@@ -10,13 +10,19 @@ namespace ConsoleLibrary
     {
         #region Fields
 
-        int _x = 0;
-        int _y = 0;
+        int _x;
+        int _y;
 
         #endregion
         #region Constructors
 
-        public Console(int width, int height) : base(width,height)
+        public Console(int width, int height, int scale) : base(width,height,scale)
+        {
+            _x = 0;
+            _y = 0;
+        }
+
+        public Console(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
@@ -95,11 +101,12 @@ namespace ConsoleLibrary
         public void Scroll(int rows)
         {
             Buffer.BlockCopy(_memory, _width, _memory, 0, _width * (_height - 1));
+            // fill the space
             for (int i = 0; i < _width; i++)
             {
                 _memory[_width * (_height - 1) + i] = 32;
             }
-            _y = _y - 1;
+            _y--;
         }
 
         #endregion

@@ -80,7 +80,6 @@ namespace FontLibrary
                             Color colour = _image.GetPixel(column * hbytes * 8 + x, row * _vbits + y);
                             if ((colour.R == 0) && (colour.G ==0) && (colour.B ==0) && (colour.A == 255))
                             {
-                                value = value;
                             }
                             else
                             {
@@ -124,11 +123,11 @@ namespace FontLibrary
                     byte check = (byte)(value & (128 >> c));
                     if (check != 0)
                     {
-                        output = output + "#";
+                        output += "#";
                     }
                     else
                     {
-                        output = output + ".";
+                        output += ".";
                     }
                 }
                 Console.WriteLine(output);
@@ -150,11 +149,11 @@ namespace FontLibrary
                         byte check = (byte)(value & (128 >> c));
                         if (check != 0)
                         {
-                            output = output + "#";
+                            output += "#";
                         }
                         else
                         {
-                            output = output + ".";
+                            output += ".";
                         }
                     }
                     Console.WriteLine(output);

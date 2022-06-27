@@ -21,7 +21,7 @@ namespace ConsoleFrom
         public Form1()
         {
             InitializeComponent();
-            console = new ConsoleLibrary.Console(32, 32);
+            console = new ConsoleLibrary.Console(32, 32, 2);
             RasterFont rasterFont = new RasterFont();
             rasterFont.Load("spectrum.bin");
             console.Font = rasterFont;

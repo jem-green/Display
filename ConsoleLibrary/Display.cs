@@ -14,6 +14,7 @@ namespace ConsoleLibrary
         protected int _height = 0;
         protected byte[] _memory;
         protected RasterFont _font;
+        protected int _scale;
 
         public enum Mode
         {
@@ -28,9 +29,17 @@ namespace ConsoleLibrary
         {
             _width = width;
             _height = height;
+            _scale = 1;
             _memory = new byte[_width * _height];
         }
 
+        public Display(int width, int height, int scale)
+        {
+            _width = width;
+            _height = height;
+            _scale = scale;
+            _memory = new byte[_width * _height];
+        }
         #endregion
         #region Properties
 
@@ -55,6 +64,14 @@ namespace ConsoleLibrary
             get
             {
                 return (_height);
+            }
+        }
+		
+		        public int Scale
+        {
+            get
+            {
+                return (_scale);
             }
         }
 
@@ -92,7 +109,7 @@ namespace ConsoleLibrary
         {
             // Need to ge
 
-            Bitmap bmp = new Bitmap(_width * _font.Horizontal, _height * _font.Vertical, PixelFormat.Format8bppIndexed);
+            Bitmap bmp = new Bitmap(_width * _font.Horizontal * _scale, _height * _font.Vertical * _scale, PixelFormat.Format8bppIndexed);
 
             BitmapData bmpCanvas = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
@@ -124,10 +141,26 @@ namespace ConsoleLibrary
                         byte value = _font.Image[(byte)character * hbytes * vbits + r];
                         for (int c = 0; c < hbits; c++) // columns
                         {
-                            byte check = (byte)(value & (128 >> c));
-                            if (check != 0)
+                            byte val = (byte)(value & (128 >> c));
+
+                            if (val != 0)
                             {
-                                rgbValues[(row * hbits + r) * columns * vbits + column * vbits + c] = 255;
+                                if (_scale == 1)
+                                {
+                                    int pos = (row * hbits + r) * columns * vbits + column * vbits + c;
+                                    rgbValues[pos] = 255;
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < _scale; i++)
+                                    {
+                                        for (int j = 0; j < _scale; j++)
+                                        {
+                                            int pos = (row * hbits * _scale + r * _scale + i) * columns * vbits * _scale + column * vbits * _scale + c * _scale + j;
+                                            rgbValues[pos] = 255;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
