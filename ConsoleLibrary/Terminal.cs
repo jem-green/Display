@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ConsoleLibrary
 {
-    public class Console : MonochromeAdaptor
+    public class Terminal : ColourAdaptor
     {
         #region Fields
 
@@ -17,13 +17,13 @@ namespace ConsoleLibrary
         #endregion
         #region Constructors
 
-        public Console(int width, int height, int scale) : base(width,height,scale)
+        public Terminal(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
         }
 
-        public Console(int width, int height) : base(width, height)
+        public Terminal(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
@@ -38,8 +38,6 @@ namespace ConsoleLibrary
                 _font = value;
             }
         }
-
-
 
         #endregion
         #region Methods
@@ -60,7 +58,13 @@ namespace ConsoleLibrary
 
         public void Write(byte character)
         {
-            _memory[_x + _y * _width] = character;
+            Write(character, _foreground, _background);
+        }
+
+        public void Write(byte character, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
+        {
+            _memory[(_x + _y * _width) * 2] = character;
+            _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
             _x++;
             if (_x >= _width)
             {
@@ -77,11 +81,17 @@ namespace ConsoleLibrary
 
         public void Write(string text)
         {
+            Write(text, _foreground, _background);
+        }
+
+        public void Write(string text, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
+        {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
             for (int i = 0; i < chars.Length; i++)
             {
-                _memory[_x + _y * _width] = (byte)chars[i];
+                _memory[(_x + _y * _width) * 2] = (byte)chars[i];
+                _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground);
                 _x++;
                 if (_x >= _width)
                 {
@@ -108,7 +118,7 @@ namespace ConsoleLibrary
             // fill the space
             for (int i = 0; i < _width; i++)
             {
-                _memory[_width * (_height - 1) + i] = 32;
+                _memory[(_width * (_height - 1) + i) * 2] = 32;
             }
             _y--;
         }
