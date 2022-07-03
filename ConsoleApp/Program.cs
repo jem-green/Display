@@ -20,13 +20,21 @@ namespace ConsoleApp
             // check loading
 
             Utility u = new Utility();
-            u.LoadFont("spectrum.bin");
+            //u.LoadFont("spectrum.bin");
+            u.LoadRom("IBM_PC_V1_8x8.rom",8,8,0,128);
+            u.SaveFont("IBM_PC_V1_8x8.bin");
 
-            // test output
+            for (byte c = 0; c < 128; c++)
+            {
+                u.DisplayChar((char)c);
+            }
 
-            //u.DisplayChar('A');
-
-            u.DisplayString("Hello !#'@");
+            u.LoadRom("IBM_VGA_8x16.rom",8,16,0,128);
+            u.SaveFont("IBM_VGA_8x16.bin");
+            for (byte c = 0; c < 128; c++)
+            {
+                u.DisplayChar((char)c);
+            }
 
         }
     }

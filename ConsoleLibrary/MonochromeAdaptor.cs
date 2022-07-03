@@ -17,19 +17,19 @@ namespace ConsoleLibrary
 
         public MonochromeAdaptor(int width, int height) : base(width, height)
         {
-            _width = width;
-            _height = height;
-            _scale = 1;
             _memory = new byte[_width * _height];
         }
 
         public MonochromeAdaptor(int width, int height, int scale) : base(width, height, scale)
         {
-            _width = width;
-            _height = height;
-            _scale = scale;
             _memory = new byte[_width * _height];
         }
+
+        public MonochromeAdaptor(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        {
+            _memory = new byte[_width * _height];
+        }
+
         #endregion
         #region Properties
 
@@ -51,11 +51,11 @@ namespace ConsoleLibrary
             }
         }
 
-        public Bitmap Paint()
+        public  Bitmap Paint()
         {
             // Need to ge
 
-            Bitmap bitmap = new Bitmap(_width * _font.Horizontal * _scale, _height * _font.Vertical * _scale, PixelFormat.Format8bppIndexed);
+            Bitmap bitmap = new Bitmap(_width * _font.Horizontal * _scale * _aspect, _height * _font.Vertical * _scale, PixelFormat.Format8bppIndexed);
             BitmapData bmpCanvas = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
@@ -72,6 +72,9 @@ namespace ConsoleLibrary
             int columns = _width;
             int hbits = _font.Horizontal;
             int vbits = _font.Vertical;
+
+            int hscale = _scale * _aspect;
+            int vscale = _scale;
 
             int hbytes = (int)Math.Round((double)hbits / 8);
 
@@ -91,18 +94,18 @@ namespace ConsoleLibrary
 
                             if (val != 0)
                             {
-                                if (_scale == 1)
+                                if ((_scale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * hbits + r) * columns * vbits + column * vbits + c;
+                                    int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
                                     rgbValues[pos] = (byte)_foreground;
                                 }
                                 else
                                 {
-                                    for (int i = 0; i < _scale; i++)
+                                    for (int i = 0; i < vscale; i++)
                                     {
-                                        for (int j = 0; j < _scale; j++)
+                                        for (int j = 0; j < hscale; j++)
                                         {
-                                            int pos = (row * hbits * _scale + r * _scale + i) * columns * vbits * _scale + column * vbits * _scale + c * _scale + j;
+                                            int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * _scale + j;
                                             rgbValues[pos] = (byte)_foreground;
                                         }
                                     }
@@ -110,18 +113,18 @@ namespace ConsoleLibrary
                             }
                             else
                             {
-                                if (_scale == 1)
+                                if ((_scale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * hbits + r) * columns * vbits + column * vbits + c;
+                                    int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
                                     rgbValues[pos] = (byte)_background;
                                 }
                                 else
                                 {
-                                    for (int i = 0; i < _scale; i++)
+                                    for (int i = 0; i < vscale; i++)
                                     {
-                                        for (int j = 0; j < _scale; j++)
+                                        for (int j = 0; j < hscale; j++)
                                         {
-                                            int pos = (row * hbits * _scale + r * _scale + i) * columns * vbits * _scale + column * vbits * _scale + c * _scale + j;
+                                            int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * _scale + j;
                                             rgbValues[pos] = (byte)_background;
                                         }
                                     }

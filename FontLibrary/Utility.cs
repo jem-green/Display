@@ -13,9 +13,17 @@ namespace FontLibrary
         int _height;
         byte[] _data;
 
-        public void LoadFont(string filePath)
+        public void LoadFont(string fileNamePath)
         {
-            BinaryReader binaryReader = new BinaryReader(File.Open(filePath, FileMode.Open, FileAccess.Read));
+            string path = Path.GetDirectoryName(fileNamePath);
+            string fileNmae = Path.GetFileName(fileNamePath);
+            if (path.Length == 0)
+            {
+                path = ".";
+            }
+            fileNamePath = Path.Combine(path, fileNmae);
+
+            BinaryReader binaryReader = new BinaryReader(File.Open(fileNamePath, FileMode.Open, FileAccess.Read));
 
             binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -33,7 +41,7 @@ namespace FontLibrary
         {
             string path = Path.GetDirectoryName(fileNamePath);
             string fileNmae = Path.GetFileName(fileNamePath);
-            if (path.Length==0)
+            if (path.Length == 0)
             {
                 path = ".";
             }
@@ -56,6 +64,37 @@ namespace FontLibrary
 
             // could guess the arrangement of the bits from the image
             // but lets assume not at theis stage
+
+        }
+
+        public void LoadRom(string fileNamePath, int horizontal, int vertical, int index, int count)
+        {
+            _hbits = horizontal;
+            _vbits = vertical;
+
+            string path = Path.GetDirectoryName(fileNamePath);
+            string fileNmae = Path.GetFileName(fileNamePath);
+            if (path.Length==0)
+            {
+                path = ".";
+            }
+            fileNamePath = Path.Combine(path, fileNmae);
+
+            BinaryReader binaryReader = new BinaryReader(File.Open(fileNamePath, FileMode.Open, FileAccess.Read));
+            int length = (int)binaryReader.BaseStream.Length;
+            binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
+            byte[] temp = new byte[length];
+            temp = binaryReader.ReadBytes(length);
+            binaryReader.Close();
+
+            // Copy the rom data to the correct location
+
+            int hbytes = (int)Math.Round((double)_hbits / 8);
+            int chars = (int)(length / _vbits / hbytes);
+            int l = hbytes * _vbits * 256;
+            _data = new byte[l];
+            int offset = index * _vbits * hbytes;
+            temp.CopyTo(_data, offset);
 
         }
 

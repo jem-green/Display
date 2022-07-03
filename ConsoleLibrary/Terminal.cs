@@ -12,10 +12,16 @@ namespace ConsoleLibrary
 
         int _x;
         int _y;
-        
+
 
         #endregion
         #region Constructors
+
+        public Terminal(int width, int height) : base(width, height)
+        {
+            _x = 0;
+            _y = 0;
+        }
 
         public Terminal(int width, int height, int scale) : base(width,height,scale)
         {
@@ -23,11 +29,12 @@ namespace ConsoleLibrary
             _y = 0;
         }
 
-        public Terminal(int width, int height) : base(width, height)
+        public Terminal(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
         }
+
 
         #endregion
         #region Properties

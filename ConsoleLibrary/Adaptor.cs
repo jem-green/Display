@@ -15,6 +15,7 @@ namespace ConsoleLibrary
         protected byte[] _memory;
         protected RasterFont _font;
         protected int _scale;
+        protected int _aspect;
         protected ConsoleColor _foreground;
         protected ConsoleColor _background;
 
@@ -60,10 +61,33 @@ namespace ConsoleLibrary
             _width = width;
             _height = height;
             _scale = scale;
+            _aspect = 1;
             _memory = new byte[_width * _height * 2];
         }
+
+        public Adaptor(int width, int height, int scale, int aspect)
+        {
+            _width = width;
+            _height = height;
+            _scale = scale;
+            _aspect = aspect;
+            _memory = new byte[_width * _height * 2];
+        }
+
         #endregion
         #region Properties
+
+        public int Aspect
+        {
+            set
+            {
+                _aspect = value;
+            }
+            get
+            {
+                return (_scale);
+            }
+        }
 
         public ConsoleColor ForegroundColor
         {
