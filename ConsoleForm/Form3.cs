@@ -12,15 +12,15 @@ using Console = ConsoleLibrary.Console;
 
 namespace ConsoleFrom
 {
-    public partial class Form2 : Form
+    public partial class Form3 : Form
     {
 
         ConsoleLibrary.Console console;
 
-        public Form2()
+        public Form3()
         {
             InitializeComponent();
-            console = new ConsoleLibrary.Console(32, 32, 1);
+            console = new ConsoleLibrary.Console(32, 32, 2);
             RasterFont rasterFont = new RasterFont();
             rasterFont.Load("IBM_PC_V1_8x8.bin");
             console.Font = rasterFont;
@@ -35,7 +35,8 @@ namespace ConsoleFrom
         {
             Graphics g = e.Graphics;
             Bitmap b = console.Paint();
-            g.DrawImageUnscaled(b, 0, 0);
+            //g.DrawImageUnscaled(b, 0, 0);
+            g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
 
         }
 

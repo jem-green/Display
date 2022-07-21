@@ -20,8 +20,8 @@ namespace ConsoleFrom
             rasterFont.Load("IBM_VGA_8x16.bin");
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColor = Adaptor.ConsoleColor.Black;
-            terminal.BackgroundColor = Adaptor.ConsoleColor.White;
+            terminal.ForegroundColor = MonochromeAdaptor.ConsoleColor.Black;
+            terminal.BackgroundColor = MonochromeAdaptor.ConsoleColor.White;
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
 
             _matrix = new KeyboardMatrix();
@@ -48,9 +48,12 @@ namespace ConsoleFrom
 
         private void pictureBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            byte key = _matrix.ToASCII(e.KeyValue, e.Shift);
-            terminal.Write(key, Adaptor.ConsoleColor.Blue, Adaptor.ConsoleColor.Green);
-            pictureBox1.Invalidate();
+            byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
+            if (key > 0)
+            {
+                terminal.Write(key, TextAdaptor.ConsoleColor.Blue, TextAdaptor.ConsoleColor.Green);
+                pictureBox1.Invalidate();
+            }
         }
 
     }

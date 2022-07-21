@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleLibrary
 {
-    public class MonochromeAdaptor : Adaptor
+    public class MonochromeAdaptor : TextAdaptor
     {
         #region Fields
 
@@ -51,7 +51,7 @@ namespace ConsoleLibrary
             }
         }
 
-        public  Bitmap Paint()
+        public override Bitmap Paint()
         {
             // Need to ge
 

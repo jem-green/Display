@@ -43,10 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColourAdaptor.cs" />
+    <Compile Include="IAdaptor.cs" />
     <Compile Include="Terminal.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="MonochromeAdaptor.cs" />
     <Compile Include="RasterFont.cs" />
+    <Compile Include="TextAdaptor.cs" />
     <Compile Include="Adaptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

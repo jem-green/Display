@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleLibrary
 {
-    public class ColourAdaptor : Adaptor
-    {  
+    public class ColourAdaptor : TextAdaptor
+    {
         #region Fields
 
         #endregion
@@ -34,6 +34,7 @@ namespace ConsoleLibrary
         #region Properties
 
 
+
         #endregion
         #region Methods
 
@@ -44,14 +45,14 @@ namespace ConsoleLibrary
 
         public void Clear(char character, ConsoleColor forground, ConsoleColor background)
         {
-            for (int i = 0; i < _memory.Length; i = i + 2)
+            for (int i = 0; i < _memory.Length; i += 2)
             {
                 _memory[i] = (byte)character;
                 _memory[i + 1] = (byte)(((byte)background << 4) | (byte)forground);
             }
         }
 
-        public Bitmap Paint()
+        public override Bitmap Paint()
         {
             // Need to ge
 

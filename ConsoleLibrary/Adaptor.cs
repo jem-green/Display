@@ -6,38 +6,16 @@ using System.Text;
 
 namespace ConsoleLibrary
 {
-    public class Adaptor
+    public class Adaptor : IAdaptor
     {
         #region Fields
 
         protected int _width = 0;
         protected int _height = 0;
         protected byte[] _memory;
-        protected RasterFont _font;
         protected int _scale;
         protected int _aspect;
-        protected ConsoleColor _foreground;
-        protected ConsoleColor _background;
-
-        public enum ConsoleColor: byte
-        {
-            Black = 0,
-            DarkBlue = 1,
-            DarkGreen = 2,
-            DarkCyan = 3,
-            DarkRed = 4,
-            DarkMagenta = 5,
-            DarkYellow = 6,
-            Gray = 7,
-            DarkGray = 8,
-            Blue = 9,
-            Green = 10,
-            Cyan = 11,
-            Red = 12,
-            Magenta = 13,
-            Yellow = 14,
-            White = 15
-        }
+        protected Mode _mode;
 
         public enum Mode
         {
@@ -47,23 +25,6 @@ namespace ConsoleLibrary
 
         #endregion
         #region Constructors
-
-        public Adaptor(int width, int height)
-        {
-            _width = width;
-            _height = height;
-            _scale = 1;
-            _memory = new byte[_width * _height * 2];
-        }
-
-        public Adaptor(int width, int height, int scale)
-        {
-            _width = width;
-            _height = height;
-            _scale = scale;
-            _aspect = 1;
-            _memory = new byte[_width * _height * 2];
-        }
 
         public Adaptor(int width, int height, int scale, int aspect)
         {
@@ -86,22 +47,6 @@ namespace ConsoleLibrary
             get
             {
                 return (_scale);
-            }
-        }
-
-        public ConsoleColor ForegroundColor
-        {
-            set
-            {
-                _foreground = value;
-            }
-        }
-
-        public ConsoleColor BackgroundColor
-        {
-            set
-            {
-                _background = value;
             }
         }
 
@@ -151,6 +96,11 @@ namespace ConsoleLibrary
 
         #endregion
         #region Methods
+
+        public virtual Bitmap Paint()
+        {
+            return (null);
+        }
 
         #endregion
         #region Private
