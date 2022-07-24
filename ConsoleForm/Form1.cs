@@ -14,10 +14,12 @@ namespace ConsoleFrom
         {
             InitializeComponent();
 
-            terminal = new ConsoleLibrary.Terminal(32, 32, 2, 1);
+            terminal = new ConsoleLibrary.Terminal(32, 32, 1, 2);
             RasterFont rasterFont = new RasterFont();
-           // rasterFont.Load("spectrum.bin");
-            rasterFont.Load("IBM_VGA_8x16.bin");
+            // rasterFont.Load("spectrum.bin");
+            //rasterFont.Load("IBM_VGA_8x16.bin");
+            rasterFont.Load("IBM_PC_V1_8x8.bin");
+
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
             terminal.ForegroundColor = MonochromeAdaptor.ConsoleColor.Black;
@@ -32,7 +34,7 @@ namespace ConsoleFrom
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = terminal.Paint();
+            Bitmap b = terminal.Generate();
             g.DrawImageUnscaled(b, 0, 0);
 
         }

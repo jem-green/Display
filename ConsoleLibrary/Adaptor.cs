@@ -10,6 +10,8 @@ namespace ConsoleLibrary
     {
         #region Fields
 
+        protected int _left = 0;
+        protected int _top = 0;
         protected int _width = 0;
         protected int _height = 0;
         protected byte[] _memory;
@@ -46,7 +48,7 @@ namespace ConsoleLibrary
             }
             get
             {
-                return (_scale);
+                return (_aspect);
             }
         }
 
@@ -97,7 +99,7 @@ namespace ConsoleLibrary
         #endregion
         #region Methods
 
-        public virtual Bitmap Paint()
+        public virtual Bitmap Generate()
         {
             return (null);
         }

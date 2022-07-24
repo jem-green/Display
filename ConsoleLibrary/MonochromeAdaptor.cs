@@ -51,7 +51,7 @@ namespace ConsoleLibrary
             }
         }
 
-        public override Bitmap Paint()
+        public override Bitmap Generate()
         {
             // Need to ge
 
@@ -68,8 +68,6 @@ namespace ConsoleLibrary
             byte[] rgbValues = new byte[size];
             // might be quicker to fill the array with background in one go
 
-            int rows = _height;
-            int columns = _width;
             int hbits = _font.Horizontal;
             int vbits = _font.Vertical;
 
@@ -80,11 +78,11 @@ namespace ConsoleLibrary
 
             // work across character by character
 
-            for (int row = 0; row < rows; row++)
+            for (int row = _top; row < _height; row++)
             {
-                for (int column = 0; column < columns; column++)
+                for (int column = _left; column < _width; column++)
                 {
-                    byte character = _memory[column + row * columns];
+                    byte character = _memory[column + row * _width];
                     for (int r = 0; r < vbits; r++)
                     {
                         byte value = _font.Image[(byte)character * hbytes * vbits + r];
@@ -96,7 +94,7 @@ namespace ConsoleLibrary
                             {
                                 if ((_scale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
+                                    int pos = (row * vbits + r) * _width * hbits + column * hbits + c;
                                     rgbValues[pos] = (byte)_foreground;
                                 }
                                 else
@@ -105,7 +103,7 @@ namespace ConsoleLibrary
                                     {
                                         for (int j = 0; j < hscale; j++)
                                         {
-                                            int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * _scale + j;
+                                            int pos = (row * vbits * vscale + r * vscale + i) * _width * hbits * hscale + column * hbits * hscale + c * _scale + j;
                                             rgbValues[pos] = (byte)_foreground;
                                         }
                                     }
@@ -115,7 +113,7 @@ namespace ConsoleLibrary
                             {
                                 if ((_scale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
+                                    int pos = (row * vbits + r) * _width * hbits + column * hbits + c;
                                     rgbValues[pos] = (byte)_background;
                                 }
                                 else
@@ -124,7 +122,7 @@ namespace ConsoleLibrary
                                     {
                                         for (int j = 0; j < hscale; j++)
                                         {
-                                            int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * _scale + j;
+                                            int pos = (row * vbits * vscale + r * vscale + i) * _width * hbits * hscale + column * hbits * hscale + c * _scale + j;
                                             rgbValues[pos] = (byte)_background;
                                         }
                                     }

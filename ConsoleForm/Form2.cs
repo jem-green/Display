@@ -34,7 +34,7 @@ namespace ConsoleFrom
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = console.Paint();
+            Bitmap b = console.Generate();
             g.DrawImageUnscaled(b, 0, 0);
 
         }
