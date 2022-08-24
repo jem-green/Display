@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using ConsoleLibrary;
 using Console = ConsoleLibrary.Console;
@@ -22,10 +23,9 @@ namespace ConsoleFrom
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColor = MonochromeAdaptor.ConsoleColor.Black;
-            terminal.BackgroundColor = MonochromeAdaptor.ConsoleColor.White;
+            terminal.ForegroundColor = TextAdaptor.ConsoleColor.Black;
+            terminal.BackgroundColor = TextAdaptor.ConsoleColor.White;
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
-
             _matrix = new KeyboardMatrix();
 
             pictureBox1.Select();
@@ -34,16 +34,24 @@ namespace ConsoleFrom
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = terminal.Generate();
+            Bitmap b = terminal.Bitmap;
             g.DrawImageUnscaled(b, 0, 0);
-
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            for (int i = 0; i < 400; i++)
+            if (e.Button == MouseButtons.Left)
             {
-                terminal.Write((byte)'e');
+                for (int i = 0; i < 400; i++)
+                {
+                    terminal.Write((byte)'e');
+                }
+                terminal.Generate();
+                pictureBox1.Invalidate();
+            }
+            else
+            {
+                terminal.Write("Hello");
                 pictureBox1.Invalidate();
             }
         }
@@ -57,6 +65,5 @@ namespace ConsoleFrom
                 pictureBox1.Invalidate();
             }
         }
-
     }
 }

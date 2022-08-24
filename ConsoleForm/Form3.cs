@@ -34,7 +34,7 @@ namespace ConsoleFrom
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = console.Generate();
+            Bitmap b = console.Bitmap;
             g.DrawImageUnscaled(b, 0, 0);
             //g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
 
@@ -42,9 +42,17 @@ namespace ConsoleFrom
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            for (int i = 0; i < 400; i++)
+            if (e.Button == MouseButtons.Left)
             {
-                console.Write((byte)'e');
+                for (int i = 0; i < 400; i++)
+                {
+                    console.Write((byte)'e');
+                }
+                pictureBox1.Invalidate();
+            }
+            else
+            {
+                console.Write("Hello");
                 pictureBox1.Invalidate();
             }
         }

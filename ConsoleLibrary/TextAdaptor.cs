@@ -37,19 +37,7 @@ namespace ConsoleLibrary
         #endregion
         #region Constructors
 
-        public TextAdaptor(int width, int height) : base(width,height,1,1)
-        {
-            _mode = Mode.text;
-            _memory = new byte[_width * _height * 2];
-        }
-
-        public TextAdaptor(int width, int height, int scale) : base(width, height, scale, 1)
-        {
-            _mode = Mode.text;
-            _memory = new byte[_width * _height * 2];
-        }
-
-        public TextAdaptor(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public TextAdaptor(int width, int height) : base(width,height)
         {
             _mode = Mode.text;
             _memory = new byte[_width * _height * 2];

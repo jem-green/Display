@@ -16,6 +16,12 @@ namespace ConsoleLibrary
 
         #endregion
         #region Constructors
+		
+		public Console(int width, int height) : base(width, height)
+        {
+            _x = 0;
+            _y = 0;
+        }
 
         public Console(int width, int height, int scale) : base(width,height,scale)
         {
@@ -23,7 +29,7 @@ namespace ConsoleLibrary
             _y = 0;
         }
 
-        public Console(int width, int height) : base(width, height)
+        public Console(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
@@ -39,7 +45,29 @@ namespace ConsoleLibrary
             }
         }
 
+        public int Row
+        {
+            set
+            {
+                _x = value;
+            }
+            get
+            {
+                return (_x);
+            }
+        }
 
+        public int Column
+        {
+            set
+            {
+                _y = value;
+            }
+            get
+            {
+                return (_y);
+            }
+        }
 
         #endregion
         #region Methods
@@ -61,6 +89,10 @@ namespace ConsoleLibrary
         public void Write(byte character)
         {
             _memory[_x + _y * _width] = character;
+            // Would have to call a partial generate here
+
+            PartialGenerate(_x, _y);
+            
             _x++;
             if (_x >= _width)
             {
@@ -82,6 +114,10 @@ namespace ConsoleLibrary
             for (int i = 0; i < chars.Length; i++)
             {
                 _memory[_x + _y * _width] = (byte)chars[i];
+                // Would have to call a partial generate here
+
+                PartialGenerate(_x, _y);
+
                 _x++;
                 if (_x >= _width)
                 {

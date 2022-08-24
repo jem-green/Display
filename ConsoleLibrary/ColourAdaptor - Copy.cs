@@ -8,96 +8,59 @@ using System.Threading.Tasks;
 
 namespace ConsoleLibrary
 {
-    public class MonochromeAdaptor : TextAdaptor
+    public class CAdaptor : TextAdaptor
     {
         #region Fields
 
-        protected int _scale = 1;
-        protected int _aspect = 1;
-        protected Bitmap _bitmap;
         #endregion
         #region Constructors
 
-        public MonochromeAdaptor(int width, int height) : base(width, height)
+        public CAdaptor(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
         }
 
-        public MonochromeAdaptor(int width, int height, int scale) : base(width, height)
+        public CAdaptor(int width, int height, int scale) : base(width, height, scale)
         {
-            _memory = new byte[_width * _height];
-            _scale = scale;
+            _memory = new byte[_width * _height * 2];
         }
 
-        public MonochromeAdaptor(int width, int height, int scale, int aspect) : base(width, height)
+        public CAdaptor(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
-            _memory = new byte[_width * _height];
-            _scale = scale;
-            _aspect = aspect;
+            _memory = new byte[_width * _height * 2];
         }
 
         #endregion
         #region Properties
 
-        public int Aspect
-        {
-            set
-            {
-                _aspect = value;
-            }
-            get
-            {
-                return (_aspect);
-            }
-        }
 
-        public Bitmap Bitmap
-        {
-            get
-            {
-                return (_bitmap);
-            }
-        }
-
-        public int Scale
-        {
-            get
-            {
-                return (_scale);
-            }
-        }
 
         #endregion
         #region Methods
 
         public void Clear()
         {
-            Clear('\0');
+            Clear('\0',_foreground, _background);
         }
 
-        public void Clear(char character)
+        public void Clear(char character, ConsoleColor forground, ConsoleColor background)
         {
-            //_buffer = new byte[_width * _height];
-            //or
-            for (int i = 0; i < _memory.Length; i++)
+            for (int i = 0; i < _memory.Length; i += 2)
             {
                 _memory[i] = (byte)character;
+                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)forground);
             }
         }
 
-        public Bitmap PartialGenerate(int column, int row)
-        {
-            return (_bitmap);
-        }
-
-        public override void Generate()
+        public override Bitmap Generate()
         {
             // Need to ge
 
             int hscale = _scale * _aspect;
             int vscale = _scale;
-            _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+
+            Bitmap bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
+            BitmapData bmpCanvas = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
@@ -105,7 +68,7 @@ namespace ConsoleLibrary
 
             // Declare an array to hold the bytes of the bitmap.
 
-            int size = _bitmap.Width * _bitmap.Height;
+            int size = bitmap.Width * bitmap.Height;
             byte[] rgbValues = new byte[size];
             // might be quicker to fill the array with background in one go
 
@@ -118,14 +81,19 @@ namespace ConsoleLibrary
 
             // work across character by character
 
-            for (int row = _top; row < _height; row++)
+            for (int row = 0; row < rows; row++)
             {
-                for (int column = _left; column < _width; column++)
+                for (int column = 0; column < columns; column++)
                 {
-                    byte character = _memory[column + row * _width];
+                    byte character = _memory[(column + row * columns) * 2];
+                    byte colour = _memory[(column + row * columns) * 2 + 1];
+                    byte foreground = (byte)(colour & 15);
+                    byte background = (byte)((colour >> 4) & 15);
+
                     for (int r = 0; r < vbits; r++)
                     {
                         byte value = _font.Image[(byte)character * hbytes * vbits + r];
+
                         for (int c = 0; c < hbits; c++) // columns
                         {
                             byte val = (byte)(value & (128 >> c));
@@ -135,7 +103,7 @@ namespace ConsoleLibrary
                                 if ((hscale==1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = (byte)_foreground;
+                                    rgbValues[pos] = (byte)foreground;
                                 }
                                 else
                                 {
@@ -144,7 +112,7 @@ namespace ConsoleLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = (byte)_foreground;
+                                            rgbValues[pos] = (byte)foreground;
                                         }
                                     }
                                 }
@@ -154,7 +122,7 @@ namespace ConsoleLibrary
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = (byte)_background;
+                                    rgbValues[pos] = (byte)background;
                                 }
                                 else
                                 {
@@ -163,7 +131,7 @@ namespace ConsoleLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = (byte)_background;
+                                            rgbValues[pos] = (byte)background;
                                         }
                                     }
                                 }
@@ -175,7 +143,8 @@ namespace ConsoleLibrary
 
             // Copy the 256 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
-            _bitmap.UnlockBits(bmpCanvas);
+            bitmap.UnlockBits(bmpCanvas);
+            return (bitmap);
         }
 
         #endregion

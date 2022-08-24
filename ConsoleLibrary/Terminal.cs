@@ -13,7 +13,6 @@ namespace ConsoleLibrary
         int _x;
         int _y;
 
-
         #endregion
         #region Constructors
 
@@ -35,7 +34,6 @@ namespace ConsoleLibrary
             _y = 0;
         }
 
-
         #endregion
         #region Properties
         public RasterFont Font
@@ -43,6 +41,30 @@ namespace ConsoleLibrary
             set
             {
                 _font = value;
+            }
+        }
+
+        public int Row
+        {
+            set
+            {
+                _x = value;
+            }
+            get
+            {
+                return (_x);
+            }
+        }
+
+        public int Column
+        {
+            set
+            {
+                _y = value;
+            }
+            get
+            {
+                return (_y);
             }
         }
 
@@ -72,6 +94,11 @@ namespace ConsoleLibrary
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
+
+            // Would have to call a partial generate here
+
+            PartialGenerate(_x, _y);
+            
             _x++;
             if (_x >= _width)
             {
@@ -82,6 +109,7 @@ namespace ConsoleLibrary
                     _y = _height;
                     // the display needs to scoll at the point.
                     Scroll();
+                    Generate();
                 }
             }
         }
@@ -99,6 +127,12 @@ namespace ConsoleLibrary
             {
                 _memory[(_x + _y * _width) * 2] = (byte)chars[i];
                 _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground);
+
+                // Would have to call a partial generate here
+                // but may make sense to only do this at the end
+
+                //PartialGenerate(_x, _y);
+
                 _x++;
                 if (_x >= _width)
                 {
@@ -108,10 +142,12 @@ namespace ConsoleLibrary
                     {
                         _y = _height;
                         // the display needs to scoll at the point.
-                        Scroll();          
+                        Scroll();
+                        //Generate();
                     }
                 }
             }
+            Generate();
         }
 
         public void Scroll()
@@ -121,11 +157,12 @@ namespace ConsoleLibrary
 
         public void Scroll(int rows)
         {
-            Buffer.BlockCopy(_memory, _width, _memory, 0, _width * (_height - 1));
+            Buffer.BlockCopy(_memory, _width, _memory, 0, _width * (_height - 1) * 2);
             // fill the space
             for (int i = 0; i < _width; i++)
             {
                 _memory[(_width * (_height - 1) + i) * 2] = 32;
+                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)(((byte)_background << 4) | (byte)_foreground);
             }
             _y--;
         }

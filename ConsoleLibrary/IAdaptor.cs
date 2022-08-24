@@ -9,6 +9,6 @@ namespace ConsoleLibrary
 {
     internal interface IAdaptor
     {
-        Bitmap Generate();
+        void Generate();
     }
 }
