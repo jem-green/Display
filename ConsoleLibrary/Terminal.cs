@@ -157,7 +157,7 @@ namespace ConsoleLibrary
 
         public void Scroll(int rows)
         {
-            Buffer.BlockCopy(_memory, _width, _memory, 0, _width * (_height - 1) * 2);
+            Buffer.BlockCopy(_memory, _width * 2, _memory, 0, _width * (_height - 1) * 2);
             // fill the space
             for (int i = 0; i < _width; i++)
             {

@@ -15,7 +15,7 @@ namespace ConsoleFrom
         {
             InitializeComponent();
 
-            terminal = new ConsoleLibrary.Terminal(32, 32, 1, 2);
+            terminal = new ConsoleLibrary.Terminal(10, 10, 2, 2);
             RasterFont rasterFont = new RasterFont();
             // rasterFont.Load("spectrum.bin");
             //rasterFont.Load("IBM_VGA_8x16.bin");

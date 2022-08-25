@@ -106,9 +106,6 @@ namespace ConsoleLibrary
 
             IntPtr ptr = bmpCanvas.Scan0;
 
-            // Ideally calcululate the position of the character
-            // and adjust the pointer.
-
             // Declare an array to hold the bytes of the bitmap.
 
             int size = _bitmap.Width * _bitmap.Height;

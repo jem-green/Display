@@ -35,8 +35,8 @@ namespace ConsoleFrom
         {
             Graphics g = e.Graphics;
             Bitmap b = console.Bitmap;
-            g.DrawImageUnscaled(b, 0, 0);
-            //g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
+            //g.DrawImageUnscaled(b, 0, 0);
+            g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
 
         }
 
@@ -48,6 +48,7 @@ namespace ConsoleFrom
                 {
                     console.Write((byte)'e');
                 }
+                console.Generate();
                 pictureBox1.Invalidate();
             }
             else

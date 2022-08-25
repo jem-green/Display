@@ -36,14 +36,22 @@ namespace ConsoleFrom
             Graphics g = e.Graphics;
             Bitmap b = console.Bitmap;
             g.DrawImageUnscaled(b, 0, 0);
-
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            for (int i = 0; i < 400; i++)
+            if (e.Button == MouseButtons.Left)
             {
-                console.Write((byte)'e');
+                for (int i = 0; i < 400; i++)
+                {
+                    console.Write((byte)'e');
+                }
+                console.Generate();
+                pictureBox1.Invalidate();
+            }
+            else
+            {
+                console.Write("Hello");
                 pictureBox1.Invalidate();
             }
         }
