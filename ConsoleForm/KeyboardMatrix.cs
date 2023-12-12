@@ -90,8 +90,8 @@ namespace ConsoleFrom
             _keys.Add(73, new Key(73, 105,73));     // I and i
             _keys.Add(79, new Key(79, 111,79));     // O and o
             _keys.Add(80, new Key(80, 112,88));     // P and p
-            _keys.Add(219, new Key(91, 91, 123));    // [ and {
-            _keys.Add(221, new Key(93, 93, 125));    // ] and }
+            _keys.Add(219, new Key(91, 91, 123));   // [ and {
+            _keys.Add(221, new Key(93, 93, 125));   // ] and }
 
             // Third Row
 
@@ -118,9 +118,9 @@ namespace ConsoleFrom
             _keys.Add(66, new Key(66, 98, 66));     // B and b
             _keys.Add(78, new Key(78, 110, 78));    // N and n
             _keys.Add(77, new Key(77, 109, 77));    // M and m
-            _keys.Add(188, new Key(44, 44, 60));   // , and <
+            _keys.Add(188, new Key(44, 44, 60));    // , and <
             _keys.Add(190, new Key(46, 46, 62));    // . and >
-            _keys.Add(191, new Key(47, 47, 63));     // / and ?
+            _keys.Add(191, new Key(47, 47, 63));    // / and ?
 
             // Last row
 

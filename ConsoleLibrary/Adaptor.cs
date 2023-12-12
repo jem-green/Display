@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Text;
-
-namespace ConsoleLibrary
+﻿namespace ConsoleLibrary
 {
     public class Adaptor : IAdaptor
     {
@@ -30,7 +24,7 @@ namespace ConsoleLibrary
         {
             _width = width;
             _height = height;
-            _memory = new byte[_width * _height * 2];
+            //_memory = new byte[_width * _height * 2];
         }
 
         #endregion

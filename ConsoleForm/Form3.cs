@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +22,13 @@ namespace ConsoleFrom
         {
             InitializeComponent();
             console = new ConsoleLibrary.Console(32, 32, 2);
+
             RasterFont rasterFont = new RasterFont();
-            rasterFont.Load("IBM_PC_V1_8x8.bin");
+            string path = @"C:\SOURCE\GIT\cs.net\Console\FontLibrary";
+            string fileName = "IBM_PC_V1_8x8.bin";
+            string fileNamePath = Path.Combine(path, fileName);
+            rasterFont.Load(fileNamePath);
+
             console.Font = rasterFont;
             console.Set(0, 0);
             console.ForegroundColor = TextAdaptor.ConsoleColor.Green;

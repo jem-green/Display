@@ -63,7 +63,7 @@ namespace FontLibrary
             }
 
             // could guess the arrangement of the bits from the image
-            // but lets assume not at theis stage
+            // but lets assume not at this stage
 
         }
 
@@ -105,7 +105,7 @@ namespace FontLibrary
 
             int hbytes = (int)Math.Round((double)_hbits / 8);
 
-            _data = new byte[256 * hbytes * _hbits];
+            _data = new byte[256 * hbytes * _vbits];
 
             for (int row = 0; row < _height; row++)
             {
@@ -114,9 +114,10 @@ namespace FontLibrary
                     for (int y = 0; y < _vbits; y++)
                     {
                         byte value = 0;
-                        for (int x = 0; x < 8; x++)
+
+                        for (int x = 0; x < _hbits; x++)
                         {
-                            Color colour = _image.GetPixel(column * hbytes * 8 + x, row * _vbits + y);
+                            Color colour = _image.GetPixel(column * _hbits + x, row * _vbits + y);
                             if ((colour.R == 0) && (colour.G ==0) && (colour.B ==0) && (colour.A == 255))
                             {
                             }

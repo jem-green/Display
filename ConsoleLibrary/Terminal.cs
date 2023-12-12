@@ -13,6 +13,19 @@ namespace ConsoleLibrary
         int _x;
         int _y;
 
+        // The main feature of a terminal or console
+        // is the scrolling ability. So we need the 
+        // working area which get copied to the display buffer
+        // when we need to scrole. Two options 1) write to both
+        // and only on the scroll upwards need to copy 2) write
+        // just to working area and copy irrespective.
+
+        // So need to be able to set the buffer size
+        // need to write to the buffer.
+
+        byte[] _data;
+        
+
         #endregion
         #region Constructors
 
@@ -20,6 +33,9 @@ namespace ConsoleLibrary
         {
             _x = 0;
             _y = 0;
+
+            _data = new byte[width * height * 2];
+
         }
 
         public Terminal(int width, int height, int scale) : base(width,height,scale)

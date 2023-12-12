@@ -40,7 +40,6 @@ namespace ConsoleLibrary
         public TextAdaptor(int width, int height) : base(width,height)
         {
             _mode = Mode.text;
-            _memory = new byte[_width * _height * 2];
         }
 
         #endregion

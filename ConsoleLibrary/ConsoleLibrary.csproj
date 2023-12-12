@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,8 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorGraphicsAdaptor.cs" />
+    <Compile Include="MonochromeDisplay.cs" />
+    <Compile Include="DisplayBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DisplayBox.Designer.cs">
+      <DependentUpon>DisplayBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraphicsAdaptor.cs" />
     <Compile Include="ColourAdaptor.cs" />
     <Compile Include="IAdaptor.cs" />
+    <Compile Include="IBM_PC.cs" />
+    <Compile Include="ColourDisplay.cs" />
     <Compile Include="Terminal.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="MonochromeAdaptor.cs" />
@@ -51,6 +63,11 @@
     <Compile Include="TextAdaptor.cs" />
     <Compile Include="Adaptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DisplayBox.resx">
+      <DependentUpon>DisplayBox.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
