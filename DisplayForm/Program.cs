@@ -16,7 +16,12 @@ namespace DisplayForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form4());
+            //Application.Run(new DisplayColour());
+            //Application.Run(new DisplayMonochrome());
+            Application.Run(new ConsoleMonochrome());
+            //Application.Run(new TerminalColour());
+            //Application.Run(new UserControlColour());
+
         }
     }
 }

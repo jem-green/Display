@@ -13,15 +13,15 @@ using Console = DisplayLibrary.Console;
 
 namespace DisplayForm
 {
-    public partial class DisplayMonochrome : Form
+    public partial class ConsoleMonochrome : Form
     {
 
-        DisplayLibrary.MonochromeDisplay monochrome;
+        DisplayLibrary.Console console;
 
-        public DisplayMonochrome()
+        public ConsoleMonochrome()
         {
             InitializeComponent();
-            monochrome = new DisplayLibrary.MonochromeDisplay(32, 32, 1);
+            console = new DisplayLibrary.Console(32, 32, 2);
 
             RasterFont rasterFont = new RasterFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
@@ -29,19 +29,21 @@ namespace DisplayForm
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
-            monochrome.Font = rasterFont;
-            monochrome.Set(0, 0);
-            monochrome.ForegroundColor = TextAdaptor.ConsoleColor.Green;
-            monochrome.BackgroundColor = TextAdaptor.ConsoleColor.Black;
-            monochrome.Write("HELLO THIS SHOULD WRAP AROUND");
+            console.Font = rasterFont;
+            console.Set(0, 0);
+            console.ForegroundColor = TextAdaptor.ConsoleColor.Green;
+            console.BackgroundColor = TextAdaptor.ConsoleColor.Black;
+            console.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = monochrome.Bitmap;
-            g.DrawImageUnscaled(b, 0, 0);
+            Bitmap b = console.Bitmap;
+            //g.DrawImageUnscaled(b, 0, 0);
+            g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
+
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -50,14 +52,14 @@ namespace DisplayForm
             {
                 for (int i = 0; i < 400; i++)
                 {
-                    monochrome.Write((byte)'e');
+                    console.Write((byte)'e');
                 }
-                monochrome.Generate();
+                console.Generate();
                 pictureBox1.Invalidate();
             }
             else
             {
-                monochrome.Write("Hello");
+                console.Write("Hello");
                 pictureBox1.Invalidate();
             }
         }
@@ -65,7 +67,7 @@ namespace DisplayForm
         private void pictureBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             int key = e.KeyValue;
-            monochrome.Write((byte)key);
+            console.Write((byte)key);
             pictureBox1.Invalidate();
         }
     }

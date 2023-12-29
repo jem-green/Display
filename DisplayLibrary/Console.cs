@@ -97,7 +97,7 @@ namespace DisplayLibrary
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to scoll at the point.
+                    // the display needs to coll at the point.
                     Scroll();
                 }
             }
@@ -122,7 +122,7 @@ namespace DisplayLibrary
                     if (_y >= _height)
                     {
                         _y = _height;
-                        // the display needs to scoll at the point.
+                        // the display needs to scroll at the point.
                         Scroll();          
                     }
                 }

@@ -19,7 +19,7 @@ namespace DisplayForm
             colourDisplay = new DisplayLibrary.ColourDisplay(32, 32, 2, 1);
 
             RasterFont rasterFont = new RasterFont();
-            string path = @"C:\SOURCE\GIT\cs.net\Console\FontLibrary";
+            string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
             string fileName = "IBM_PC_V1_8x8.bin";
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
