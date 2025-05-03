@@ -1,6 +1,6 @@
 ﻿namespace DisplayLibrary
 {
-    public class Adaptor : IAdaptor
+    public class DisplayMode : IMode
     {
         #region Fields
 
@@ -9,9 +9,9 @@
         protected int _width = 0;
         protected int _height = 0;
         protected byte[] _memory;
-        protected Mode _mode;
+        protected Type _type;
 
-        public enum Mode
+        public enum Type
         {
             text = 1,
             graphic = 2
@@ -20,17 +20,14 @@
         #endregion
         #region Constructors
 
-        public Adaptor(int width, int height)
+        public DisplayMode(int width, int height)
         {
             _width = width;
             _height = height;
-            //_memory = new byte[_width * _height * 2];
         }
 
         #endregion
         #region Properties
-
-        
 
         public int Width
         {
@@ -72,6 +69,10 @@
         #region Methods
 
         public virtual void Generate()
+        {
+        }
+
+        public virtual void PartialGenerate(int x, int y)
         {
         }
 

@@ -9,14 +9,14 @@ namespace DisplayForm
 {
     public partial class DisplayColour : Form
     {
-        DisplayLibrary.ColourDisplay colourDisplay;
+        DisplayLibrary.ColourTextDisplay colourDisplay;
         KeyboardMatrix _matrix;
 
         public DisplayColour()
         {
             InitializeComponent();
 
-            colourDisplay = new DisplayLibrary.ColourDisplay(32, 32, 2, 1);
+            colourDisplay = new DisplayLibrary.ColourTextDisplay(32, 32, 2, 1);
 
             RasterFont rasterFont = new RasterFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
@@ -26,8 +26,8 @@ namespace DisplayForm
 
             colourDisplay.Font = rasterFont;
             colourDisplay.Set(0, 0);
-            colourDisplay.ForegroundColor = TextAdaptor.ConsoleColor.Black;
-            colourDisplay.BackgroundColor = TextAdaptor.ConsoleColor.White;
+            colourDisplay.ForegroundColor = TextMode.ConsoleColor.Black;
+            colourDisplay.BackgroundColor = TextMode.ConsoleColor.White;
             colourDisplay.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             pictureBox1.Select();
@@ -64,7 +64,7 @@ namespace DisplayForm
             byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
             if (key > 0)
             {
-                colourDisplay.Write(key, TextAdaptor.ConsoleColor.Blue, TextAdaptor.ConsoleColor.Green);
+                colourDisplay.Write(key, TextMode.ConsoleColor.Blue, TextMode.ConsoleColor.Green);
                 pictureBox1.Invalidate();
             }
         }

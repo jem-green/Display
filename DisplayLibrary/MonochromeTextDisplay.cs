@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    public class MonochromeDisplay : MonochromeAdaptor
+    public class MonochromeTextDisplay : MonochromeTextMode
     {
         #region Fields
 
@@ -13,19 +13,19 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 		
-		public MonochromeDisplay(int width, int height) : base(width, height)
+		public MonochromeTextDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public MonochromeDisplay(int width, int height, int scale) : base(width,height,scale)
+        public MonochromeTextDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
         }
 
-        public MonochromeDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public MonochromeTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
@@ -97,7 +97,7 @@ namespace DisplayLibrary
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to scoll at the point.
+                    // the display needs to scroll at the point.
                     Scroll();
                 }
             }
@@ -122,7 +122,7 @@ namespace DisplayLibrary
                     if (_y >= _height)
                     {
                         _y = _height;
-                        // the display needs to scoll at the point.
+                        // the display needs to scroll at the point.
                         Scroll();          
                     }
                 }

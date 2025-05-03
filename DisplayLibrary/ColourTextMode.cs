@@ -5,33 +5,34 @@ using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class MonochromeAdaptor : TextAdaptor
+    public class ColourTextMode : TextMode
     {
         #region Fields
 
         protected int _scale = 1;
         protected int _aspect = 1;
         protected Bitmap _bitmap;
+
         #endregion
         #region Constructors
 
-        public MonochromeAdaptor(int width, int height) : base(width, height)
+        public ColourTextMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
         }
 
-        public MonochromeAdaptor(int width, int height, int scale) : base(width, height)
+        public ColourTextMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
             _scale = scale;
         }
 
-        public MonochromeAdaptor(int width, int height, int scale, int aspect) : base(width, height)
+        public ColourTextMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
             _scale = scale;
             _aspect = aspect;
-        }
+         }
 
         #endregion
         #region Properties
@@ -69,14 +70,15 @@ namespace DisplayLibrary
 
         public void Clear()
         {
-            Clear('\0');
+            Clear('\0',_foreground, _background);
         }
 
-        public void Clear(char character)
+        public void Clear(char character, ConsoleColor forground, ConsoleColor background)
         {
-            for (int i = 0; i < _memory.Length; i++)
+            for (int i = 0; i < _memory.Length; i += 2)
             {
                 _memory[i] = (byte)character;
+                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)forground);
             }
         }
 
@@ -87,11 +89,13 @@ namespace DisplayLibrary
   
             int hscale = _scale * _aspect;
             int vscale = _scale;
+
             if (_bitmap is null)
             {
                 _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
             }
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
@@ -113,10 +117,15 @@ namespace DisplayLibrary
 
             int hbytes = (int)Math.Round((double)hbits / 8);
 
-            byte character = _memory[column + row * _width];
+            byte character = _memory[(column + row * columns) * 2];
+            byte colour = _memory[(column + row * columns) * 2 + 1];
+            byte foreground = (byte)(colour & 15);
+            byte background = (byte)((colour >> 4) & 15);
+
             for (int r = 0; r < vbits; r++)
             {
                 byte value = _font.Image[(byte)character * hbytes * vbits + r];
+
                 for (int c = 0; c < hbits; c++) // columns
                 {
                     byte val = (byte)(value & (128 >> c));
@@ -126,7 +135,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = (byte)_foreground;
+                            rgbValues[pos] = (byte)foreground;
                         }
                         else
                         {
@@ -135,7 +144,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = (byte)_foreground;
+                                    rgbValues[pos] = (byte)foreground;
                                 }
                             }
                         }
@@ -145,7 +154,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = (byte)_background;
+                            rgbValues[pos] = (byte)background;
                         }
                         else
                         {
@@ -154,7 +163,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = (byte)_background;
+                                    rgbValues[pos] = (byte)background;
                                 }
                             }
                         }
@@ -162,8 +171,8 @@ namespace DisplayLibrary
                 }
             }
 
-
             // Copy the 256 bit values back to the bitmap
+
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
             return (_bitmap);
@@ -173,6 +182,7 @@ namespace DisplayLibrary
         {
             int hscale = _scale * _aspect;
             int vscale = _scale;
+
             _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
@@ -199,10 +209,15 @@ namespace DisplayLibrary
             {
                 for (int column = 0; column < columns; column++)
                 {
-                    byte character = _memory[column + row * columns];
+                    byte character = _memory[(column + row * columns) * 2];
+                    byte colour = _memory[(column + row * columns) * 2 + 1];
+                    byte foreground = (byte)(colour & 15);
+                    byte background = (byte)((colour >> 4) & 15);
+
                     for (int r = 0; r < vbits; r++)
                     {
                         byte value = _font.Image[(byte)character * hbytes * vbits + r];
+
                         for (int c = 0; c < hbits; c++) // columns
                         {
                             byte val = (byte)(value & (128 >> c));
@@ -212,7 +227,7 @@ namespace DisplayLibrary
                                 if ((hscale==1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = (byte)_foreground;
+                                    rgbValues[pos] = (byte)foreground;
                                 }
                                 else
                                 {
@@ -221,7 +236,7 @@ namespace DisplayLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = (byte)_foreground;
+                                            rgbValues[pos] = (byte)foreground;
                                         }
                                     }
                                 }
@@ -231,7 +246,7 @@ namespace DisplayLibrary
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = (byte)_background;
+                                    rgbValues[pos] = (byte)background;
                                 }
                                 else
                                 {
@@ -240,7 +255,7 @@ namespace DisplayLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = (byte)_background;
+                                            rgbValues[pos] = (byte)background;
                                         }
                                     }
                                 }

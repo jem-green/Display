@@ -16,12 +16,12 @@ namespace DisplayForm
     public partial class DisplayMonochrome : Form
     {
 
-        DisplayLibrary.MonochromeDisplay monochrome;
+        DisplayLibrary.MonochromeTextDisplay monochrome;
 
         public DisplayMonochrome()
         {
             InitializeComponent();
-            monochrome = new DisplayLibrary.MonochromeDisplay(32, 32, 1);
+            monochrome = new DisplayLibrary.MonochromeTextDisplay(32, 32, 2);
 
             RasterFont rasterFont = new RasterFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
@@ -31,8 +31,8 @@ namespace DisplayForm
 
             monochrome.Font = rasterFont;
             monochrome.Set(0, 0);
-            monochrome.ForegroundColor = TextAdaptor.ConsoleColor.Green;
-            monochrome.BackgroundColor = TextAdaptor.ConsoleColor.Black;
+            monochrome.ForegroundColor = TextMode.ConsoleColor.Green;
+            monochrome.BackgroundColor = TextMode.ConsoleColor.Black;
             monochrome.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

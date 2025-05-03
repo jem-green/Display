@@ -1,12 +1,12 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.Text;
 
 namespace DisplayLibrary
 {
-    public class GraphicsAdaptor : Adaptor
+    public class TextMode : DisplayMode
     {
         #region Fields
 
@@ -37,29 +37,29 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public GraphicsAdaptor(int width, int height) : base(width, height)
+        public TextMode(int width, int height) : base(width,height)
         {
-            _mode = Mode.graphic;
+            _type = Type.text;
         }
 
         #endregion
         #region Properties
 
-        //public ConsoleColor ForegroundColor
-        //{
-        //    set
-        //    {
-        //        _foreground = value;
-        //    }
-        //}
+        public ConsoleColor ForegroundColor
+        {
+            set
+            {
+                _foreground = value;
+            }
+        }
 
-        //public ConsoleColor BackgroundColor
-        //{
-        //    set
-        //    {
-        //        _background = value;
-        //    }
-        //}
+        public ConsoleColor BackgroundColor
+        {
+            set
+            {
+                _background = value;
+            }
+        }
 
         #endregion
         #region Methods

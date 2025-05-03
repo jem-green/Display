@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    public class Console : MonochromeAdaptor
+    public class Console : MonochromeTextMode
     {
         #region Fields
 

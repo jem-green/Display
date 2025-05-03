@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Drawing;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
+using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace DisplayLibrary
 {
-    public class ColourAdaptor : TextAdaptor
+    internal class ColorGraphicsMode : GraphicsMode
     {
+        #region Fields
+
         #region Fields
 
         protected int _scale = 1;
@@ -16,23 +23,23 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public ColourAdaptor(int width, int height) : base(width, height)
+        public ColorGraphicsMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height * 2];
+            _memory = new byte[_width * _height];
         }
 
-        public ColourAdaptor(int width, int height, int scale) : base(width, height)
+        public ColorGraphicsMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[_width * _height * 2];
+            _memory = new byte[_width * _height];
             _scale = scale;
         }
 
-        public ColourAdaptor(int width, int height, int scale, int aspect) : base(width, height)
+        public ColorGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[_width * _height * 2];
+            _memory = new byte[_width * _height];
             _scale = scale;
             _aspect = aspect;
-         }
+        }
 
         #endregion
         #region Properties
@@ -70,15 +77,14 @@ namespace DisplayLibrary
 
         public void Clear()
         {
-            Clear('\0',_foreground, _background);
+            Clear('\0', _foreground, _background);
         }
 
-        public void Clear(char character, ConsoleColor forground, ConsoleColor background)
+        public void Clear(ConsoleColor background)
         {
             for (int i = 0; i < _memory.Length; i += 2)
             {
-                _memory[i] = (byte)character;
-                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)forground);
+                _memory[i] = (byte)background;
             }
         }
 
@@ -86,7 +92,7 @@ namespace DisplayLibrary
         {
             // need to know which position has been updated
             // at the moment this is handled by the parent class
-  
+
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
@@ -177,7 +183,6 @@ namespace DisplayLibrary
             _bitmap.UnlockBits(bmpCanvas);
             return (_bitmap);
         }
-
         public override void Generate()
         {
             int hscale = _scale * _aspect;
@@ -224,7 +229,7 @@ namespace DisplayLibrary
 
                             if (val != 0)
                             {
-                                if ((hscale==1) && (vscale == 1) && (_aspect == 1))
+                                if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
                                     rgbValues[pos] = (byte)foreground;

@@ -4,11 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static DisplayLibrary.Adaptor;
+using static DisplayLibrary.DisplayMode;
 
 namespace DisplayLibrary
 {
-    internal interface IAdaptor
+    internal interface IMode
     {
         int Width 
         {
@@ -28,5 +28,6 @@ namespace DisplayLibrary
             get;
         }
         void Generate();
+        void PartialGenerate(int column, int row);
     }
 }

@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Text;
+using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class TextAdaptor : Adaptor
+    public class GraphicsMode : DisplayMode
     {
         #region Fields
 
-        protected RasterFont _font;
-        protected ConsoleColor _foreground;
-        protected ConsoleColor _background;
+        protected int _scale = 1;
+        protected int _aspect = 1;
+        protected Bitmap _bitmap;
 
         public enum ConsoleColor : byte
         {
@@ -37,29 +37,29 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public TextAdaptor(int width, int height) : base(width,height)
+        public GraphicsMode(int width, int height) : base(width, height)
         {
-            _mode = Mode.text;
+            _type = Type.graphic;
         }
 
         #endregion
         #region Properties
 
-        public ConsoleColor ForegroundColor
-        {
-            set
-            {
-                _foreground = value;
-            }
-        }
+        //public ConsoleColor ForegroundColor
+        //{
+        //    set
+        //    {
+        //        _foreground = value;
+        //    }
+        //}
 
-        public ConsoleColor BackgroundColor
-        {
-            set
-            {
-                _background = value;
-            }
-        }
+        //public ConsoleColor BackgroundColor
+        //{
+        //    set
+        //    {
+        //        _background = value;
+        //    }
+        //}
 
         #endregion
         #region Methods

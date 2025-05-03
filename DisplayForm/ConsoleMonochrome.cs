@@ -31,8 +31,8 @@ namespace DisplayForm
 
             console.Font = rasterFont;
             console.Set(0, 0);
-            console.ForegroundColor = TextAdaptor.ConsoleColor.Green;
-            console.BackgroundColor = TextAdaptor.ConsoleColor.Black;
+            console.ForegroundColor = TextMode.ConsoleColor.Green;
+            console.BackgroundColor = TextMode.ConsoleColor.Black;
             console.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }
@@ -41,8 +41,8 @@ namespace DisplayForm
         {
             Graphics g = e.Graphics;
             Bitmap b = console.Bitmap;
-            //g.DrawImageUnscaled(b, 0, 0);
-            g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
+            g.DrawImageUnscaled(b, 0, 0);
+            //g.DrawImage(b, 0, 0,pictureBox1.Width-vScrollBar1.Width, pictureBox1.Height-8);
 
         }
 

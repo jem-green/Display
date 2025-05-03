@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DisplayLibrary
 {
-    public class ColourDisplay : ColourAdaptor
+    public class ColourTextDisplay : ColourTextMode
     {
         #region Fields
 
@@ -16,19 +16,19 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public ColourDisplay(int width, int height) : base(width, height)
+        public ColourTextDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public ColourDisplay(int width, int height, int scale) : base(width,height,scale)
+        public ColourTextDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
         }
 
-        public ColourDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public ColourTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
@@ -90,7 +90,7 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
+        public void Write(byte character, ColourTextMode.ConsoleColor foreground, ColourTextMode.ConsoleColor background)
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
@@ -119,7 +119,7 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
+        public void Write(string text, ColourTextMode.ConsoleColor foreground, ColourTextMode.ConsoleColor background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
@@ -141,7 +141,7 @@ namespace DisplayLibrary
                     if (_y >= _height)
                     {
                         _y = _height;
-                        // the display needs to scoll at the point.
+                        // the display needs to scroll at the point.
                         Scroll();
                         //Generate();
                     }

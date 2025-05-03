@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DisplayLibrary
 {
-    public class Terminal : ColourAdaptor
+    public class Terminal : ColourTextMode
     {
         #region Fields
 
@@ -16,7 +16,7 @@ namespace DisplayLibrary
         // The main feature of a terminal or console
         // is the scrolling ability. So we need the 
         // working area which get copied to the display buffer
-        // when we need to scrole. Two options 1) write to both
+        // when we need to scroll. Two options 1) write to both
         // and only on the scroll upwards need to copy 2) write
         // just to working area and copy irrespective.
 
@@ -106,7 +106,7 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
+        public void Write(byte character, ColourTextMode.ConsoleColor foreground, ColourTextMode.ConsoleColor background)
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
@@ -123,7 +123,7 @@ namespace DisplayLibrary
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to scoll at the point.
+                    // the display needs to scRoll at the point.
                     Scroll();
                     Generate();
                 }
@@ -135,7 +135,7 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
+        public void Write(string text, ColourTextMode.ConsoleColor foreground, ColourTextMode.ConsoleColor background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
@@ -157,7 +157,7 @@ namespace DisplayLibrary
                     if (_y >= _height)
                     {
                         _y = _height;
-                        // the display needs to scoll at the point.
+                        // the display needs to scroll at the point.
                         Scroll();
                         //Generate();
                     }
