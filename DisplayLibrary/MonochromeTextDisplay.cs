@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    public class MonochromeTextDisplay : MonochromeTextMode
+    public class MonochromeTextDisplay : MonochromeTextMode, IMode
     {
         #region Fields
 
@@ -87,7 +87,7 @@ namespace DisplayLibrary
             _memory[_x + _y * _width] = character;
             // Would have to call a partial generate here
 
-            PartialGenerate(_x, _y);
+            PartialGenerate(_x, _y, 1, 1);
             
             _x++;
             if (_x >= _width)
@@ -112,7 +112,7 @@ namespace DisplayLibrary
                 _memory[_x + _y * _width] = (byte)chars[i];
                 // Would have to call a partial generate here
 
-                PartialGenerate(_x, _y);
+                PartialGenerate(_x, _y, 1, 1);
 
                 _x++;
                 if (_x >= _width)

@@ -11,10 +11,10 @@ namespace DisplayLibrary
         #region Fields
 
         protected RasterFont _font;
-        protected ConsoleColor _foreground;
-        protected ConsoleColor _background;
+        protected ConsoleColour _foreground;
+        protected ConsoleColour _background;
 
-        public enum ConsoleColor : byte
+        public enum ConsoleColour : byte
         {
             Black = 0,
             DarkBlue = 1,
@@ -45,7 +45,7 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public ConsoleColor ForegroundColor
+        public ConsoleColour ForegroundColor
         {
             set
             {
@@ -53,7 +53,7 @@ namespace DisplayLibrary
             }
         }
 
-        public ConsoleColor BackgroundColor
+        public ConsoleColour BackgroundColor
         {
             set
             {

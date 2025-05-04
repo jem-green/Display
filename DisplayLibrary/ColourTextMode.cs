@@ -73,7 +73,7 @@ namespace DisplayLibrary
             Clear('\0',_foreground, _background);
         }
 
-        public void Clear(char character, ConsoleColor forground, ConsoleColor background)
+        public void Clear(char character, ConsoleColour forground, ConsoleColour background)
         {
             for (int i = 0; i < _memory.Length; i += 2)
             {
@@ -82,7 +82,7 @@ namespace DisplayLibrary
             }
         }
 
-        public Bitmap PartialGenerate(int column, int row)
+        public override void PartialGenerate(int column, int row, int width, int height)
         {
             // need to know which position has been updated
             // at the moment this is handled by the parent class
@@ -175,7 +175,7 @@ namespace DisplayLibrary
 
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
-            return (_bitmap);
+            //return (_bitmap);
         }
 
         public override void Generate()

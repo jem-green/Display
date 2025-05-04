@@ -35,8 +35,8 @@ namespace DisplayLibrary
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColor = TextMode.ConsoleColor.Black;
-            terminal.BackgroundColor = TextMode.ConsoleColor.White;
+            terminal.ForegroundColor = TextMode.ConsoleColour.Black;
+            terminal.BackgroundColor = TextMode.ConsoleColour.White;
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

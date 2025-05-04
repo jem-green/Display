@@ -27,8 +27,8 @@ namespace DisplayForm
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColor = TextMode.ConsoleColor.Black;
-            terminal.BackgroundColor = TextMode.ConsoleColor.White;
+            terminal.ForegroundColor = TextMode.ConsoleColour.Black;
+            terminal.BackgroundColor = TextMode.ConsoleColour.White;
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             panel1.Select();
@@ -67,7 +67,7 @@ namespace DisplayForm
             byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
             if (key > 0)
             {
-                terminal.Write(key, TextMode.ConsoleColor.Blue, TextMode.ConsoleColor.Green);
+                terminal.Write(key, TextMode.ConsoleColour.Blue, TextMode.ConsoleColour.Green);
                 panel1.Invalidate();
             }
         }

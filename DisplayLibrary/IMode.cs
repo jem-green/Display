@@ -28,6 +28,6 @@ namespace DisplayLibrary
             get;
         }
         void Generate();
-        void PartialGenerate(int column, int row);
+        void PartialGenerate(int x1, int y1, int x2, int y2);
     }
 }

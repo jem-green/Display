@@ -55,15 +55,24 @@ namespace DisplayLibrary
 
             // Could predefine all the modes here
 
-            KeyValuePair<int, IMode> mode = new KeyValuePair<int, IMode>((int)DisplayMode.t40x25c16, new TextMode(40, 25));
+            KeyValuePair<int, IMode> mode;
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t40x25c16, new TextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x25c16, new TextMode(80, 25));
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g160x100c16, new GraphicsMode(160, 100));
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g320x200c4, new GraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x43c16, new ColourTextMode(80, 43));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x200c2, new GraphicsMode(640, 200));
+
+
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x350c16, new ColourGraphicsMode(640, 350));
+            _modes.Add(mode);
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x350c2, new MonochromeGraphicsMode(640, 200));
+            _modes.Add(mode);
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x200c16, new ColourGraphicsMode(640, 200));
+            _modes.Add(mode);
+            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g320x200c16, new ColourGraphicsMode(320, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -118,15 +127,21 @@ namespace DisplayLibrary
             switch (displayMode)
             {
                 case DisplayMode.t40x25c16:
-                    return new TextMode(40, 25);
+                    return new ColourTextMode(40, 25);
                 case DisplayMode.t80x25c16:
-                    return new TextMode(80, 25);
-                case DisplayMode.g160x100c16:
-                    return new GraphicsMode(160, 100);
-                case DisplayMode.g320x200c4:
-                    return new GraphicsMode(320, 200);
-                case DisplayMode.g640x200c2:
-                    return new GraphicsMode(640, 200);
+                    return new ColourTextMode(80, 25);
+                case DisplayMode.t80x25c16a:
+                    return new ColourTextMode(80, 25);
+                case DisplayMode.t80x43c16:
+                    return new ColourTextMode(80, 43);
+                case DisplayMode.g640x350c16:
+                    return new ColourGraphicsMode(640, 350);
+                case DisplayMode.g640x350c2:
+                    return new MonochromeGraphicsMode(640, 350);
+                case DisplayMode.g640x200c16:
+                    return new ColourGraphicsMode(640, 200);
+                case DisplayMode.g320x200c16:
+                    return new ColourGraphicsMode(320, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }

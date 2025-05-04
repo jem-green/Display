@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DisplayLibrary
 {
-    public class Terminal : ColourTextMode
+    public class Terminal : ColourTextMode, IMode
     {
         #region Fields
 
@@ -106,14 +106,14 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, ColourTextMode.ConsoleColor foreground, ColourTextMode.ConsoleColor background)
+        public void Write(byte character, ColourTextMode.ConsoleColour foreground, ColourTextMode.ConsoleColour background)
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
 
             // Would have to call a partial generate here
 
-            PartialGenerate(_x, _y);
+            PartialGenerate(_x, _y, 1, 1);
             
             _x++;
             if (_x >= _width)
@@ -135,7 +135,7 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, ColourTextMode.ConsoleColor foreground, ColourTextMode.ConsoleColor background)
+        public void Write(string text, ColourTextMode.ConsoleColour foreground, ColourTextMode.ConsoleColour background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks

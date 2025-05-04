@@ -29,10 +29,11 @@ namespace DisplayForm
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
+            monochrome.Clear(); // Need this to set the memory to 0
             monochrome.Font = rasterFont;
             monochrome.Set(0, 0);
-            monochrome.ForegroundColor = TextMode.ConsoleColor.Green;
-            monochrome.BackgroundColor = TextMode.ConsoleColor.Black;
+            monochrome.ForegroundColor = TextMode.ConsoleColour.Green;
+            monochrome.BackgroundColor = TextMode.ConsoleColour.Black;
             monochrome.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }
