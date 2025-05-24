@@ -4,30 +4,39 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static DisplayLibrary.DisplayMode;
 
 namespace DisplayLibrary
 {
     internal interface IMode
     {
-        int Width 
-        {
-            set;
-            get; 
-        }
+        #region Methods
 
-        int Height
+        public int Aspect
         {
             set;
             get;
         }
 
-        byte[] Memory
+        public Bitmap Bitmap
         {
-            set;
             get;
         }
-        void Generate();
-        void PartialGenerate(int x1, int y1, int x2, int y2);
+
+        public int Scale
+        {
+            get;
+            set;
+        }
+
+        public void Clear();
+
+        public void Clear(Colour background);
+
+        public void PartialGenerate(int x1, int y1, int x2, int y2);
+
+        public void Generate();
+
+        #endregion
+
     }
 }

@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Drawing;
-using System.Linq;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace DisplayLibrary
 {
-    internal class ColourGraphicsMode : GraphicsMode
+    /// <summary>
+    /// Support for 8 bit graphics mode
+    /// </summary>
+    public class ColourGraphicsMode : GraphicsMode, IStorage, IMode
     {
         #region Fields
-
-        protected int _scale = 1;
-        protected int _aspect = 1;
-        protected Bitmap _bitmap;
 
         #endregion
         #region Constructors
@@ -42,50 +36,31 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public int Aspect
-        {
-            set
-            {
-                _aspect = value;
-            }
-            get
-            {
-                return (_aspect);
-            }
-        }
-
-        public Bitmap Bitmap
-        {
-            get
-            {
-                return (_bitmap);
-            }
-        }
-
-        public int Scale
-        {
-            get
-            {
-                return (_scale);
-            }
-        }
-
         #endregion
         #region Methods
 
-        public void Clear()
+        public override void Clear()
         {
-            Clear(0);
+            Clear(_background);
         }
 
-        public void Clear(byte background)
+        public override void Clear(Colour background)
         {
-            for (int i = 0; i < _memory.Length; i += 2)
-            {
-                _memory[i] = (byte)background;
-            }
+            Clear(background.R, background.G, background.B);
+        }
 
-            Array.Fill(_memory, (byte)background, 1, _memory.Length - 1);
+        public void Clear(byte r, byte g, byte b)
+        {
+            _memory = new byte[_width * _height];
+            byte colour = r;
+            g = (byte)((g >> 3) & 0b00011100);
+            colour = (byte)(colour | g);
+            b = (byte)((b >> 6) & 0b00000011);
+            colour = (byte)(colour | b);
+            for (int i = 0; i < _memory.Length; i++)
+            {
+                _memory[i] = colour;
+            }
         }
 
         public override void PartialGenerate(int x1, int y1, int x2, int y2)
@@ -126,10 +101,8 @@ namespace DisplayLibrary
         {
             int hscale = _scale * _aspect;
             int vscale = _scale;
-            if (_bitmap is null)
-            {
-                _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
-            }
+
+        	_bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
@@ -149,11 +122,10 @@ namespace DisplayLibrary
 
             _memory.CopyTo(rgbValues, 0);
 
-            // Copy the 256 bit values back to the bitmap
+            // Copy the 255 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }
-
 
         #endregion
         #region Private

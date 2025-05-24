@@ -1,8 +1,9 @@
 ﻿using System;
+using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
-    public class Console : MonochromeTextMode
+    public class Console : MonochromeTextMode, IStorage, IText
     {
         #region Fields
 
@@ -68,6 +69,27 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
+        public byte Read(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                byte character = _memory[_x + _y * _width];
+                return (character);
+            }
+        }
+
+        public byte Read()
+        {
+            // need to do some boundary checks
+            byte character = _memory[_x + _y * _width];
+            return (character);
+        }
+
         public void Set(int column, int row)
         {
             // need to do some boundary checks
@@ -83,6 +105,11 @@ namespace DisplayLibrary
         }
 
         public void Write(byte character)
+        {
+            Write(character, _foreground, _background);
+        }
+
+        public void Write(byte character, Colour foreground, Colour background)
         {
             _memory[_x + _y * _width] = character;
             // Would have to call a partial generate here
@@ -104,6 +131,11 @@ namespace DisplayLibrary
         }
 
         public void Write(string text)
+        {
+            Write(text, _foreground, _background);
+        }
+
+        public void Write(string text, Colour foreground, Colour background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks

@@ -1,14 +1,14 @@
 ﻿using System;
+using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
-    public class MonochromeTextDisplay : MonochromeTextMode, IMode
+    public class MonochromeTextDisplay : MonochromeTextMode, IText, IStorage
     {
         #region Fields
 
         int _x;
         int _y;
-        
 
         #endregion
         #region Constructors
@@ -23,12 +23,15 @@ namespace DisplayLibrary
         {
             _x = 0;
             _y = 0;
+            _scale = scale;
         }
 
         public MonochromeTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
+            _scale = scale;
+            _aspect = aspect;
         }
 
         #endregion
@@ -82,7 +85,32 @@ namespace DisplayLibrary
             }
         }
 
+        public byte Read()
+        {
+            // need to do some boundary checks
+            byte character = _memory[_x + _y * _width];
+            return (character);
+        }
+
+        public byte Read(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+            	byte character = _memory[column + row * _width];
+            	return (character);
+            }
+        }
         public void Write(byte character)
+        {
+            Write(character, _foreground, _background);
+        }
+
+        public void Write(byte character, byte foreground, byte background)
         {
             _memory[_x + _y * _width] = character;
             // Would have to call a partial generate here
@@ -99,11 +127,17 @@ namespace DisplayLibrary
                     _y = _height;
                     // the display needs to scroll at the point.
                     Scroll();
+                    Generate();
                 }
             }
         }
 
         public void Write(string text)
+        {
+            Write(text, _foreground, _background);
+        }
+
+        public void Write(string text, byte foreground, byte background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
@@ -111,6 +145,7 @@ namespace DisplayLibrary
             {
                 _memory[_x + _y * _width] = (byte)chars[i];
                 // Would have to call a partial generate here
+                // but may make sense to only do this at the end
 
                 PartialGenerate(_x, _y, 1, 1);
 
@@ -127,7 +162,9 @@ namespace DisplayLibrary
                     }
                 }
             }
+            Generate();
         }
+
 
         public void Scroll()
         {

@@ -5,13 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class ColourTextMode : TextMode
+    public class ColourTextMode : TextMode, IStorage
     {
         #region Fields
-
-        protected int _scale = 1;
-        protected int _aspect = 1;
-        protected Bitmap _bitmap;
 
         #endregion
         #region Constructors
@@ -37,48 +33,26 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public int Aspect
-        {
-            set
-            {
-                _aspect = value;
-            }
-            get
-            {
-                return (_aspect);
-            }
-        }
-
-        public Bitmap Bitmap
-        {
-            get
-            {
-                return (_bitmap);
-            }
-        }
-
-        public int Scale
-        {
-            get
-            {
-                return (_scale);
-            }
-        }
-
         #endregion
         #region Methods
 
-        public void Clear()
+        public override void Clear()
         {
-            Clear('\0',_foreground, _background);
+            Clear(_background);
         }
 
-        public void Clear(char character, ConsoleColour forground, ConsoleColour background)
+        public override void Clear(Colour background)
         {
+            Clear('\0', 0, 7);
+        }
+
+        public void Clear(char character, byte foreground, byte background)
+        {
+            _memory = new byte[_width * _height * 2];
             for (int i = 0; i < _memory.Length; i += 2)
             {
                 _memory[i] = (byte)character;
-                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)forground);
+                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)foreground);
             }
         }
 

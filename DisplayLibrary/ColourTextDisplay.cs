@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
-    public class ColourTextDisplay : ColourTextMode
+    public class ColourTextDisplay : ColourTextMode, IStorage, IText
     {
         #region Fields
 
@@ -26,12 +27,15 @@ namespace DisplayLibrary
         {
             _x = 0;
             _y = 0;
+            _scale = scale;
         }
 
         public ColourTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
+            _scale = scale;
+            _aspect = aspect;
         }
 
         #endregion
@@ -84,13 +88,34 @@ namespace DisplayLibrary
                 _y = row;
             }
         }
+		
+        public byte Read()
+        {
+            // need to do some boundary checks
+            byte character = _memory[(_x + _y * _width) * 2];
+            return (character);
+        }
+
+        public byte Read(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                byte character = _memory[(_x + _y * _width)*2];
+                return (character);
+            }
+        }
 
         public void Write(byte character)
         {
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, ColourTextMode.ConsoleColour foreground, ColourTextMode.ConsoleColour background)
+        public void Write(byte character, Colour foreground, Colour background)
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
@@ -107,7 +132,7 @@ namespace DisplayLibrary
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to scoll at the point.
+                    // the display needs to scroll at the point.
                     Scroll();
                     Generate();
                 }
@@ -119,7 +144,7 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, ColourTextMode.ConsoleColour foreground, ColourTextMode.ConsoleColour background)
+        public void Write(string text, byte foreground, byte background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
@@ -131,7 +156,7 @@ namespace DisplayLibrary
                 // Would have to call a partial generate here
                 // but may make sense to only do this at the end
 
-                //PartialGenerate(_x, _y);
+                PartialGenerate(_x, _y, 1, 1);
 
                 _x++;
                 if (_x >= _width)

@@ -11,8 +11,8 @@ namespace DisplayLibrary
         #region Fields
 
         private DisplayMode _displayMode = DisplayMode.t40x25c16;
-        private List<KeyValuePair<int,IMode>> _modes = new List<KeyValuePair<int, IMode>>();
-        private IMode _mode;
+        private List<KeyValuePair<int,IStorage>> _modes = new List<KeyValuePair<int, IStorage>>();
+        private IStorage _mode;
 
         public enum DisplayMode : int
         {
@@ -55,24 +55,24 @@ namespace DisplayLibrary
 
             // Could predefine all the modes here
 
-            KeyValuePair<int, IMode> mode;
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t40x25c16, new TextMode(40, 25));
+            KeyValuePair<int, IStorage> mode;
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new ColourTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x43c16, new ColourTextMode(80, 43));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x43c16, new ColourTextMode(80, 43));
             _modes.Add(mode);
 
 
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x350c16, new ColourGraphicsMode(640, 350));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c16, new ColourGraphicsMode(640, 350));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x350c2, new MonochromeGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c2, new MonochromeGraphicsMode(640, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x200c16, new ColourGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c16, new ColourGraphicsMode(640, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g320x200c16, new ColourGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c16, new ColourGraphicsMode(320, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -122,7 +122,7 @@ namespace DisplayLibrary
         #endregion
         #region Private
 
-        IMode GetAdaptor(DisplayMode displayMode)
+        IStorage GetAdaptor(DisplayMode displayMode)
         {
             switch (displayMode)
             {

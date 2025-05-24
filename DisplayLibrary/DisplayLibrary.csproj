@@ -9,16 +9,29 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="DisplayBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.6.0-preview3.19128.7" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ColourAdaptor - Copy.cs" />
+    <Compile Remove="ColourTextDisplay.cs" />
+    <Compile Remove="Console.cs" />
+    <Compile Remove="DisplayBox.cs" />
+    <Compile Remove="DisplayBox.Designer.cs" />
+    <Compile Remove="GraphicsDisplay.cs" />
+    <Compile Remove="IBMColorGraphicsAdaptor.cs" />
+    <Compile Remove="IBMEnhancedGraphicsAdaptor.cs" />
+    <Compile Remove="IBM_PC.cs" />
+    <Compile Remove="MonochromeGraphicsMode.cs" />
+    <Compile Remove="MonochromeTextDisplay.cs" />
+    <Compile Remove="MonochromeTextMode.cs" />
+    <Compile Remove="Terminal.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="DisplayBox.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RasterFontLibrary\RasterFontLibrary.csproj" />
   </ItemGroup>
 </Project>

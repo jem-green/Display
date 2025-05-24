@@ -15,8 +15,8 @@ namespace DisplayLibrary
         #region Fields
 
         private DisplayMode _displayMode = DisplayMode.t40x25c16;
-        private List<KeyValuePair<int,IMode>> _modes = new List<KeyValuePair<int, IMode>>();
-        private IMode _mode;
+        private List<KeyValuePair<int,IStorage>> _modes = new List<KeyValuePair<int, IStorage>>();
+        private IStorage _mode;
 
         public enum DisplayMode : int
         {
@@ -48,15 +48,16 @@ namespace DisplayLibrary
 
             // Could predefine all the modes here
 
-            KeyValuePair<int, IMode> mode = new KeyValuePair<int, IMode>((int)DisplayMode.t40x25c16, new TextMode(40, 25));
+            KeyValuePair<int, IStorage> mode;
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new ColourTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.t80x25c16, new TextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g160x100c16, new GraphicsMode(160, 100));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new ColourGraphicsMode(160, 100));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g320x200c4, new GraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new ColourGraphicsMode(320, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IMode>((int)DisplayMode.g640x200c2, new GraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new ColourGraphicsMode(640, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -106,20 +107,20 @@ namespace DisplayLibrary
         #endregion
         #region Private
 
-        IMode GetAdaptor(DisplayMode displayMode)
+        IStorage GetAdaptor(DisplayMode displayMode)
         {
             switch (displayMode)
             {
                 case DisplayMode.t40x25c16:
-                    return new TextMode(40, 25);
+                    return new ColourTextMode(40, 25);
                 case DisplayMode.t80x25c16:
-                    return new TextMode(80, 25);
+                    return new ColourTextMode(80, 25);
                 case DisplayMode.g160x100c16:
-                    return new GraphicsMode(160, 100);
+                    return new ColourGraphicsMode(160, 100);
                 case DisplayMode.g320x200c4:
-                    return new GraphicsMode(320, 200);
+                    return new ColourGraphicsMode(320, 200);
                 case DisplayMode.g640x200c2:
-                    return new GraphicsMode(640, 200);
+                    return new ColourGraphicsMode(640, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }
