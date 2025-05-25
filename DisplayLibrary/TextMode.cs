@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
 using DisplayLibrary;
+using DisplayLibrary;
+using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
