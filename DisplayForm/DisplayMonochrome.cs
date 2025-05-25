@@ -32,9 +32,9 @@ namespace DisplayForm
             monochrome.Clear(); // Need this to set the memory to 0
             monochrome.Font = rasterFont;
             monochrome.Set(0, 0);
-            monochrome.ForegroundColor = TextMode.ConsoleColour.Green;
-            monochrome.BackgroundColor = TextMode.ConsoleColour.Black;
-            monochrome.Write("HELLO THIS SHOULD WRAP AROUND");
+            monochrome.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
+            monochrome.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
+            monochrome.Write("HELLO THIS SHOULD WRAP AROUND",0,0);
             pictureBox1.Select();
         }
 
@@ -51,14 +51,14 @@ namespace DisplayForm
             {
                 for (int i = 0; i < 400; i++)
                 {
-                    monochrome.Write((byte)'e');
+                    monochrome.Write((byte)'e',0,0);
                 }
                 monochrome.Generate();
                 pictureBox1.Invalidate();
             }
             else
             {
-                monochrome.Write("Hello");
+                monochrome.Write("Hello", 0, 0);
                 pictureBox1.Invalidate();
             }
         }
@@ -66,7 +66,7 @@ namespace DisplayForm
         private void pictureBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             int key = e.KeyValue;
-            monochrome.Write((byte)key);
+            monochrome.Write((byte)key, 0, 0);
             pictureBox1.Invalidate();
         }
     }

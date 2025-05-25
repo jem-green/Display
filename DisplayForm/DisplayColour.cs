@@ -26,8 +26,8 @@ namespace DisplayForm
 
             colourDisplay.Font = rasterFont;
             colourDisplay.Set(0, 0);
-            colourDisplay.ForegroundColor = TextMode.ConsoleColour.Black;
-            colourDisplay.BackgroundColor = TextMode.ConsoleColour.White;
+            colourDisplay.ForegroundColour = (byte)TextMode.ConsoleColour.Black;
+            colourDisplay.BackgroundColour = (byte)TextMode.ConsoleColour.White;
             colourDisplay.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             pictureBox1.Select();
@@ -64,7 +64,7 @@ namespace DisplayForm
             byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
             if (key > 0)
             {
-                colourDisplay.Write(key, TextMode.ConsoleColour.Blue, TextMode.ConsoleColour.Green);
+                colourDisplay.Write(key, (byte)TextMode.ConsoleColour.Blue, (byte)TextMode.ConsoleColour.Green);
                 pictureBox1.Invalidate();
             }
         }

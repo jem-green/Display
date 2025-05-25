@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class MonochromeTextMode : TextMode
+    public class MonochromeTextMode : TextMode, IStorage, IMode
     {
         #region Fields
 
@@ -68,7 +68,7 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
-        public void Clear()
+        public override void Clear()
         {
             Clear('\0');
         }
@@ -262,191 +262,6 @@ namespace DisplayLibrary
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }
-
-
-        //public override void PartialGenerate(int column, int row)
-        //{
-        //    // need to know which position has been updated
-        //    // at the moment this is handled by the parent class
-
-        //    int hscale = _scale * _aspect;
-        //    int vscale = _scale;
-        //    if (_bitmap is null)
-        //    {
-        //        _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format1bppIndexed);
-        //        IndexedBitmapHelper.SetPalette(_bitmap, _foreground, _background);
-        //    }
-        //    BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
-
-        //    // Get the address of the first line.
-
-        //    IntPtr ptr = bmpCanvas.Scan0;
-
-        //    // Declare an array to hold the bytes of the bitmap.
-
-        //    int size = _bitmap.Width / 8 * _bitmap.Height;
-        //    byte[] rgbValues = new byte[size];
-
-        //    // Copy the 256 bit values from bitmap
-
-        //    Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
-
-        //    int rows = _height;
-        //    int columns = _width;
-        //    int hbits = _font.Horizontal;
-        //    int vbits = _font.Vertical;
-
-        //    int hbytes = (int)Math.Round((double)hbits / 8);
-
-        //    byte character = _memory[column + row * _width];
-        //    for (int r = 0; r < vbits; r++)
-        //    {
-        //        byte value = _font.Image[(byte)character * hbytes * vbits + r];
-
-        //        for (int c = 0; c < hbits; c++) // columns
-        //        {
-        //            byte val = (byte)(value & (128 >> c));
-
-        //            int pos = (row * vbits + r) * columns * hbytes + column * hbytes;
-        //            rgbValues[pos] = value;
-
-        //            //if (val != 0)
-        //            //{
-        //            //    if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
-        //            //    {
-        //            //        int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-        //            //        rgbValues[pos] = (byte)_foreground;
-        //            //    }
-        //            //    else
-        //            //    {
-        //            //        for (int i = 0; i < vscale; i++)
-        //            //        {
-        //            //            for (int j = 0; j < hscale; j++)
-        //            //            {
-        //            //                int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-        //            //                rgbValues[pos] = (byte)_foreground;
-        //            //            }
-        //            //        }
-        //            //    }
-        //            //}
-        //            //else
-        //            //{
-        //            //    if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
-        //            //    {
-        //            //        int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-        //            //        rgbValues[pos] = (byte)_background;
-        //            //    }
-        //            //    else
-        //            //    {
-        //            //        for (int i = 0; i < vscale; i++)
-        //            //        {
-        //            //            for (int j = 0; j < hscale; j++)
-        //            //            {
-        //            //                int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-        //            //                rgbValues[pos] = (byte)_background;
-        //            //            }
-        //            //        }
-        //            //    }
-        //            //}
-        //        }
-        //    }
-
-
-        //    // Copy the 256 bit values back to the bitmap
-        //    System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
-        //    _bitmap.UnlockBits(bmpCanvas);
-        //}
-
-        //public override void Generate()
-        //{
-        //    int hscale = _scale * _aspect;
-        //    int vscale = _scale;
-        //    _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format1bppIndexed);
-        //    IndexedBitmapHelper.SetPalette(_bitmap, _foreground, _background);
-        //    BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
-
-        //    // Get the address of the first line.
-
-        //    IntPtr ptr = bmpCanvas.Scan0;
-
-        //    // Declare an array to hold the bytes of the bitmap.
-
-        //    int size = _bitmap.Width / 8 * _bitmap.Height;
-        //    byte[] rgbValues = new byte[size];
-        //    // might be quicker to fill the array with background in one go
-
-        //    int rows = _height;
-        //    int columns = _width;
-        //    int hbits = _font.Horizontal;
-        //    int vbits = _font.Vertical;
-
-        //    int hbytes = (int)Math.Round((double)hbits / 8);
-
-        //    // work across character by character
-
-        //    for (int row = 0; row < rows; row++)
-        //    {
-        //        for (int column = 0; column < columns; column++)
-        //        {
-        //            byte character = _memory[column + row * columns];
-        //            for (int r = 0; r < vbits; r++) // rows
-        //            {
-        //                byte value = _font.Image[(byte)character * hbytes * vbits + r];
-
-        //                //int pos = (row * vbits + r) * columns * hbytes + column * hbytes;
-        //                //rgbValues[pos] = value;
-
-        //                for (int c = 0; c < hbits; c++) // columns
-        //                {
-        //                    byte val = (byte)(value & (128 >> c));
-
-        //                    if (val != 0)
-        //                    {
-        //                        if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
-        //                        {
-        //                            int pos = (row * vbits + r) * columns * hbits / 8 + column * hbits / 8 + c / 8;
-        //                            rgbValues[pos] = (byte)(rgbValues[pos] | (128 >> c));
-        //                        }
-        //                        else
-        //                        {
-        //                            for (int i = 0; i < vscale; i++)
-        //                            {
-        //                                for (int j = 0; j < hscale; j++)
-        //                                {
-        //                                    int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits / 8 * hscale + column * hbits / 8 * hscale + c / 8 * hscale + j;
-        //                                    rgbValues[pos] = (byte)(rgbValues[pos] | (128 >> c));
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
-        //                        {
-        //                            int pos = (row * vbits + r) * columns * hbits / 8 + column * hbits / 8 + c / 8;
-        //                            //rgbValues[pos] = (byte)(rgbValues[pos] & (255 >> c));
-        //                        }
-        //                        else
-        //                        {
-        //                            for (int i = 0; i < vscale; i++)
-        //                            {
-        //                                for (int j = 0; j < hscale; j++)
-        //                                {
-        //                                    int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits / 8 * hscale + column * hbits / 8 * hscale + c / 8 * hscale + j;
-        //                                    rgbValues[pos] = (byte)(rgbValues[pos] & (1 >> c));
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    // Copy the 256 bit values back to the bitmap
-        //    System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
-        //    _bitmap.UnlockBits(bmpCanvas);
-        //}
 
         #endregion
         #region Private

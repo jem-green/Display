@@ -1,34 +1,35 @@
 ﻿using System;
-using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
     /// <summary>
-    /// Support for 8 bit graphics mode
+    /// Support for 32 bit graphics mode
     /// </summary>
-    public class ColourGraphicsMode : GraphicsMode, IStorage, IMode
+    public class VibrantGraphicsMode : GraphicsMode, IStorage, IMode
     {
         #region Fields
+
 
         #endregion
         #region Constructors
 
-        public ColourGraphicsMode(int width, int height) : base(width, height)
+        public VibrantGraphicsMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 3];
         }
 
-        public ColourGraphicsMode(int width, int height, int scale) : base(width, height)
+        public VibrantGraphicsMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 3];
             _scale = scale;
         }
 
-        public ColourGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
+        public VibrantGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 3];
             _scale = scale;
             _aspect = aspect;
         }
@@ -46,20 +47,17 @@ namespace DisplayLibrary
 
         public override void Clear(Colour background)
         {
-            Clear(background.R, background.G, background.B);
+           Clear(background.R, background.G, background.B);
         }
 
         public void Clear(byte r, byte g, byte b)
         {
-            _memory = new byte[_width * _height];
-            byte colour = r;
-            g = (byte)((g >> 3) & 0b00011100);
-            colour = (byte)(colour | g);
-            b = (byte)((b >> 6) & 0b00000011);
-            colour = (byte)(colour | b);
-            for (int i = 0; i < _memory.Length; i++)
+            _memory = new byte[_width * _height * 3];
+            for (int i = 0; i < _memory.Length; i += 3)
             {
-                _memory[i] = colour;
+                _memory[i] = r;
+                _memory[i + 1] = g;
+                _memory[i + 2] = b;
             }
         }
 
@@ -72,9 +70,9 @@ namespace DisplayLibrary
             int vscale = _scale;
             if (_bitmap is null)
             {
-                _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
+                _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format24bppRgb);
             }
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
 
             // Get the address of the first line.
 
@@ -82,7 +80,37 @@ namespace DisplayLibrary
 
             // Declare an array to hold the bytes of the bitmap.
 
-            int size = _bitmap.Width * _bitmap.Height;
+            int size = _bitmap.Width * _bitmap.Height * 3;
+            byte[] rgbValues = new byte[size];
+
+            // Copy the 256 bit values from bitmap
+
+            Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
+
+            // Copy the memory to the rgbValues array
+
+            _memory.CopyTo(rgbValues, 0);
+
+            // Copy the 3 x 256 bit values back to the bitmap
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
+            _bitmap.UnlockBits(bmpCanvas);
+        }
+        public override void Generate()
+        {
+            int hscale = _scale * _aspect;
+            int vscale = _scale;
+
+            _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format24bppRgb);
+
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+
+            // Get the address of the first line.
+
+            IntPtr ptr = bmpCanvas.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.
+
+            int size = _bitmap.Width * _bitmap.Height * 3;
             byte[] rgbValues = new byte[size];
 
             // Copy the 256 bit values from bitmap
@@ -94,35 +122,6 @@ namespace DisplayLibrary
             _memory.CopyTo(rgbValues, 0);
 
             // Copy the 256 bit values back to the bitmap
-            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
-            _bitmap.UnlockBits(bmpCanvas);
-        }
-        public override void Generate()
-        {
-            int hscale = _scale * _aspect;
-            int vscale = _scale;
-
-        	_bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
-
-            // Get the address of the first line.
-
-            IntPtr ptr = bmpCanvas.Scan0;
-
-            // Declare an array to hold the bytes of the bitmap.
-
-            int size = _bitmap.Width * _bitmap.Height;
-            byte[] rgbValues = new byte[size];
-
-            // Copy the 256 bit values from bitmap
-
-            Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
-
-            // Copy the memory to the rgbValues array
-
-            _memory.CopyTo(rgbValues, 0);
-
-            // Copy the 255 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }

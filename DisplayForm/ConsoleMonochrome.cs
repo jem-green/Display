@@ -31,8 +31,8 @@ namespace DisplayForm
 
             console.Font = rasterFont;
             console.Set(0, 0);
-            console.ForegroundColor = TextMode.ConsoleColour.Green;
-            console.BackgroundColor = TextMode.ConsoleColour.Black;
+            console.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
+            console.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
             console.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

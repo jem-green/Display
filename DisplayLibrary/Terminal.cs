@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
-    public class Terminal : ColourTextMode, IMode
+    public class Terminal : ColourTextMode, IStorage
     {
         #region Fields
 
@@ -106,7 +107,7 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, ColourTextMode.ConsoleColour foreground, ColourTextMode.ConsoleColour background)
+        public void Write(byte character, byte foreground, byte background)
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
@@ -135,7 +136,7 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, ColourTextMode.ConsoleColour foreground, ColourTextMode.ConsoleColour background)
+        public void Write(string text, byte foreground, byte background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks

@@ -1,6 +1,8 @@
-﻿namespace DisplayLibrary
+﻿using System.Drawing;
+
+namespace DisplayLibrary
 {
-    public class DisplayMode : IMode
+    public abstract class Storage : IStorage
     {
         #region Fields
 
@@ -20,26 +22,15 @@
         #endregion
         #region Constructors
 
-        public DisplayMode(int width, int height)
+        public Storage(int width, int height)
         {
             _width = width;
             _height = height;
+            _memory = new byte[0];
         }
 
         #endregion
         #region Properties
-
-        public int Width
-        {
-            set
-            {
-                _width = value;
-            }
-            get
-            {
-                return (_width);
-            }
-        }
 
         public int Height
         {
@@ -50,6 +41,18 @@
             get
             {
                 return (_height);
+            }
+        }
+
+        public int Left
+        {
+            set
+            {
+                _left = value;
+            }
+            get
+            {
+                return (_left);
             }
         }
 
@@ -65,16 +68,33 @@
             }
         }
 
+        public int Top
+        {
+            set
+            {
+                _top = value;
+            }
+            get
+            {
+                return (_top);
+            }
+        }
+
+        public int Width
+        {
+            set
+            {
+                _width = value;
+            }
+            get
+            {
+                return (_width);
+            }
+        }
+
         #endregion
         #region Methods
 
-        public virtual void Generate()
-        {
-        }
-
-        public virtual void PartialGenerate(int x1, int y1, int x2, int y2)
-        {
-        }
 
         #endregion
         #region Private

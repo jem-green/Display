@@ -10,14 +10,16 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace DisplayLibrary
 {
-    internal class MonochromeGraphicsMode : GraphicsMode, IMode
+    /// <summary>
+    /// Support for 1 bit graphics mode
+    /// </summary>
+    internal class MonochromeGraphicsMode : GraphicsMode, IGraphic, IMode, IStorage
     {
         #region Fields
 
         protected int _scale = 1;
         protected int _aspect = 1;
         protected Bitmap _bitmap;
-
         #endregion
         #region Constructors
 
@@ -69,23 +71,31 @@ namespace DisplayLibrary
                 return (_scale);
             }
         }
-
         #endregion
         #region Methods
 
         public void Clear()
         {
-            Clear(0);
+            Clear(_background);
+        }
+		
+		public void Clear(Colour background)
+        {
+           Clear(background.R, background.G, background.B);
         }
 
-        public void Clear(byte background)
+        public void Clear(byte r, byte g, byte b)
         {
-            for (int i = 0; i < _memory.Length; i += 2)
+            _memory = new byte[_width * _height];
+            byte colour = r;
+            g = (byte)((g >> 3) & 0b00011100);
+            colour = (byte)(colour | g);
+            b = (byte)((b >> 6) & 0b00000011);
+            colour = (byte)(colour | b);
+            for (int i = 0; i < _memory.Length; i++)
             {
-                _memory[i] = (byte)background;
+                _memory[i] = colour;
             }
-
-            Array.Fill(_memory, (byte)background, 1, _memory.Length - 1);
         }
 
         public override void PartialGenerate(int x1, int y1, int x2, int y2)
@@ -122,14 +132,14 @@ namespace DisplayLibrary
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }
+		
         public override void Generate()
         {
             int hscale = _scale * _aspect;
             int vscale = _scale;
-            if (_bitmap is null)
-            {
-                _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
-            }
+
+            _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
+
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
@@ -152,6 +162,30 @@ namespace DisplayLibrary
             // Copy the 256 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
+        }
+
+        public void SetPixel(int x, int y, byte r, byte g, byte b)
+        {
+            int index = y * _width / 8 + x;
+            int bit = x % 8;
+            byte colour = (byte)((r << 16) | (g << 8) | b);
+            if (colour == 0)
+            {
+                _memory[index] = (byte)(_memory[index] & (1 << bit));
+            }
+            else
+            {
+                _memory[index] = (byte)(_memory[index] | (1 << bit));
+            }
+        }
+
+        public void GetPixel(int x, int y, out byte r, out byte g, out byte b)
+        {
+            int index = y * _width + x;
+            byte colour = _memory[index];
+            r = (byte)((colour >> 16) & 0xFF);
+            g = (byte)((colour >> 8) & 0xFF);
+            b = (byte)(colour & 0xFF);
         }
 
 

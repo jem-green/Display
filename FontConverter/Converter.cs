@@ -4,7 +4,7 @@ using System.IO;
 
 namespace FontLibrary
 {
-    public class Utility
+    public class Converter
     {
         Bitmap _image;
         int _hbits;
@@ -13,17 +13,15 @@ namespace FontLibrary
         int _height;
         byte[] _data;
 
-        public void LoadFont(string fileNamePath)
+        public void LoadFont(string path, string filename)
         {
-            string path = Path.GetDirectoryName(fileNamePath);
-            string fileNmae = Path.GetFileName(fileNamePath);
             if (path.Length == 0)
             {
                 path = ".";
             }
-            fileNamePath = Path.Combine(path, fileNmae);
+            string filenamePath = Path.Combine(path, filename);
 
-            BinaryReader binaryReader = new BinaryReader(File.Open(fileNamePath, FileMode.Open, FileAccess.Read));
+            BinaryReader binaryReader = new BinaryReader(File.Open(filenamePath, FileMode.Open, FileAccess.Read));
 
             binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -37,17 +35,15 @@ namespace FontLibrary
 
         }
 
-        public void LoadBitmap(string fileNamePath, int width, int height)
+        public void LoadBitmap(string path, string filename, int width, int height)
         {
-            string path = Path.GetDirectoryName(fileNamePath);
-            string fileNmae = Path.GetFileName(fileNamePath);
             if (path.Length == 0)
             {
                 path = ".";
             }
-            fileNamePath = Path.Combine(path, fileNmae);
+            string filenamePath = Path.Combine(path, filename);
 
-            _image = new Bitmap(fileNamePath);
+            _image = new Bitmap(filenamePath);
             if (width > 255)
             {
                 throw new ArgumentOutOfRangeException("Must be less than 256");
@@ -67,20 +63,18 @@ namespace FontLibrary
 
         }
 
-        public void LoadRom(string fileNamePath, int horizontal, int vertical, int index, int count)
+        public void LoadRom(string path, string filename, int horizontal, int vertical, int index, int count)
         {
             _hbits = horizontal;
             _vbits = vertical;
 
-            string path = Path.GetDirectoryName(fileNamePath);
-            string fileNmae = Path.GetFileName(fileNamePath);
             if (path.Length==0)
             {
                 path = ".";
             }
-            fileNamePath = Path.Combine(path, fileNmae);
+            string filenamePath = Path.Combine(path, filename);
 
-            BinaryReader binaryReader = new BinaryReader(File.Open(fileNamePath, FileMode.Open, FileAccess.Read));
+            BinaryReader binaryReader = new BinaryReader(File.Open(filenamePath, FileMode.Open, FileAccess.Read));
             int length = (int)binaryReader.BaseStream.Length;
             binaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
             byte[] temp = new byte[length];
@@ -133,8 +127,9 @@ namespace FontLibrary
             }
         }
 
-        public void SaveFont(string filePath)
+        public void SaveFont(string path, string filename)
         {
+            string filePath = Path.Combine(path, filename);
             if (File.Exists(filePath) == true)
             {
                 File.Delete(filePath);

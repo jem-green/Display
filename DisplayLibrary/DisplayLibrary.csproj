@@ -21,4 +21,7 @@
   <ItemGroup>
     <Compile Remove="ColourAdaptor - Copy.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FontLibrary\RasterFontLibrary.csproj" />
+  </ItemGroup>
 </Project>

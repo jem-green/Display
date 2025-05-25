@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using DisplayLibrary;
 
 namespace DisplayLibrary
 {
-    public class TextMode : DisplayMode
+    public abstract class TextMode : Storage, IStorage, IMode
     {
         #region Fields
 
         protected RasterFont _font;
-        protected ConsoleColour _foreground;
-        protected ConsoleColour _background;
+        protected Colour _foreground;
+        protected Colour _background;
+        protected int _scale = 1;
+        protected int _aspect = 1;
+        protected Bitmap _bitmap;
 
         public enum ConsoleColour : byte
         {
@@ -45,7 +49,39 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public ConsoleColour ForegroundColor
+public int Aspect
+        {
+            set
+            {
+                _aspect = value;
+            }
+            get
+            {
+                return (_aspect);
+            }
+        }
+
+        public Bitmap Bitmap
+        {
+            get
+            {
+                return (_bitmap);
+            }
+        }
+
+        public int Scale
+        {
+            get
+            {
+                return (_scale);
+            }
+            set
+            {
+                _scale = value;
+            }
+        }
+
+        public Colour ForegroundColour
         {
             set
             {
@@ -53,7 +89,7 @@ namespace DisplayLibrary
             }
         }
 
-        public ConsoleColour BackgroundColor
+        public Colour BackgroundColour
         {
             set
             {
@@ -64,7 +100,16 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
+        public abstract void Clear();
+
+        public abstract void Clear(Colour background);
+
+        public abstract void PartialGenerate(int x1, int y1, int x2, int y2);
+
+        public abstract void Generate();
+
         #endregion
+
         #region Private
 
         #endregion
