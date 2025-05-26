@@ -13,13 +13,13 @@ namespace DisplayLibrary
     /// <summary>
     /// Support for 1 bit graphics mode
     /// </summary>
-    internal class MonochromeGraphicsMode : GraphicsMode, IGraphic, IMode, IStorage
+    internal class MonochromeGraphicsMode : GraphicsMode, IStorage, IMode
     {
         #region Fields
 
-        protected int _scale = 1;
-        protected int _aspect = 1;
-        protected Bitmap _bitmap;
+        //protected int _scale = 1;
+        //protected int _aspect = 1;
+        //protected Bitmap _bitmap;
         #endregion
         #region Constructors
 
@@ -44,42 +44,16 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public int Aspect
-        {
-            set
-            {
-                _aspect = value;
-            }
-            get
-            {
-                return (_aspect);
-            }
-        }
 
-        public Bitmap Bitmap
-        {
-            get
-            {
-                return (_bitmap);
-            }
-        }
-
-        public int Scale
-        {
-            get
-            {
-                return (_scale);
-            }
-        }
         #endregion
         #region Methods
 
-        public void Clear()
+        public override void Clear()
         {
             Clear(_background);
         }
 		
-		public void Clear(Colour background)
+		public override void Clear(Colour background)
         {
            Clear(background.R, background.G, background.B);
         }
@@ -164,29 +138,29 @@ namespace DisplayLibrary
             _bitmap.UnlockBits(bmpCanvas);
         }
 
-        public void SetPixel(int x, int y, byte r, byte g, byte b)
-        {
-            int index = y * _width / 8 + x;
-            int bit = x % 8;
-            byte colour = (byte)((r << 16) | (g << 8) | b);
-            if (colour == 0)
-            {
-                _memory[index] = (byte)(_memory[index] & (1 << bit));
-            }
-            else
-            {
-                _memory[index] = (byte)(_memory[index] | (1 << bit));
-            }
-        }
+        //public void SetPixel(int x, int y, byte r, byte g, byte b)
+        //{
+        //    int index = y * _width / 8 + x;
+        //    int bit = x % 8;
+        //    byte colour = (byte)((r << 16) | (g << 8) | b);
+        //    if (colour == 0)
+        //    {
+        //        _memory[index] = (byte)(_memory[index] & (1 << bit));
+        //    }
+        //    else
+        //    {
+        //        _memory[index] = (byte)(_memory[index] | (1 << bit));
+        //    }
+        //}
 
-        public void GetPixel(int x, int y, out byte r, out byte g, out byte b)
-        {
-            int index = y * _width + x;
-            byte colour = _memory[index];
-            r = (byte)((colour >> 16) & 0xFF);
-            g = (byte)((colour >> 8) & 0xFF);
-            b = (byte)(colour & 0xFF);
-        }
+        //public void GetPixel(int x, int y, out byte r, out byte g, out byte b)
+        //{
+        //    int index = y * _width + x;
+        //    byte colour = _memory[index];
+        //    r = (byte)((colour >> 16) & 0xFF);
+        //    g = (byte)((colour >> 8) & 0xFF);
+        //    b = (byte)(colour & 0xFF);
+        //}
 
 
         #endregion

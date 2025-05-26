@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
-using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
-    public class Terminal : ColourTextMode, IStorage
+    public class Terminal : ColourTextMode, IStorage, IMode, IText
     {
         #region Fields
 
@@ -53,7 +52,7 @@ namespace DisplayLibrary
 
         #endregion
         #region Properties
-        public RasterFont Font
+        public ROMFont Font
         {
             set
             {
@@ -88,6 +87,11 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
+        public byte Read()
+        {
+            throw new NotImplementedException("Read method not implemented in Terminal class.");
+        }
+
         public void Set(int column, int row)
         {
             // need to do some boundary checks
@@ -107,10 +111,10 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, byte foreground, byte background)
+        public void Write(byte character, Colour foreground, Colour background)
         {
             _memory[(_x + _y * _width) * 2] = character;
-            _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
+            _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToByte() << 4) | (byte)foreground.ToByte()) ;
 
             // Would have to call a partial generate here
 
@@ -136,14 +140,14 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, byte foreground, byte background)
+        public void Write(string text, Colour foreground, Colour background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
             for (int i = 0; i < chars.Length; i++)
             {
                 _memory[(_x + _y * _width) * 2] = (byte)chars[i];
-                _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground);
+                _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background.ToByte() << 4) | (byte)foreground.ToByte());
 
                 // Would have to call a partial generate here
                 // but may make sense to only do this at the end
@@ -179,10 +183,26 @@ namespace DisplayLibrary
             for (int i = 0; i < _width; i++)
             {
                 _memory[(_width * (_height - 1) + i) * 2] = 32;
-                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)(((byte)_background << 4) | (byte)_foreground);
+                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)((_background.ToByte() << 4) | _foreground.ToByte());
             }
             _y--;
         }
+
+        public override void Clear()
+        {
+            Clear(_background);
+        }
+
+        public byte Read(int column, int row)
+        {
+            return(_memory[(_x + _y * _width) * 2]);
+        }
+
+        public void Save(string path, string filename)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
         #region Private

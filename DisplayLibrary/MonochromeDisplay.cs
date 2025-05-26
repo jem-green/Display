@@ -1,37 +1,34 @@
 ﻿using System;
-using System.Windows.Forms;
 
 namespace DisplayLibrary
 {
-    public class MonochromeTextDisplay : MonochromeTextMode, IStorage, IMode, IText
+    public class MonochromeDisplay : MonochromeAdaptor
     {
         #region Fields
 
         int _x;
         int _y;
+        
 
         #endregion
         #region Constructors
 		
-		public MonochromeTextDisplay(int width, int height) : base(width, height)
+		public MonochromeDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public MonochromeTextDisplay(int width, int height, int scale) : base(width,height,scale)
+        public MonochromeDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
         }
 
-        public MonochromeTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public MonochromeDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
-            _aspect = aspect;
         }
 
         #endregion
@@ -85,37 +82,12 @@ namespace DisplayLibrary
             }
         }
 
-        public byte Read()
-        {
-            // need to do some boundary checks
-            byte character = _memory[_x + _y * _width];
-            return (character);
-        }
-
-        public byte Read(int column, int row)
-        {
-            // need to do some boundary checks
-            if ((column > _width) || (row > _height))
-            {
-                throw new IndexOutOfRangeException();
-            }
-            else
-            {
-            	byte character = _memory[column + row * _width];
-            	return (character);
-            }
-        }
         public void Write(byte character)
-        {
-            Write(character, _foreground, _background);
-        }
-
-        public void Write(byte character, Colour foreground, Colour background)
         {
             _memory[_x + _y * _width] = character;
             // Would have to call a partial generate here
 
-            PartialGenerate(_x, _y, 1, 1);
+            PartialGenerate(_x, _y);
             
             _x++;
             if (_x >= _width)
@@ -125,19 +97,13 @@ namespace DisplayLibrary
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to scroll at the point.
+                    // the display needs to scoll at the point.
                     Scroll();
-                    Generate();
                 }
             }
         }
 
         public void Write(string text)
-        {
-            Write(text, _foreground, _background);
-        }
-
-        public void Write(string text, Colour foreground, Colour background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
@@ -145,9 +111,8 @@ namespace DisplayLibrary
             {
                 _memory[_x + _y * _width] = (byte)chars[i];
                 // Would have to call a partial generate here
-                // but may make sense to only do this at the end
 
-                PartialGenerate(_x, _y, 1, 1);
+                PartialGenerate(_x, _y);
 
                 _x++;
                 if (_x >= _width)
@@ -157,14 +122,12 @@ namespace DisplayLibrary
                     if (_y >= _height)
                     {
                         _y = _height;
-                        // the display needs to scroll at the point.
+                        // the display needs to scoll at the point.
                         Scroll();          
                     }
                 }
             }
-            Generate();
         }
-
 
         public void Scroll()
         {
@@ -180,11 +143,6 @@ namespace DisplayLibrary
                 _memory[_width * (_height - 1) + i] = 32;
             }
             _y--;
-        }
-
-        public void Save(string path, string filename)
-        {
-            throw new NotImplementedException("Save method not implemented for MonochromeTextDisplay.");
         }
 
         #endregion

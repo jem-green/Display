@@ -1,5 +1,4 @@
 ﻿using System;
-using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
@@ -34,7 +33,7 @@ namespace DisplayLibrary
 
         #endregion
         #region Properties
-        public RasterFont Font
+        public ROMFont Font
         {
             set
             {
@@ -175,6 +174,11 @@ namespace DisplayLibrary
                 _memory[_width * (_height - 1) + i] = 32;
             }
             _y--;
+        }
+
+        public void Save(string path, string filename)
+        {
+            throw new NotImplementedException("");
         }
 
         #endregion

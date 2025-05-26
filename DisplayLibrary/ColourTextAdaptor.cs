@@ -5,25 +5,29 @@ using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class ColourTextMode : TextMode, IStorage, IMode
+    public class ColourTextAdaptor : TextAdaptor
     {
         #region Fields
+
+        protected int _scale = 1;
+        protected int _aspect = 1;
+        protected Bitmap _bitmap;
 
         #endregion
         #region Constructors
 
-        public ColourTextMode(int width, int height) : base(width, height)
+        public ColourTextAdaptor(int width, int height) : base(width, height)
         {
             _memory = new byte[_width * _height * 2];
         }
 
-        public ColourTextMode(int width, int height, int scale) : base(width, height)
+        public ColourTextAdaptor(int width, int height, int scale) : base(width, height)
         {
             _memory = new byte[_width * _height * 2];
             _scale = scale;
         }
 
-        public ColourTextMode(int width, int height, int scale, int aspect) : base(width, height)
+        public ColourTextAdaptor(int width, int height, int scale, int aspect) : base(width, height)
         {
             _memory = new byte[_width * _height * 2];
             _scale = scale;
@@ -33,30 +37,52 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        #endregion
-        #region Methods
-
-        public override void Clear()
+        public int Aspect
         {
-            Clear(_background);
-        }
-
-        public override void Clear(Colour background)
-        {
-            Clear('\0', 0, 7);
-        }
-
-        public void Clear(char character, byte foreground, byte background)
-        {
-            _memory = new byte[_width * _height * 2];
-            for (int i = 0; i < _memory.Length; i += 2)
+            set
             {
-                _memory[i] = (byte)character;
-                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)foreground);
+                _aspect = value;
+            }
+            get
+            {
+                return (_aspect);
             }
         }
 
-        public override void PartialGenerate(int column, int row, int width, int height)
+        public Bitmap Bitmap
+        {
+            get
+            {
+                return (_bitmap);
+            }
+        }
+
+        public int Scale
+        {
+            get
+            {
+                return (_scale);
+            }
+        }
+
+        #endregion
+        #region Methods
+
+        public void Clear()
+        {
+            Clear('\0',_foreground, _background);
+        }
+
+        public void Clear(char character, ConsoleColor forground, ConsoleColor background)
+        {
+            for (int i = 0; i < _memory.Length; i += 2)
+            {
+                _memory[i] = (byte)character;
+                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)forground);
+            }
+        }
+
+        public Bitmap PartialGenerate(int column, int row)
         {
             // need to know which position has been updated
             // at the moment this is handled by the parent class
@@ -149,7 +175,7 @@ namespace DisplayLibrary
 
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
-            //return (_bitmap);
+            return (_bitmap);
         }
 
         public override void Generate()

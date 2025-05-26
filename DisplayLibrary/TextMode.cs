@@ -4,8 +4,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
 using DisplayLibrary;
-using DisplayLibrary;
-using RasterFontLibrary;
 
 namespace DisplayLibrary
 {
@@ -13,7 +11,7 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        protected RasterFont _font;
+        protected ROMFont _font;
         protected Colour _foreground;
         protected Colour _background;
         protected int _scale = 1;
@@ -51,7 +49,7 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-public int Aspect
+        public int Aspect
         {
             set
             {
@@ -111,7 +109,6 @@ public int Aspect
         public abstract void Generate();
 
         #endregion
-
         #region Private
 
         #endregion

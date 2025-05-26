@@ -1,8 +1,6 @@
-﻿using System.Drawing;
-
-namespace DisplayLibrary
+﻿namespace DisplayLibrary
 {
-    public abstract class Storage : IStorage
+    public class Adaptor : IAdaptor
     {
         #region Fields
 
@@ -11,9 +9,9 @@ namespace DisplayLibrary
         protected int _width = 0;
         protected int _height = 0;
         protected byte[] _memory;
-        protected Type _type;
+        protected Mode _mode;
 
-        public enum Type
+        public enum Mode
         {
             text = 1,
             graphic = 2
@@ -22,15 +20,28 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public Storage(int width, int height)
+        public Adaptor(int width, int height)
         {
             _width = width;
             _height = height;
-            _memory = new byte[0];
         }
 
         #endregion
         #region Properties
+
+        
+
+        public int Width
+        {
+            set
+            {
+                _width = value;
+            }
+            get
+            {
+                return (_width);
+            }
+        }
 
         public int Height
         {
@@ -41,18 +52,6 @@ namespace DisplayLibrary
             get
             {
                 return (_height);
-            }
-        }
-
-        public int Left
-        {
-            set
-            {
-                _left = value;
-            }
-            get
-            {
-                return (_left);
             }
         }
 
@@ -68,32 +67,16 @@ namespace DisplayLibrary
             }
         }
 
-        public int Top
-        {
-            set
-            {
-                _top = value;
-            }
-            get
-            {
-                return (_top);
-            }
-        }
-
-        public int Width
-        {
-            set
-            {
-                _width = value;
-            }
-            get
-            {
-                return (_width);
-            }
-        }
-
         #endregion
         #region Methods
+
+        public virtual void Generate()
+        {
+        }
+
+        public virtual void PartialGenerate(int x, int y)
+        {
+        }
 
         #endregion
         #region Private

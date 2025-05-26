@@ -3,7 +3,7 @@ namespace DisplayLibrary
 {
     internal interface IText
     {
-        public RasterFont Font
+        public ROMFont Font
         {
             set;
         }
@@ -45,7 +45,7 @@ namespace DisplayLibrary
         void Generate();
         void PartialGenerate(int x1, int y1, int x2, int y2);
 
-        public void Save(string filename);
+        public void Save(string path, string filename);
 
         int Left
         {

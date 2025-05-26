@@ -23,7 +23,7 @@ namespace DisplayForm
             InitializeComponent();
             console = new DisplayLibrary.Console(32, 32, 2);
 
-            RasterFont rasterFont = new RasterFont();
+            ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
             string fileName = "IBM_PC_V1_8x8.bin";
             string fileNamePath = Path.Combine(path, fileName);
@@ -31,8 +31,10 @@ namespace DisplayForm
 
             console.Font = rasterFont;
             console.Set(0, 0);
-            console.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
-            console.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
+            //console.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
+            console.ForegroundColour = new Colour(0, 0, 255);
+            //console.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
+            console.BackgroundColour = new Colour(0, 0, 0);
             console.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

@@ -6,7 +6,7 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class MonochromeGraphicsDisplay : ColourGraphicsMode, IStorage, IGraphic, IDisplay
+    public class MonochromeGraphicsDisplay : ColourGraphicsMode, IStorage, IMode, IGraphic, IDisplay
     {
         #region Fields
 

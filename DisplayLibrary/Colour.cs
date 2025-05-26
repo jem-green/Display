@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DisplayLibrary
 {
@@ -11,18 +6,33 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        private byte _r = 0;
-        private byte _g = 0;
-        private byte _b = 0;
+        private byte _red = 0;
+        private byte _green = 0;
+        private byte _blue = 0;
+        private byte _console = 0;
+        private byte _colour = 0;
 
         #endregion
         #region Constructors
 
-        public Colour(byte r, byte g, byte b)
+        public Colour(byte red, byte green, byte blue)
         {
-            _r = r;
-            _g = g;
-            _b = b;
+            _red = red;
+            _green = green;
+            _blue = blue;
+
+            // Convert to 4-bit colour
+
+            byte c = _red;
+            byte g = (byte)((_green >> 3) & 0b00011100);
+            c = (byte)(c | g);
+            byte b = (byte)((_blue >> 6) & 0b00000011);
+            _console = (byte)(c | b);
+
+            // Convert to 5-6-5 format
+
+            _colour = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+
         }
 
         public Colour(string rgb)
@@ -39,9 +49,22 @@ namespace DisplayLibrary
                 }
                 else
                 {
-                    _r = Convert.ToByte(rgb.Substring(1, 2), 16);
-                    _g = Convert.ToByte(rgb.Substring(3, 2), 16);
-                    _b = Convert.ToByte(rgb.Substring(5, 2), 16);
+                    _red = Convert.ToByte(rgb.Substring(1, 2), 16);
+                    _green = Convert.ToByte(rgb.Substring(3, 2), 16);
+                    _blue = Convert.ToByte(rgb.Substring(5, 2), 16);
+
+                    // Convert to 4-bit colour
+
+                    byte c = _red;
+                    byte g = (byte)((_green >> 3) & 0b00011100);
+                    c = (byte)(c | g);
+                    byte b = (byte)((_blue >> 6) & 0b00000011);
+                    _console = (byte)(c | b);
+
+                    // Convert to 5-6-5 format
+
+                    _colour = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+
                 }
             }
         }
@@ -51,29 +74,44 @@ namespace DisplayLibrary
 
         public byte R
         {
-            get { return _r; }
-            set { _r = value; }
+            get { return _red; }
+            set { _red = value; }
         }
 
         public byte G
         {
-            get { return _g; }
-            set { _g = value; }
+            get { return _green; }
+            set { _green = value; }
         }
 
         public byte B
         {
-            get { return _b; }
-            set { _b = value; }
+            get { return _blue; }
+            set { _blue = value; }
         }
 
         #endregion
         #region Methods
 
-        bool IEquatable<Colour>.Equals(Colour? other)
+        public byte ToByte()
+        {
+            // Return 4-bit colour
+            return (_console);
+        }
+
+        public int ToInt32()
+        {
+            // Return 5-6-5 format
+            return (_colour);
+        }
+
+        #endregion
+        #region Private
+
+        bool IEquatable<Colour>.Equals(Colour other)
         {
             if (other == null) return false;
-            if (_r == other.R && _g == other.G && _b == other.B)
+            if (_red == other.R && _green == other.G && _blue == other.B)
             {
                 return true;
             }

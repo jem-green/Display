@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ConsoleFrom</RootNamespace>
+    <AssemblyName>ConsoleFrom</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>DisplayForm.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DisplayLibrary\DisplayLibrary.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.6.0-preview3.19128.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Form3.cs" />
+    <Compile Remove="Form3.Designer.cs" />
+    <Compile Remove="Form4.cs" />
+    <Compile Remove="Form4.Designer.cs" />
+    <Compile Remove="Form5.cs" />
+    <Compile Remove="Form5.Designer.cs" />
+    <EmbeddedResource Remove="Form3.resx" />
+    <EmbeddedResource Remove="Form4.resx" />
+    <EmbeddedResource Remove="Form5.resx" />
+  </ItemGroup>
+</Project>

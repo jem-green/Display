@@ -27,7 +27,7 @@ namespace DisplayLibrary
 
             terminal = new DisplayLibrary.Terminal(32, 32, 2, 1);
 
-            RasterFont rasterFont = new RasterFont();
+            ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
             string fileName = "IBM_PC_V1_8x8.bin";
             string fileNamePath = Path.Combine(path, fileName);
@@ -35,8 +35,10 @@ namespace DisplayLibrary
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColour = (byte)TextMode.ConsoleColour.Black;
-            terminal.BackgroundColour = (byte)TextMode.ConsoleColour.White;
+            //terminal.ForegroundColour = (byte)TextMode.ConsoleColour.Black;
+            terminal.ForegroundColour = new Colour(0, 0, 0);
+            //terminal.BackgroundColour = (byte)TextMode.ConsoleColour.White;
+            terminal.BackgroundColour = new Colour(255, 255, 255);
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Text;
 
 namespace DisplayLibrary
 {
-    public class MonochromeTextDisplay : MonochromeTextMode, IStorage, IMode, IText
+    public class ColourDisplay : ColourAdaptor
     {
         #region Fields
 
@@ -12,26 +15,23 @@ namespace DisplayLibrary
 
         #endregion
         #region Constructors
-		
-		public MonochromeTextDisplay(int width, int height) : base(width, height)
+
+        public ColourDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public MonochromeTextDisplay(int width, int height, int scale) : base(width,height,scale)
+        public ColourDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
         }
 
-        public MonochromeTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public ColourDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
-            _aspect = aspect;
         }
 
         #endregion
@@ -85,37 +85,19 @@ namespace DisplayLibrary
             }
         }
 
-        public byte Read()
-        {
-            // need to do some boundary checks
-            byte character = _memory[_x + _y * _width];
-            return (character);
-        }
-
-        public byte Read(int column, int row)
-        {
-            // need to do some boundary checks
-            if ((column > _width) || (row > _height))
-            {
-                throw new IndexOutOfRangeException();
-            }
-            else
-            {
-            	byte character = _memory[column + row * _width];
-            	return (character);
-            }
-        }
         public void Write(byte character)
         {
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, Colour foreground, Colour background)
+        public void Write(byte character, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
         {
-            _memory[_x + _y * _width] = character;
+            _memory[(_x + _y * _width) * 2] = character;
+            _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground) ;
+
             // Would have to call a partial generate here
 
-            PartialGenerate(_x, _y, 1, 1);
+            PartialGenerate(_x, _y);
             
             _x++;
             if (_x >= _width)
@@ -125,7 +107,7 @@ namespace DisplayLibrary
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to scroll at the point.
+                    // the display needs to scoll at the point.
                     Scroll();
                     Generate();
                 }
@@ -137,17 +119,19 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, Colour foreground, Colour background)
+        public void Write(string text, ColourAdaptor.ConsoleColor foreground, ColourAdaptor.ConsoleColor background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
             for (int i = 0; i < chars.Length; i++)
             {
-                _memory[_x + _y * _width] = (byte)chars[i];
+                _memory[(_x + _y * _width) * 2] = (byte)chars[i];
+                _memory[(_x + _y * _width) * 2 + 1] = (byte)(((byte)background << 4) | (byte)foreground);
+
                 // Would have to call a partial generate here
                 // but may make sense to only do this at the end
 
-                PartialGenerate(_x, _y, 1, 1);
+                //PartialGenerate(_x, _y);
 
                 _x++;
                 if (_x >= _width)
@@ -157,14 +141,14 @@ namespace DisplayLibrary
                     if (_y >= _height)
                     {
                         _y = _height;
-                        // the display needs to scroll at the point.
-                        Scroll();          
+                        // the display needs to scoll at the point.
+                        Scroll();
+                        //Generate();
                     }
                 }
             }
             Generate();
         }
-
 
         public void Scroll()
         {
@@ -173,18 +157,14 @@ namespace DisplayLibrary
 
         public void Scroll(int rows)
         {
-            Buffer.BlockCopy(_memory, _width, _memory, 0, _width * (_height - 1));
+            Buffer.BlockCopy(_memory, _width * 2, _memory, 0, _width * (_height - 1) * 2);
             // fill the space
             for (int i = 0; i < _width; i++)
             {
-                _memory[_width * (_height - 1) + i] = 32;
+                _memory[(_width * (_height - 1) + i) * 2] = 32;
+                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)(((byte)_background << 4) | (byte)_foreground);
             }
             _y--;
-        }
-
-        public void Save(string path, string filename)
-        {
-            throw new NotImplementedException("Save method not implemented for MonochromeTextDisplay.");
         }
 
         #endregion
