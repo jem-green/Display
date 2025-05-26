@@ -60,7 +60,7 @@ namespace DisplayLibrary
 
         public Colour Read(int x, int y);
 
-        public void Save(string filename);
+        public void Save(string path, string filename);
 
     }
 }

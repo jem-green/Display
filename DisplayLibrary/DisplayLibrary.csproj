@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ConsoleLibrary</RootNamespace>
-    <AssemblyName>ConsoleLibrary</AssemblyName>
+    <RootNamespace>DisplayLibrary</RootNamespace>
+    <AssemblyName>DisplayLibrary</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>

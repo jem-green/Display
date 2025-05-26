@@ -18,13 +18,16 @@ namespace DisplayLibrary
         {
             t40x25c16 = 0,
             t80x25c16 = 1,
-            t80x25c16a= 2,
-            t80x43c16 = 3,
+            g160x100c16 = 2,
+            g320x200c4 = 3,
+            g640x200c2 = 4,
 
-            g640x350c16 = 4,
-            g640x350c2 = 5, 
-            g640x200c16 = 6,
-            g320x200c16 = 7
+            t80x25c16a = 5,
+            t80x43c16 = 6,
+            g640x350c16 = 7,
+            g640x350c2 = 8, 
+            g640x200c16 = 9,
+            g320x200c16 = 10
         }
 
         // Need some way to set the number of colours

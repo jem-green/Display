@@ -61,7 +61,7 @@ namespace DisplayLibrary
 
         void PartialGenerate(int x1, int y1, int x2, int y2);
 
-        public void Save(string filename);
+        public void Save(string path, string filename);
 
     }
 }

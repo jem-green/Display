@@ -143,16 +143,17 @@ namespace DisplayLibrary
             }
         }
 
-        public void Save(string filename)
+        public void Save(string path, string filename)
         {
             // Save the bitmap to a file
-            _bitmap.Save(filename, ImageFormat.Png);
+            Save(path, filename, ImageFormat.Png);
         }
 
-        public void Save(string filename, ImageFormat format)
+        public void Save(string path, string filename, ImageFormat format)
         {
             // Save the bitmap to a file
-            _bitmap.Save(filename, format);
+            string filenamePath = System.IO.Path.Combine(path, filename);
+            _bitmap.Save(filenamePath, format);
         }
 
         #endregion
