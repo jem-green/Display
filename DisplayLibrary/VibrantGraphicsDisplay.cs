@@ -137,9 +137,9 @@ namespace DisplayLibrary
                 //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
 
                 int index = (y * _width + x) * 3;
-                _memory[index] = r;
+                _memory[index] = b;
                 _memory[index + 1] = g;
-                _memory[index + 2] = b;
+                _memory[index + 2] = r;
             }
         }
 

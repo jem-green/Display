@@ -21,67 +21,67 @@ namespace ConsoleApp
             string fileName = "spectrum_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "amiga_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 16);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "amstrad_cpc_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "atari_8bit_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "atari_st_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "bbc_micro_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(6, 9);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "c64_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "enterprise64_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 9);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "ibm_pc_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 12);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "macintosh_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(6, 10);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "memotech_mtx_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(6, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "msx_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(6, 8);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
             fileName = "nascom_x1";
             converter.LoadBitmap(path, fileName + ".png", 128, 1);
             converter.Convert(8, 12);
-            converter.SaveFont(outPath, fileName + ".bin");
+            converter.SaveROMFont(outPath, fileName + ".bin");
 
 
             // Load the list of roms and convert
@@ -105,8 +105,8 @@ namespace ConsoleApp
                         int height = Convert.ToInt32(parts[1]);
 
                         Converter u = new Converter();
-                        u.LoadRom(path, romName + ".rom", width, height, 0, 128);
-                        u.SaveFont(path, romName + ".bin");
+                        u.LoadRomBitmap(path, romName + ".rom", width, height, 0, 128);
+                        u.SaveROMFont(path, romName + ".bin");
                         
                     }
                     else

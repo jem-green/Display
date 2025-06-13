@@ -13,7 +13,7 @@ namespace FontLibrary
         int _height;
         byte[] _data;
 
-        public void LoadFont(string path, string filename)
+        public void LoadROMFont(string path, string filename)
         {
             if (path.Length == 0)
             {
@@ -63,7 +63,7 @@ namespace FontLibrary
 
         }
 
-        public void LoadRom(string path, string filename, int horizontal, int vertical, int index, int count)
+        public void LoadRomBitmap(string path, string filename, int horizontal, int vertical, int index, int count)
         {
             _hbits = horizontal;
             _vbits = vertical;
@@ -81,7 +81,7 @@ namespace FontLibrary
             temp = binaryReader.ReadBytes(length);
             binaryReader.Close();
 
-            // Copy the rom data to the correct location
+            // Copy the ROM data to the correct location
 
             int hbytes = (int)Math.Round((double)_hbits / 8);
             int chars = (int)(length / _vbits / hbytes);
@@ -127,7 +127,7 @@ namespace FontLibrary
             }
         }
 
-        public void SaveFont(string path, string filename)
+        public void SaveROMFont(string path, string filename)
         {
             string filePath = Path.Combine(path, filename);
             if (File.Exists(filePath) == true)
