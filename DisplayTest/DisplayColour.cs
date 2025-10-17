@@ -3,9 +3,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayLibrary.Console;
+using Console = DisplayTest.Console;
 
-namespace DisplayForm
+namespace DisplayTest
 {
     public partial class DisplayColour : Form
     {
@@ -19,15 +19,15 @@ namespace DisplayForm
             colourDisplay = new DisplayLibrary.ColourTextDisplay(32, 32, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
-            string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
-            string fileName = "IBM_PC_V1_8x8.bin";
+            string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
+            string fileName = "IBM_XT286_V1_8x8.bin";
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
             colourDisplay.Font = rasterFont;
             colourDisplay.Set(0, 0);
-            colourDisplay.ForegroundColour = new Colour(0, 0, 0); //(byte)TextMode.ConsoleColour.Black;
-            colourDisplay.BackgroundColour = new Colour(255, 255, 255);//(byte)TextMode.ConsoleColour.White;
+            colourDisplay.ForegroundColour = new Solid(0, 0, 0); //(byte)TextMode.ConsoleColour.Black;
+            colourDisplay.BackgroundColour = new Solid(255, 255, 255);//(byte)TextMode.ConsoleColour.White;
             colourDisplay.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             pictureBox1.Select();
@@ -65,7 +65,7 @@ namespace DisplayForm
             if (key > 0)
             {
                 //colourDisplay.Write(key, (byte)TextMode.ConsoleColour.Blue, (byte)TextMode.ConsoleColour.Green);
-                colourDisplay.Write(key, new Colour(0,0,255), new Colour(0,255,0));
+                colourDisplay.Write(key, new Solid(0,0,255), new Solid(0,255,0));
                 pictureBox1.Invalidate();
             }
         }

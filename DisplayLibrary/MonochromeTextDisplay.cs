@@ -110,7 +110,7 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, Colour foreground, Colour background)
+        public void Write(byte character, IColour foreground, IColour background)
         {
             _memory[_x + _y * _width] = character;
             // Would have to call a partial generate here
@@ -137,7 +137,7 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, Colour foreground, Colour background)
+        public void Write(string text, IColour foreground, IColour background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks

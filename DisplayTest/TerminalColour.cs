@@ -3,13 +3,13 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayLibrary.Console;
+using Console = DisplayTest.Console;
 
-namespace DisplayForm
+namespace DisplayTest
 {
     public partial class TerminalColour : Form
     {
-        DisplayLibrary.Terminal terminal;
+        DisplayTest.Terminal terminal;
         KeyboardMatrix _matrix;
 
         public TerminalColour()
@@ -17,18 +17,18 @@ namespace DisplayForm
             InitializeComponent();
             this.DoubleBuffered = true;
 
-            terminal = new DisplayLibrary.Terminal(32, 32, 2, 1);
+            terminal = new DisplayTest.Terminal(32, 32, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
-            string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayForm";
+            string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
             string fileName = "IBM_XT286_V1_8x8.bin";
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColour = new Colour(0, 0, 0);
-            terminal.BackgroundColour = new Colour(255,255,255);
+            terminal.ForegroundColour = new Solid(0, 0, 0);
+            terminal.BackgroundColour = new Solid(255,255,255);
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             panel1.Select();
@@ -68,7 +68,7 @@ namespace DisplayForm
             if (key > 0)
             {
                 //terminal.Write(key, (byte)TextMode.ConsoleColour.Blue, (byte)TextMode.ConsoleColour.Green);
-                terminal.Write(key, new Colour(0,0,255), new Colour(0,255,0));
+                terminal.Write(key, new Solid(0,0,255), new Solid(0,255,0));
 
                 panel1.Invalidate();
             }

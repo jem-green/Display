@@ -114,7 +114,7 @@ namespace DisplayLibrary
             Write(character, _foreground, _background);
         }
 
-        public void Write(byte character, Colour foreground, Colour background)
+        public void Write(byte character, IColour foreground, IColour background)
         {
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToByte() << 4) | foreground.ToByte()) ;
@@ -143,14 +143,14 @@ namespace DisplayLibrary
             Write(text, _foreground, _background);
         }
 
-        public void Write(string text, Colour foreground, Colour background)
+        public void Write(string text, IColour foreground, IColour background)
         {
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
             for (int i = 0; i < chars.Length; i++)
             {
                 _memory[(_x + _y * _width) * 2] = (byte)chars[i];
-                _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToByte() << 4) | foreground.ToByte());
+                _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToNybble() << 4) | foreground.ToNybble());
 
                 // Would have to call a partial generate here
                 // but may make sense to only do this at the end
@@ -186,7 +186,7 @@ namespace DisplayLibrary
             for (int i = 0; i < _width; i++)
             {
                 _memory[(_width * (_height - 1) + i) * 2] = 32;
-                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)((_background.ToByte() << 4) | _foreground.ToByte());
+                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)((_background.ToNybble() << 4) | _foreground.ToNybble());
             }
             _y--;
         }

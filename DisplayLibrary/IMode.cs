@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    internal interface IMode
+    public interface IMode
     {
         #region Methods
 
@@ -25,7 +25,7 @@ namespace DisplayLibrary
 
         public void Clear();
 
-        public void Clear(Colour background);
+        public void Clear(IColour background);
 
         public void PartialGenerate(int x1, int y1, int x2, int y2);
 

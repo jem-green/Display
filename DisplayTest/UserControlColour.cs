@@ -3,9 +3,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayLibrary.Console;
+using Console = DisplayTest.Console;
 
-namespace DisplayForm
+namespace DisplayTest
 {
     public partial class UserControlColour : Form
     {

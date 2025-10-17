@@ -1,7 +1,7 @@
 ﻿
 namespace DisplayLibrary
 {
-    internal interface IText
+    public interface IText
     {
         public ROMFont Font
         {
@@ -28,11 +28,11 @@ namespace DisplayLibrary
 
         public byte Read(int column, int row);
 
-        public void Write(byte character, Colour foreground, Colour background);
+        public void Write(byte character, IColour foreground, IColour background);
 
         public void Write(string text);
 
-        public void Write(string text, Colour foreground, Colour background);
+        public void Write(string text, IColour foreground, IColour background);
 
         public void Scroll();
 
@@ -40,7 +40,7 @@ namespace DisplayLibrary
 
         void Clear();
 
-        void Clear(Colour colour);
+        void Clear(IColour colour);
 
         void Generate();
         void PartialGenerate(int x1, int y1, int x2, int y2);

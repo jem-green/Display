@@ -45,19 +45,15 @@ namespace DisplayLibrary
             Clear(_background);
         }
 
-        public override void Clear(Colour background)
-        {
-           Clear(background.R, background.G, background.B);
-        }
-
-        public void Clear(byte r, byte g, byte b)
+        public override void Clear(IColour background)
         {
             _memory = new byte[_width * _height * 3];
             for (int i = 0; i < _memory.Length; i += 3)
             {
-                _memory[i] = r;
-                _memory[i + 1] = g;
-                _memory[i + 2] = b;
+                // Note : BGR order for 24bpp RGB
+                _memory[i] = background.Blue;
+                _memory[i + 1] = background.Green;
+                _memory[i + 2] = background.Red;
             }
         }
 

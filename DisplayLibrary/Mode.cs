@@ -6,8 +6,8 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        protected Colour _foreground;
-        protected Colour _background;
+        protected IColour _foreground;
+        protected IColour _background;
         protected int _scale = 1;
         protected int _aspect = 1;
         protected Bitmap _bitmap;
@@ -17,8 +17,8 @@ namespace DisplayLibrary
 
         public Mode(int width, int height)
         {
-            _background = new Colour(0, 0, 0);
-            _foreground = new Colour(255, 255, 255);
+            _background = new Solid(0, 0, 0);
+            _foreground = new Solid(255, 255, 255);
         }
 
         #endregion
@@ -64,7 +64,7 @@ namespace DisplayLibrary
             // Implementation of Clear method without parameters
         }
 
-        public void Clear(Colour background)
+        public void Clear(IColour background)
         {
             // Implementation of Clear method with background colour
         }

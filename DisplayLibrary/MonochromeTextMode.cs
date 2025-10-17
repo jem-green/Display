@@ -50,7 +50,7 @@ namespace DisplayLibrary
             }
         }
 
-        public override void Clear(Colour colour)
+        public override void Clear(IColour colour)
         {
             Clear('\0');
         }

@@ -53,22 +53,12 @@ namespace DisplayLibrary
             Clear(_background);
         }
 		
-		public override void Clear(Colour background)
-        {
-           Clear(background.R, background.G, background.B);
-        }
-
-        public void Clear(byte r, byte g, byte b)
+		public override void Clear(IColour background)
         {
             _memory = new byte[_width * _height];
-            byte colour = r;
-            g = (byte)((g >> 3) & 0b00011100);
-            colour = (byte)(colour | g);
-            b = (byte)((b >> 6) & 0b00000011);
-            colour = (byte)(colour | b);
             for (int i = 0; i < _memory.Length; i++)
             {
-                _memory[i] = colour;
+                _memory[i] = background.ToNybble();
             }
         }
 
@@ -137,31 +127,6 @@ namespace DisplayLibrary
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }
-
-        //public void SetPixel(int x, int y, byte r, byte g, byte b)
-        //{
-        //    int index = y * _width / 8 + x;
-        //    int bit = x % 8;
-        //    byte colour = (byte)((r << 16) | (g << 8) | b);
-        //    if (colour == 0)
-        //    {
-        //        _memory[index] = (byte)(_memory[index] & (1 << bit));
-        //    }
-        //    else
-        //    {
-        //        _memory[index] = (byte)(_memory[index] | (1 << bit));
-        //    }
-        //}
-
-        //public void GetPixel(int x, int y, out byte r, out byte g, out byte b)
-        //{
-        //    int index = y * _width + x;
-        //    byte colour = _memory[index];
-        //    r = (byte)((colour >> 16) & 0xFF);
-        //    g = (byte)((colour >> 8) & 0xFF);
-        //    b = (byte)(colour & 0xFF);
-        //}
-
 
         #endregion
         #region Private

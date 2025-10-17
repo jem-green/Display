@@ -1,5 +1,5 @@
 ﻿
-namespace DisplayForm
+namespace DisplayTest
 {
     partial class TerminalColour
     {
@@ -30,7 +30,7 @@ namespace DisplayForm
         private void InitializeComponent()
         {
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.panel1 = new DisplayForm.DoubleBufferedPanel();
+            this.panel1 = new DisplayTest.DoubleBufferedPanel();
             this.SuspendLayout();
             // 
             // vScrollBar1

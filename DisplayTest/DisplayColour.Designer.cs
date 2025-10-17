@@ -1,7 +1,7 @@
 ﻿
-namespace DisplayForm
+namespace DisplayTest
 {
-    partial class ConsoleMonochrome
+    partial class DisplayColour
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,6 @@ namespace DisplayForm
         private void InitializeComponent()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,22 +46,13 @@ namespace DisplayForm
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             this.pictureBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.pictureBox1_PreviewKeyDown);
             // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(1413, 0);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(22, 1155);
-            this.vScrollBar1.TabIndex = 1;
-            // 
-            // Form3
+            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1435, 1155);
-            this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.pictureBox1);
-            this.Name = "Form3";
+            this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -72,7 +62,6 @@ namespace DisplayForm
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
     }
 }
 

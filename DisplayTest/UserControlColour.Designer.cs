@@ -1,5 +1,5 @@
 ﻿
-namespace DisplayForm
+namespace DisplayTest
 {
     partial class UserControlColour
     {
@@ -29,7 +29,7 @@ namespace DisplayForm
         /// </summary>
         private void InitializeComponent()
         {
-            this.displayBox1 = new DisplayLibrary.DisplayBox();
+            this.displayBox1 = new DisplayTest.DisplayBox();
             this.SuspendLayout();
             // 
             // displayBox1
@@ -56,7 +56,7 @@ namespace DisplayForm
 
         #endregion
 
-        private DisplayLibrary.DisplayBox displayBox1;
+        private DisplayTest.DisplayBox displayBox1;
     }
 }
 

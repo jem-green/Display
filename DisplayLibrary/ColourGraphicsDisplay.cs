@@ -81,12 +81,12 @@ namespace DisplayLibrary
 			}
         }
 		
-        public Colour Read()
+        public IColour Read()
         {
             return Read(_x, _y);
         }
 
-        public Colour Read(int x, int y)
+        public IColour Read(int x, int y)
         {
             
             // need to do some boundary checks
@@ -98,27 +98,17 @@ namespace DisplayLibrary
             {
             	int index = y * _width + x;
             	byte colour = _memory[index];
-                Colour c = new Colour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
+                Solid c = new Solid((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
                 return(c);
             }
         }
 
-        public void Write(Colour colour)
+        public void Write(IColour colour)
         {
-            Write(colour.R, colour.G, colour.B);
+            Write(_x, _y, colour);
         }
 
-        public void Write(byte r, byte g, byte b)
-        {
-            Write(_x, _y, r,g,b);
-        }
-
-        public void Write(int x, int y, Colour colour)
-        {
-            Write(x, y, colour.R, colour.G, colour.B);
-        }
-
-        public void Write(int x, int y, byte r, byte g, byte b)
+        public void Write(int x, int y, IColour colour)
         {
             // 8-bit colour from wiki
             // http://en.wikipedia.org/wiki/8-bit_color
@@ -135,13 +125,7 @@ namespace DisplayLibrary
                 //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
 
                 int index = y * _width + x;
-                r = (byte)(r & 0b11100000);
-                byte colour = r;
-                g = (byte)((g >> 3) & 0b00011100);
-                colour= (byte)(colour | g);
-                b = (byte)((b >> 6) & 0b00000011);
-                colour = (byte)(colour | b);
-                _memory[index] = colour;
+                _memory[index] = colour.ToByte();
             }
         }
 

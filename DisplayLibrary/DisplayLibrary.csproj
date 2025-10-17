@@ -9,11 +9,6 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="DisplayBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.6.0-preview3.19128.7" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
@@ -24,12 +19,14 @@
     <Compile Remove="ColourAdaptor.cs" />
     <Compile Remove="ColourDisplay.cs" />
     <Compile Remove="ColourTextAdaptor.cs" />
+    <Compile Remove="Console.cs" />
     <Compile Remove="DisplayMode.cs" />
     <Compile Remove="GraphicsAdaptor.cs" />
     <Compile Remove="GraphicsDisplay.cs" />
     <Compile Remove="MonochromeAdaptor.cs" />
     <Compile Remove="MonochromeDisplay.cs" />
     <Compile Remove="MonochromeTextAdaptor.cs" />
+    <Compile Remove="Terminal.cs" />
     <Compile Remove="TextAdaptor.cs" />
   </ItemGroup>
 </Project>

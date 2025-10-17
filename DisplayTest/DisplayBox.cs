@@ -9,14 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DisplayLibrary;
 
-namespace DisplayLibrary
+namespace DisplayTest
 {
     public partial class DisplayBox : UserControl
     {
         #region Fields
 
-        DisplayLibrary.Terminal terminal;
+        DisplayTest.Terminal terminal;
 
         #endregion
         #region Constructor
@@ -25,20 +26,20 @@ namespace DisplayLibrary
         {
             InitializeComponent();
 
-            terminal = new DisplayLibrary.Terminal(32, 32, 2, 1);
+            terminal = new DisplayTest.Terminal(32, 32, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
-            string path = @"C:\SOURCE\GIT\cs.net\Display\FontLibrary";
-            string fileName = "IBM_PC_V1_8x8.bin";
+            string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
+            string fileName = "IBM_XT286_V1_8x8.bin";
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
             //terminal.ForegroundColour = (byte)TextMode.ConsoleColour.Black;
-            terminal.ForegroundColour = new Colour(0, 0, 0);
+            terminal.ForegroundColour = new Solid(0, 0, 0);
             //terminal.BackgroundColour = (byte)TextMode.ConsoleColour.White;
-            terminal.BackgroundColour = new Colour(255, 255, 255);
+            terminal.BackgroundColour = new Solid(255, 255, 255);
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

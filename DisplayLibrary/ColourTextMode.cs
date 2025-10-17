@@ -41,18 +41,18 @@ namespace DisplayLibrary
             Clear(_background);
         }
 
-        public override void Clear(Colour background)
+        public override void Clear(IColour background)
         {
-            Clear('\0', 0, 7);
+            Clear('\0', new Solid(255, 255, 255), background);
         }
 
-        public void Clear(char character, byte foreground, byte background)
+        public void Clear(char character, IColour foreground, IColour background)
         {
             _memory = new byte[_width * _height * 2];
-            for (int i = 0; i < _memory.Length; i += 2)
+            for (int i = 0; i < _memory.Length - 1; i += 2)
             {
                 _memory[i] = (byte)character;
-                _memory[i + 1] = (byte)(((byte)background << 4) | (byte)foreground);
+                _memory[i + 1] = (byte)((byte)(background.ToNybble() << 4) | (byte)foreground.ToNybble());
             }
         }
 

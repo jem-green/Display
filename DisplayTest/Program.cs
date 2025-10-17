@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DisplayForm
+namespace DisplayTest
 {
     static class Program
     {
@@ -16,11 +13,11 @@ namespace DisplayForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new DisplayColour());
-            //Application.Run(new DisplayMonochrome());
-            //Application.Run(new ConsoleMonochrome());
+            Application.Run(new DisplayColour());
+            Application.Run(new DisplayMonochrome());
+            Application.Run(new ConsoleMonochrome());
             Application.Run(new TerminalColour());
-            //Application.Run(new UserControlColour());
+            Application.Run(new UserControlColour());
 
         }
     }

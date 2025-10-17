@@ -9,7 +9,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DisplayForm.Program</StartupObject>
+    <StartupObject>DisplayTest.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DisplayLibrary\DisplayLibrary.csproj" />
@@ -28,5 +28,10 @@
     <EmbeddedResource Remove="Form3.resx" />
     <EmbeddedResource Remove="Form4.resx" />
     <EmbeddedResource Remove="Form5.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="DisplayBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

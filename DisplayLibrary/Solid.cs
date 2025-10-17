@@ -2,20 +2,22 @@
 
 namespace DisplayLibrary
 {
-    public class Colour : IEquatable<Colour>
-    {
+    public class Solid : IEquatable<Solid>, IColour
+{
         #region Fields
 
         private byte _red = 0;
         private byte _green = 0;
         private byte _blue = 0;
-        private byte _console = 0;
-        private byte _colour = 0;
+        private byte _colour4 = 0;      // 4-bit colour
+        private byte _colour8 = 0;      // 8-bit colour
+        private ushort _colour16 = 0;   // 16-bit colour
+        private ulong _colour32 = 0;    // 32-bit colour
 
         #endregion
         #region Constructors
 
-        public Colour(byte red, byte green, byte blue)
+        public Solid(byte red, byte green, byte blue)
         {
             _red = red;
             _green = green;
@@ -27,15 +29,24 @@ namespace DisplayLibrary
             byte g = (byte)((_green >> 3) & 0b00011100);
             c = (byte)(c | g);
             byte b = (byte)((_blue >> 6) & 0b00000011);
-            _console = (byte)(c | b);
+            _colour4 = (byte)(c | b);
 
             // Convert to 5-6-5 format
 
-            _colour = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+            _colour8 = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+
+            // Convert to 16-bit colour
+
+            _colour16 = (ushort)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+
+            // Convert to 32-bit colour (b-g-r format to match bitmap format)
+
+            _colour32 = (ulong)((_blue >> 3) | ((_green >> 2) << 8) | ((_red >> 3) << 16));
+
 
         }
 
-        public Colour(string rgb)
+        public Solid(string rgb)
         {
             if (rgb.Length != 7)
             {
@@ -59,11 +70,19 @@ namespace DisplayLibrary
                     byte g = (byte)((_green >> 3) & 0b00011100);
                     c = (byte)(c | g);
                     byte b = (byte)((_blue >> 6) & 0b00000011);
-                    _console = (byte)(c | b);
+                    _colour4 = (byte)(c | b);
 
                     // Convert to 5-6-5 format
 
-                    _colour = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+                    _colour8 = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+
+                    // Convert to 16-bit colour
+
+                    _colour16 = (ushort)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+
+                    // Convert to 32-bit colour (b-g-r format to match bitmap format)
+
+                    _colour32 = (ulong)((_blue >> 3) | ((_green >> 2) << 8) | ((_red >> 3) << 16));
 
                 }
             }
@@ -72,19 +91,19 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public byte R
+        public byte Red
         {
             get { return _red; }
             set { _red = value; }
         }
 
-        public byte G
+        public byte Green
         {
             get { return _green; }
             set { _green = value; }
         }
 
-        public byte B
+        public byte Blue
         {
             get { return _blue; }
             set { _blue = value; }
@@ -93,25 +112,39 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
-        public byte ToByte()
+        public byte ToNybble()
         {
             // Return 4-bit colour
-            return (_console);
+            return (_colour4);
         }
 
-        public int ToInt32()
+        public byte ToByte()
         {
+            // Return 8-bit colour
             // Return 5-6-5 format
-            return (_colour);
+            return (_colour8);
+        }
+
+        public ushort ToUInt16()
+        {
+            // Return 16-bit colour
+            return (_colour16);
+        }
+
+        public ulong ToUInt32()
+        {
+            // Return 32-bit colour
+            // Return b-g-r format to match bitmap format
+            return (_colour32);
         }
 
         #endregion
         #region Private
 
-        bool IEquatable<Colour>.Equals(Colour other)
+        bool IEquatable<Solid>.Equals(Solid other)
         {
             if (other == null) return false;
-            if (_red == other.R && _green == other.G && _blue == other.B)
+            if (_red == other.Red && _green == other.Green && _blue == other.Blue)
             {
                 return true;
             }

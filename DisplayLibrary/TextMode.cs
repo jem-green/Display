@@ -12,8 +12,8 @@ namespace DisplayLibrary
         #region Fields
 
         protected ROMFont _font;
-        protected Colour _foreground;
-        protected Colour _background;
+        protected IColour _foreground;
+        protected IColour _background;
         protected int _scale = 1;
         protected int _aspect = 1;
         protected Bitmap _bitmap;
@@ -44,6 +44,8 @@ namespace DisplayLibrary
         public TextMode(int width, int height) : base(width,height)
         {
             _type = Type.text;
+            _foreground = new Solid(255, 255, 255);
+            _background = new Solid(0, 0, 0);
         }
 
         #endregion
@@ -81,7 +83,7 @@ namespace DisplayLibrary
             }
         }
 
-        public Colour ForegroundColour
+        public IColour ForegroundColour
         {
             set
             {
@@ -89,7 +91,7 @@ namespace DisplayLibrary
             }
         }
 
-        public Colour BackgroundColour
+        public IColour BackgroundColour
         {
             set
             {
@@ -102,7 +104,7 @@ namespace DisplayLibrary
 
         public abstract void Clear();
 
-        public abstract void Clear(Colour background);
+        public abstract void Clear(IColour background);
 
         public abstract void PartialGenerate(int x1, int y1, int x2, int y2);
 

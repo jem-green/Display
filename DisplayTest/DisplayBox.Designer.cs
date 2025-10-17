@@ -1,4 +1,4 @@
-﻿namespace DisplayLibrary
+﻿namespace DisplayTest
 {
     partial class DisplayBox
     {

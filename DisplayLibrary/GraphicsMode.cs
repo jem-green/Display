@@ -10,8 +10,8 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        protected Colour _foreground;
-        protected Colour _background;
+        protected Solid _foreground;
+        protected Solid _background;
         protected int _scale = 1;
         protected int _aspect = 1;
         protected Bitmap _bitmap;
@@ -21,8 +21,8 @@ namespace DisplayLibrary
 
         public GraphicsMode(int width, int height) : base(width, height)
         {
-            _background = new Colour(0, 0, 0);
-            _foreground = new Colour(255, 255, 255);
+            _background = new Solid(0, 0, 0);
+            _foreground = new Solid(255, 255, 255);
             _type = Type.graphic;
         }
 
@@ -66,7 +66,7 @@ namespace DisplayLibrary
 
         public abstract void Clear();
 
-        public abstract void Clear(Colour background);
+        public abstract void Clear(IColour background);
 
         public abstract void PartialGenerate(int x1, int y1, int x2, int y2);
 

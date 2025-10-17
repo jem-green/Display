@@ -49,13 +49,14 @@ namespace DisplayLibrary
 
         public void Set(int x, int y);
 
-        public void Write(int x, int y, Colour c);
+        public void Write(IColour c);
+        public void Write(int x, int y, IColour c);
 
-        public Colour Read(int x, int y);
+        public IColour Read(int x, int y);
 
         void Clear();
 
-        void Clear(Colour colour);
+        void Clear(IColour colour);
 
         void Generate();
 

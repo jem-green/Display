@@ -44,19 +44,9 @@ namespace DisplayLibrary
             Clear(_background);
         }
 
-        public override void Clear(Colour background)
+        public override void Clear(IColour background)
         {
-            Clear(background.R, background.G, background.B);
-        }
-
-        public void Clear(byte r, byte g, byte b)
-        {
-            _memory = new byte[_width * _height];
-            byte colour = r;
-            g = (byte)((g >> 3) & 0b00011100);
-            colour = (byte)(colour | g);
-            b = (byte)((b >> 6) & 0b00000011);
-            colour = (byte)(colour | b);
+            byte colour = background.ToByte();
             for (int i = 0; i < _memory.Length; i++)
             {
                 _memory[i] = colour;
