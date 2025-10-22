@@ -5,30 +5,30 @@ using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class MonochromeTextMode : TextMode, IStorage, IMode
+    public class VibrantTextMode : TextMode, IStorage, IMode
     {
         #region Fields
-            
+
         #endregion
         #region Constructors
 
-        public MonochromeTextMode(int width, int height) : base(width, height)
+        public VibrantTextMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
         }
 
-        public MonochromeTextMode(int width, int height, int scale) : base(width, height)
+        public VibrantTextMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
             _scale = scale;
         }
 
-        public MonochromeTextMode(int width, int height, int scale, int aspect) : base(width, height)
+        public VibrantTextMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            _memory = new byte[_width * _height * 2];
             _scale = scale;
             _aspect = aspect;
-        }
+         }
 
         #endregion
         #region Properties
@@ -38,37 +38,40 @@ namespace DisplayLibrary
 
         public override void Clear()
         {
-            Clear('\0');
+            Clear(_background);
         }
 
-        public void Clear(char character)
+        public override void Clear(IColour background)
         {
-            _memory = new byte[_width * _height];
-            for (int i = 0; i < _memory.Length; i++)
+            Clear('\0', new Solid(255, 255, 255), background);
+        }
+
+        public void Clear(char character, IColour foreground, IColour background)
+        {
+            _memory = new byte[_width * _height * 4];
+            for (int i = 0; i < _memory.Length - 3; i += 4)
             {
                 _memory[i] = (byte)character;
+                _memory[i + 1] = background.Red;
+                _memory[i + 2] = background.Green;
+                _memory[i + 3] = background.Blue;
             }
-        }
-
-        public override void Clear(IColour colour)
-        {
-            Clear('\0');
         }
 
         public override void PartialGenerate(int column, int row, int width, int height)
         {
             // need to know which position has been updated
             // at the moment this is handled by the parent class
-
+  
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
             if (_bitmap is null)
             {
-                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
+                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format24bppRgb);
             }
 
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
 
             // Get the address of the first line.
 
@@ -90,7 +93,10 @@ namespace DisplayLibrary
 
             int hbytes = (int)Math.Round((double)hbits / 8);
 
-            byte character = _memory[column + row * columns];
+            byte character = _memory[(column + row * columns) * 2];
+            byte red = _memory[(column + row * columns) * 4 + 1];
+            byte green = _memory[(column + row * columns) * 4 + 1];
+            byte blue = _memory[(column + row * columns) * 4 + 1];
 
             for (int r = 0; r < vbits; r++)
             {
@@ -105,7 +111,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = _foreground.ToByte();
+                            rgbValues[pos] = (byte)red;
                         }
                         else
                         {
@@ -114,7 +120,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = _foreground.ToByte();
+                                    rgbValues[pos] = (byte)red;
                                 }
                             }
                         }
@@ -124,7 +130,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = _background.ToByte();
+                            rgbValues[pos] = (byte)green;
                         }
                         else
                         {
@@ -133,7 +139,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = _background.ToByte();
+                                    rgbValues[pos] = (byte)green;
                                 }
                             }
                         }
@@ -145,6 +151,7 @@ namespace DisplayLibrary
 
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
+            //return (_bitmap);
         }
 
         public override void Generate()
@@ -178,7 +185,10 @@ namespace DisplayLibrary
             {
                 for (int column = 0; column < columns; column++)
                 {
-                    byte character = _memory[column + row * columns];
+                    byte character = _memory[(column + row * columns) * 2];
+                    byte colour = _memory[(column + row * columns) * 2 + 1];
+                    byte foreground = (byte)(colour & 15);
+                    byte background = (byte)((colour >> 4) & 15);
 
                     for (int r = 0; r < vbits; r++)
                     {
@@ -190,10 +200,10 @@ namespace DisplayLibrary
 
                             if (val != 0)
                             {
-                                if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
+                                if ((hscale==1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = _foreground.ToByte();
+                                    rgbValues[pos] = (byte)foreground;
                                 }
                                 else
                                 {
@@ -202,7 +212,7 @@ namespace DisplayLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = _foreground.ToByte();
+                                            rgbValues[pos] = (byte)foreground;
                                         }
                                     }
                                 }
@@ -212,7 +222,7 @@ namespace DisplayLibrary
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = _background.ToByte();
+                                    rgbValues[pos] = (byte)background;
                                 }
                                 else
                                 {
@@ -221,7 +231,7 @@ namespace DisplayLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = _background.ToByte();
+                                            rgbValues[pos] = (byte)background;
                                         }
                                     }
                                 }
@@ -240,46 +250,4 @@ namespace DisplayLibrary
         #region Private
         #endregion
     }
-
-    //// Add the following helper class to resolve the CS0103 error.  
-    //// This class provides the missing 'IndexedBitmapHelper' functionality.  
-    //internal static class IndexedBitmapHelper
-    //{
-    //    public static void SetPalette(Bitmap bitmap, TextMode.ConsoleColour foreground, TextMode.ConsoleColour background)
-    //    {
-    //        if (bitmap.PixelFormat != PixelFormat.Format1bppIndexed)
-    //        {
-    //            throw new ArgumentException("Bitmap must be 1bpp indexed format.", nameof(bitmap));
-    //        }
-
-    //        ColorPalette palette = bitmap.Palette;
-    //        palette.Entries[0] = MapConsoleColorToColor(background);
-    //        palette.Entries[1] = MapConsoleColorToColor(foreground);
-    //        bitmap.Palette = palette;
-    //    }
-
-    //    private static Color MapConsoleColorToColor(TextMode.ConsoleColour consoleColor)
-    //    {
-    //        return consoleColor switch
-    //        {
-    //            TextMode.ConsoleColour.Black => Color.Black,
-    //            TextMode.ConsoleColour.DarkBlue => Color.DarkBlue,
-    //            TextMode.ConsoleColour.DarkGreen => Color.DarkGreen,
-    //            TextMode.ConsoleColour.DarkCyan => Color.DarkCyan,
-    //            TextMode.ConsoleColour.DarkRed => Color.DarkRed,
-    //            TextMode.ConsoleColour.DarkMagenta => Color.DarkMagenta,
-    //            TextMode.ConsoleColour.DarkYellow => Color.Olive,
-    //            TextMode.ConsoleColour.Gray => Color.Gray,
-    //            TextMode.ConsoleColour.DarkGray => Color.DarkGray,
-    //            TextMode.ConsoleColour.Blue => Color.Blue,
-    //            TextMode.ConsoleColour.Green => Color.Green,
-    //            TextMode.ConsoleColour.Cyan => Color.Cyan,
-    //            TextMode.ConsoleColour.Red => Color.Red,
-    //            TextMode.ConsoleColour.Magenta => Color.Magenta,
-    //            TextMode.ConsoleColour.Yellow => Color.Yellow,
-    //            TextMode.ConsoleColour.White => Color.White,
-    //            _ => throw new ArgumentOutOfRangeException(nameof(consoleColor), "Invalid console color value.")
-    //        };
-    //    }
-    
 }

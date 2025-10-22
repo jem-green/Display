@@ -98,7 +98,7 @@ namespace DisplayLibrary
 
             for (int r = 0; r < vbits; r++)
             {
-                byte value = _font.Image[(byte)character * hbytes * vbits + r];
+                byte value = _font.Data[(byte)character * hbytes * vbits + r];
 
                 for (int c = 0; c < hbits; c++) // columns
                 {
@@ -190,7 +190,7 @@ namespace DisplayLibrary
 
                     for (int r = 0; r < vbits; r++)
                     {
-                        byte value = _font.Image[(byte)character * hbytes * vbits + r];
+                        byte value = _font.Data[(byte)character * hbytes * vbits + r];
 
                         for (int c = 0; c < hbits; c++) // columns
                         {

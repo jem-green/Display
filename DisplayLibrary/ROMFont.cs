@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -10,7 +11,7 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        byte[] _image;
+        byte[] _data;
         int _hbits;
         int _vbits;
 
@@ -19,15 +20,15 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public byte[] Image
+        public byte[] Data
         {
             set
             {
-                _image = value;
+                _data = value;
             }
             get
             {
-                return (_image);
+                return (_data);
             }
         }
 
@@ -68,8 +69,8 @@ namespace DisplayLibrary
             _vbits = binaryReader.ReadByte();
             int hbytes = (int)Math.Round((double)_hbits / 8);
             int length = hbytes * _vbits * 255;
-            _image = new byte[length];
-            _image = binaryReader.ReadBytes(length);
+            _data = new byte[length];
+            _data = binaryReader.ReadBytes(length);
 
             binaryReader.Close();
             binaryReader.Dispose();

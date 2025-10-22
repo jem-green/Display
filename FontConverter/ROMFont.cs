@@ -4,14 +4,71 @@ using System.IO;
 
 namespace FontLibrary
 {
-    public class Converter
+    public class ROMFont
     {
+        #region Fields
+
         Bitmap _image;
         int _hbits;
         int _vbits;
         int _width;
         int _height;
         byte[] _data;
+
+        #endregion
+
+        #region Properties
+
+        public byte[] Data
+        {
+            set
+            {
+                _data = value;
+            }
+            get
+            {
+                return (_data);
+            }
+        }
+
+        public int Horizontal
+        {
+            set
+            {
+                _hbits = value;
+            }
+            get
+            {
+                return (_hbits);
+            }
+        }
+
+        public Bitmap Image
+        {
+            set
+            {
+                _image = value;
+            }
+            get
+            {
+                return (_image);
+            }
+        }
+
+        public int Vertical
+        {
+            set
+            {
+                _vbits = value;
+            }
+            get
+            {
+                return (_vbits);
+            }
+        }
+
+        #endregion
+        #region Methods
 
         public void LoadROMFont(string path, string filename)
         {
@@ -195,6 +252,8 @@ namespace FontLibrary
                 }
             }
         }
+
+        #endregion
     }
 }
 

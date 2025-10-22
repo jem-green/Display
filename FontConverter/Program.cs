@@ -13,7 +13,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            Converter converter = new Converter();
+            ROMFont converter = new ROMFont();
 
             string path = @"C:\SOURCE\GIT\cs.net\Display\FontConverter\ROM";
             string outPath = @"C:\SOURCE\GIT\cs.net\Display\FontConverter\ROM";
@@ -104,7 +104,7 @@ namespace ConsoleApp
                         int width = Convert.ToInt32(parts[0]);
                         int height = Convert.ToInt32(parts[1]);
 
-                        Converter u = new Converter();
+                        ROMFont u = new ROMFont();
                         u.LoadRomBitmap(path, romName + ".rom", width, height, 0, 128);
                         u.SaveROMFont(path, romName + ".bin");
                         
