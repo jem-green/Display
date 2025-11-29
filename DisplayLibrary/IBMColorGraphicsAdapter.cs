@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DisplayLibrary
 {
-    internal class IBMColorGraphicsAdaptor
+    internal class IBMColorGraphicsAdapter
     {
         // This is slightly different as it supports both
         // text and graphics just need to work out how you
@@ -29,7 +29,7 @@ namespace DisplayLibrary
 
         #endregion
         #region Constructors
-        public IBMColorGraphicsAdaptor()
+        public IBMColorGraphicsAdapter()
         {
             /* CGA supports:
              * 
@@ -41,23 +41,23 @@ namespace DisplayLibrary
              * 
              * Text modes:
              * 
-             * 40×25 with 8×8 pixel font (effective resolution of 320×200)
-             * 80×25 with 8×8 pixel font (effective resolution of 640×200)
+             * 40×25 in 16 colors, with 8×8 pixel font (effective resolution of 320×200)
+             * 80×25 in 16 colors, with 8×8 pixel font (effective resolution of 640×200)
              * 
              */
 
             // Could predefine all the modes here
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new ColourTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new VibrantTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new ColourGraphicsMode(160, 100));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new VibrantGraphicsMode(160, 100));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new ColourGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new VibrantGraphicsMode(320, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new ColourGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new MonochromeGraphicsMode(640, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -65,7 +65,7 @@ namespace DisplayLibrary
             _mode = GetAdaptor(_displayMode);
 
             // Need to consider what fonts to use for the text modes
-            // I suspect as the depended on the adaptor manufacture then this is in the
+            // I suspect as the depended on the adapter manufacture then this is in the
             // the derived class (BIOS)
 
         }
@@ -112,15 +112,15 @@ namespace DisplayLibrary
             switch (displayMode)
             {
                 case DisplayMode.t40x25c16:
-                    return new ColourTextMode(40, 25);
+                    return new VibrantTextMode(40, 25);
                 case DisplayMode.t80x25c16:
-                    return new ColourTextMode(80, 25);
+                    return new VibrantTextMode(80, 25);
                 case DisplayMode.g160x100c16:
-                    return new ColourGraphicsMode(160, 100);
+                    return new VibrantGraphicsMode(160, 100);
                 case DisplayMode.g320x200c4:
-                    return new ColourGraphicsMode(320, 200);
+                    return new VibrantGraphicsMode(320, 200);
                 case DisplayMode.g640x200c2:
-                    return new ColourGraphicsMode(640, 200);
+                    return new VibrantGraphicsMode(640, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }

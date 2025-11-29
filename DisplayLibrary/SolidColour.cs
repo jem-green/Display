@@ -2,13 +2,14 @@
 
 namespace DisplayLibrary
 {
-    public class Solid : IEquatable<Solid>, IColour
+    public class SolidColour : IEquatable<SolidColour>, IColour
 {
         #region Fields
 
         private byte _red = 0;
         private byte _green = 0;
         private byte _blue = 0;
+        private byte _colour2 = 0;      // 2-bit colour
         private byte _colour4 = 0;      // 4-bit colour
         private byte _colour8 = 0;      // 8-bit colour
         private ushort _colour16 = 0;   // 16-bit colour
@@ -17,75 +18,34 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public Solid(byte red, byte green, byte blue)
+        public SolidColour(byte red, byte green, byte blue)
         {
             _red = red;
             _green = green;
             _blue = blue;
 
+            // Convert to 2-bit colour
+
+            _colour2 = (byte)((_red >> 7) << 1 | (_green >> 6) | (_blue >> 7));
+
             // Convert to 4-bit colour
 
-            byte c = _red;
-            byte g = (byte)((_green >> 3) & 0b00011100);
-            c = (byte)(c | g);
-            byte b = (byte)((_blue >> 6) & 0b00000011);
-            _colour4 = (byte)(c | b);
+            byte intensity = (byte)(((_red >> 6) | (_green >> 6) | (_blue >> 6)) & 0x01);
+            _colour4 = (byte)((intensity << 3) | ((_red >> 7) << 2) | ((_green >> 7) << 1) | (_blue >> 7));
 
-            // Convert to 5-6-5 format
+            // Convert to 3-3-2 format 8-bit colour
 
-            _colour8 = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+            _colour8 = (byte)((_red >> 5) << 5 | (_green >> 5) << 2 | (_blue >> 6));
 
-            // Convert to 16-bit colour
+            // Convert to 5-6-5 format 16-bit colour
 
-            _colour16 = (ushort)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
+            _colour16 = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
 
             // Convert to 32-bit colour (b-g-r format to match bitmap format)
 
             _colour32 = (ulong)((_blue >> 3) | ((_green >> 2) << 8) | ((_red >> 3) << 16));
 
 
-        }
-
-        public Solid(string rgb)
-        {
-            if (rgb.Length != 7)
-            {
-                throw new ArgumentException("RGB string must be 6 characters long");
-            }
-            else
-            {
-                if (rgb[0] != '#')
-                {
-                    throw new ArgumentException("RGB string must start with #");
-                }
-                else
-                {
-                    _red = Convert.ToByte(rgb.Substring(1, 2), 16);
-                    _green = Convert.ToByte(rgb.Substring(3, 2), 16);
-                    _blue = Convert.ToByte(rgb.Substring(5, 2), 16);
-
-                    // Convert to 4-bit colour
-
-                    byte c = _red;
-                    byte g = (byte)((_green >> 3) & 0b00011100);
-                    c = (byte)(c | g);
-                    byte b = (byte)((_blue >> 6) & 0b00000011);
-                    _colour4 = (byte)(c | b);
-
-                    // Convert to 5-6-5 format
-
-                    _colour8 = (byte)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
-
-                    // Convert to 16-bit colour
-
-                    _colour16 = (ushort)((_red >> 3) << 11 | (_green >> 2) << 5 | (_blue >> 3));
-
-                    // Convert to 32-bit colour (b-g-r format to match bitmap format)
-
-                    _colour32 = (ulong)((_blue >> 3) | ((_green >> 2) << 8) | ((_red >> 3) << 16));
-
-                }
-            }
         }
 
         #endregion
@@ -111,6 +71,12 @@ namespace DisplayLibrary
 
         #endregion
         #region Methods
+
+        public byte To2Bit()
+        {
+            // Return 1-bit colour
+            return (_colour2);
+        }
 
         public byte ToNybble()
         {
@@ -141,7 +107,7 @@ namespace DisplayLibrary
         #endregion
         #region Private
 
-        bool IEquatable<Solid>.Equals(Solid other)
+        bool IEquatable<SolidColour>.Equals(SolidColour other)
         {
             if (other == null) return false;
             if (_red == other.Red && _green == other.Green && _blue == other.Blue)

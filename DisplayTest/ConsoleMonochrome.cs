@@ -21,7 +21,7 @@ namespace DisplayTest
         public ConsoleMonochrome()
         {
             InitializeComponent();
-            console = new Console(32, 32, 2);
+            console = new Console(32, 32, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
@@ -32,9 +32,9 @@ namespace DisplayTest
             console.Font = rasterFont;
             console.Set(0, 0);
             //console.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
-            console.ForegroundColour = new Solid(0, 0, 255);
+            console.ForegroundColour = new SolidColour(0, 0, 255);
             //console.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
-            console.BackgroundColour = new Solid(0, 0, 0);
+            console.BackgroundColour = new SolidColour(0, 0, 0);
             console.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

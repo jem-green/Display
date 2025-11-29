@@ -27,8 +27,8 @@ namespace DisplayTest
 
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
-            terminal.ForegroundColour = new Solid(0, 0, 0);
-            terminal.BackgroundColour = new Solid(255,255,255);
+            terminal.ForegroundColour = new SolidColour(0, 0, 0);
+            terminal.BackgroundColour = new SolidColour(255,255,255);
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             panel1.Select();
@@ -68,7 +68,7 @@ namespace DisplayTest
             if (key > 0)
             {
                 //terminal.Write(key, (byte)TextMode.ConsoleColour.Blue, (byte)TextMode.ConsoleColour.Green);
-                terminal.Write(key, new Solid(0,0,255), new Solid(0,255,0));
+                terminal.Write(key, new SolidColour(0,0,255), new SolidColour(0,255,0));
 
                 panel1.Invalidate();
             }

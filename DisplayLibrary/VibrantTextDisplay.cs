@@ -6,35 +6,32 @@ using System.Text;
 
 namespace DisplayLibrary
 {
-    public class ColourTextDisplay : ColourTextMode, IStorage, IText
+    public class VibrantTextDisplay : VibrantTextMode, IStorage, IText
     {
         #region Fields
 
-        int _x;
-        int _y;
+        int _x; // Column
+        int _y; // Row
 
         #endregion
         #region Constructors
 
-        public ColourTextDisplay(int width, int height) : base(width, height)
+        public VibrantTextDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public ColourTextDisplay(int width, int height, int scale) : base(width,height,scale)
+        public VibrantTextDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
         }
 
-        public ColourTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public VibrantTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
-            _aspect = aspect;
         }
 
         #endregion
@@ -51,11 +48,11 @@ namespace DisplayLibrary
         {
             set
             {
-                _x = value;
+                _y = value;
             }
             get
             {
-                return (_x);
+                return (_y);
             }
         }
 
@@ -63,11 +60,11 @@ namespace DisplayLibrary
         {
             set
             {
-                _y = value;
+                _x = value;
             }
             get
             {
-                return (_y);
+                return (_x);
             }
         }
 
@@ -104,7 +101,7 @@ namespace DisplayLibrary
             }
             else
             {
-                byte character = _memory[(_x + _y * _width)*2];
+                byte character = _memory[(column + row * _width)*2];
                 return (character);
             }
         }
@@ -167,7 +164,6 @@ namespace DisplayLibrary
                         _y = _height;
                         // the display needs to scroll at the point.
                         Scroll();
-                        //Generate();
                     }
                 }
             }

@@ -6,35 +6,33 @@ using System.Text;
 
 namespace DisplayLibrary
 {
-    public class VibrantTextDisplay : ColourTextMode, IStorage, IText
+    public class TrueTextDisplay : TrueTextMode, IStorage, IText
     {
         #region Fields
 
-        int _x;
-        int _y;
+        int _x; // Column
+        int _y; // Row
 
         #endregion
         #region Constructors
 
-        public VibrantTextDisplay(int width, int height) : base(width, height)
+        public TrueTextDisplay(int width, int height) : base(width, height)
+        {
+            _x = 0;
+            _y = 0;
+
+        }
+
+        public TrueTextDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
         }
 
-        public VibrantTextDisplay(int width, int height, int scale) : base(width,height,scale)
+        public TrueTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
-        }
-
-        public VibrantTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
-        {
-            _x = 0;
-            _y = 0;
-            _scale = scale;
-            _aspect = aspect;
         }
 
         #endregion
@@ -51,11 +49,11 @@ namespace DisplayLibrary
         {
             set
             {
-                _x = value;
+                _y = value;
             }
             get
             {
-                return (_x);
+                return (_y);
             }
         }
 
@@ -63,11 +61,11 @@ namespace DisplayLibrary
         {
             set
             {
-                _y = value;
+                _x = value;
             }
             get
             {
-                return (_y);
+                return (_x);
             }
         }
 
@@ -167,7 +165,6 @@ namespace DisplayLibrary
                         _y = _height;
                         // the display needs to scroll at the point.
                         Scroll();
-                        //Generate();
                     }
                 }
             }
@@ -194,7 +191,7 @@ namespace DisplayLibrary
         public void Save(string path, string filename)
         {
             // Save the display to a file
-            throw new NotImplementedException("Save method not implemented for ColourTextDisplay.");
+            throw new NotImplementedException("Save method not implemented for TrueTextDisplay.");
         }
 
         #endregion

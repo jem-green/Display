@@ -43,18 +43,16 @@ namespace DisplayLibrary
 
         public override void Clear(IColour background)
         {
-            Clear('\0', new Solid(255, 255, 255), background);
+            Clear('\0', new SolidColour(255, 255, 255), background);
         }
 
         public void Clear(char character, IColour foreground, IColour background)
         {
-            _memory = new byte[_width * _height * 4];
-            for (int i = 0; i < _memory.Length - 3; i += 4)
+            _memory = new byte[_width * _height * 2];
+            for (int i = 0; i < _memory.Length - 1; i += 2)
             {
                 _memory[i] = (byte)character;
-                _memory[i + 1] = background.Red;
-                _memory[i + 2] = background.Green;
-                _memory[i + 3] = background.Blue;
+                _memory[i + 1] = (byte)((byte)(background.ToNybble() << 4) | (byte)foreground.ToNybble());
             }
         }
 
@@ -68,10 +66,10 @@ namespace DisplayLibrary
 
             if (_bitmap is null)
             {
-                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format24bppRgb);
+                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
             }
 
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
@@ -94,9 +92,9 @@ namespace DisplayLibrary
             int hbytes = (int)Math.Round((double)hbits / 8);
 
             byte character = _memory[(column + row * columns) * 2];
-            byte red = _memory[(column + row * columns) * 4 + 1];
-            byte green = _memory[(column + row * columns) * 4 + 1];
-            byte blue = _memory[(column + row * columns) * 4 + 1];
+            byte colour = _memory[(column + row * columns) * 2 + 1];
+            byte foreground = (byte)(colour & 15);
+            byte background = (byte)((colour >> 4) & 15);
 
             for (int r = 0; r < vbits; r++)
             {
@@ -111,7 +109,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = (byte)red;
+                            rgbValues[pos] = (byte)foreground;
                         }
                         else
                         {
@@ -120,7 +118,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = (byte)red;
+                                    rgbValues[pos] = (byte)foreground;
                                 }
                             }
                         }
@@ -130,7 +128,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = (byte)green;
+                            rgbValues[pos] = (byte)background;
                         }
                         else
                         {
@@ -139,7 +137,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = (byte)green;
+                                    rgbValues[pos] = (byte)background;
                                 }
                             }
                         }

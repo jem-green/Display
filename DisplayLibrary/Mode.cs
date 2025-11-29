@@ -17,8 +17,8 @@ namespace DisplayLibrary
 
         public Mode(int width, int height)
         {
-            _background = new Solid(0, 0, 0);
-            _foreground = new Solid(255, 255, 255);
+            _background = new SolidColour(0, 0, 0);
+            _foreground = new SolidColour(255, 255, 255);
         }
 
         #endregion

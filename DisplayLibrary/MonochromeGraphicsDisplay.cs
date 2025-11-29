@@ -6,7 +6,7 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class MonochromeGraphicsDisplay : ColourGraphicsMode, IStorage, IMode, IGraphic, IDisplay
+    public class MonochromeGraphicsDisplay : VibrantGraphicsMode, IStorage, IMode, IGraphic, IDisplay
     {
         #region Fields
 
@@ -98,7 +98,7 @@ namespace DisplayLibrary
             {
             	int index = y * _width + x;
             	byte colour = _memory[index];
-                IColour c = new Solid((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
+                IColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
                 return(c);
             }
         }

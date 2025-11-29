@@ -1,5 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Text;
 
 namespace DisplayLibrary
 {
@@ -7,13 +10,13 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        int _x;
-        int _y;
+        int _x; // Column
+        int _y; // Row
 
         #endregion
         #region Constructors
-		
-		public MonochromeTextDisplay(int width, int height) : base(width, height)
+
+        public MonochromeTextDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
@@ -23,15 +26,12 @@ namespace DisplayLibrary
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
         }
 
         public MonochromeTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
-            _scale = scale;
-            _aspect = aspect;
         }
 
         #endregion
@@ -48,11 +48,11 @@ namespace DisplayLibrary
         {
             set
             {
-                _x = value;
+                _y = value;
             }
             get
             {
-                return (_x);
+                return (_y);
             }
         }
 
@@ -60,11 +60,11 @@ namespace DisplayLibrary
         {
             set
             {
-                _y = value;
+                _x = value;
             }
             get
             {
-                return (_y);
+                return (_x);
             }
         }
 
@@ -158,7 +158,7 @@ namespace DisplayLibrary
                     {
                         _y = _height;
                         // the display needs to scroll at the point.
-                        Scroll();          
+                        Scroll();
                     }
                 }
             }
@@ -184,6 +184,7 @@ namespace DisplayLibrary
 
         public void Save(string path, string filename)
         {
+            // Save the display to a file
             throw new NotImplementedException("Save method not implemented for MonochromeTextDisplay.");
         }
 

@@ -6,7 +6,7 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class ColourGraphicsDisplay : ColourGraphicsMode, IStorage, IMode, IGraphic
+    public class TrueGraphicsDisplay : TrueGraphicsMode, IGraphic, IMode, IStorage
     {
         #region Fields
 
@@ -16,20 +16,20 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public ColourGraphicsDisplay(int width, int height) : base(width, height)
+        public TrueGraphicsDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public ColourGraphicsDisplay(int width, int height, int scale) : base(width, height)
+        public TrueGraphicsDisplay(int width, int height, int scale) : base(width, height)
         {
             _x = 0;
             _y = 0;
             _scale = scale;
         }
 
-        public ColourGraphicsDisplay(int width, int height, int scale, int aspect) : base(width, height)
+        public TrueGraphicsDisplay(int width, int height, int scale, int aspect) : base(width, height)
         {
             _x = 0;
             _y = 0;
@@ -96,9 +96,11 @@ namespace DisplayLibrary
             }
             else
             {
-            	int index = y * _width + x;
-            	byte colour = _memory[index];
-                Solid c = new Solid((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
+            	int index = (y * _width + x) * 3;
+                byte r = _memory[index];
+                byte g = _memory[index + 1];
+                byte b = _memory[index + 2];
+                SolidColour c = new SolidColour(r, g, b);
                 return(c);
             }
         }
@@ -110,10 +112,6 @@ namespace DisplayLibrary
 
         public void Write(int x, int y, IColour colour)
         {
-            // 8-bit colour from wiki
-            // http://en.wikipedia.org/wiki/8-bit_color
-            // 3 bits red, 3 bits green, 2 bits blue
-
             // need to do some boundary checks
 
             if ((x > _width) || (y > _height))
@@ -124,8 +122,10 @@ namespace DisplayLibrary
             {
                 //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
 
-                int index = y * _width + x;
-                _memory[index] = colour.ToByte();
+                int index = (y * _width + x) * 3;
+                _memory[index] = colour.Blue;
+                _memory[index + 1] = colour.Green;
+                _memory[index + 2] = colour.Red;
             }
         }
 

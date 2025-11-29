@@ -28,6 +28,8 @@ namespace DisplayLibrary
             set;
         }
 
+        public byte To2Bit();
+
         public byte ToNybble();
 
         public byte ToByte();

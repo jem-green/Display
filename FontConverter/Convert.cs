@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.IO;
 
-namespace FontLibrary
+namespace FontConverter
 {
-    public class ROMFont
+    public class Convert
     {
         #region Fields
 
@@ -16,7 +16,6 @@ namespace FontLibrary
         byte[] _data;
 
         #endregion
-
         #region Properties
 
         public byte[] Data
@@ -149,7 +148,7 @@ namespace FontLibrary
 
         }
 
-        public void Convert(int horizontal, int vertical)
+        public void ConvertBitmap(int horizontal, int vertical)
         {
             _hbits = horizontal;
             _vbits = vertical;

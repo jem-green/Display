@@ -44,8 +44,9 @@ namespace DisplayLibrary
         public TextMode(int width, int height) : base(width,height)
         {
             _type = Type.text;
-            _foreground = new Solid(255, 255, 255);
-            _background = new Solid(0, 0, 0);
+            _foreground = new SolidColour(255, 255, 255);
+            _background = new SolidColour(0, 0, 0);
+            _bitmap = null;
         }
 
         #endregion

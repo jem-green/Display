@@ -33,5 +33,11 @@
     <Compile Update="DisplayBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="DisplayVibrantGraphics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DisplayColourGraphics.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    public class Dither : IEquatable<Solid>, IColour
+    public class DitheredColour : IEquatable<SolidColour>, IColour
     {
         #region Fields
 
@@ -13,6 +13,7 @@ namespace DisplayLibrary
         private byte _red = 0;
         private byte _green = 0;
         private byte _blue = 0;
+        private byte _colour2 = 0;      // 2-bit colour
         private byte _colour4 = 0;      // 4-bit colour
         private byte _colour8 = 0;      // 8-bit colour
         private ushort _colour16 = 0;   // 16-bit colour
@@ -21,7 +22,7 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public Dither(byte red, byte green, byte blue)
+        public DitheredColour(byte red, byte green, byte blue)
         {
             _red = red;
             _green = green;
@@ -50,7 +51,7 @@ namespace DisplayLibrary
 
         }
 
-        public Dither(string rgb)
+        public DitheredColour(string rgb)
         {
             if (rgb.Length != 7)
             {
@@ -116,6 +117,12 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
+        public byte To2Bit()
+        {
+            // Return 1-bit colour
+            return (_colour2);
+        }
+
         public byte ToNybble()
         {
             // Return 4-bit colour
@@ -145,7 +152,7 @@ namespace DisplayLibrary
         #endregion
         #region Private
 
-        bool IEquatable<Solid>.Equals(Solid other)
+        bool IEquatable<SolidColour>.Equals(SolidColour other)
         {
             if (other == null) return false;
             if (_red == other.Red && _green == other.Green && _blue == other.Blue)

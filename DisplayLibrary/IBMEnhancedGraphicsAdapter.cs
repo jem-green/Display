@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DisplayLibrary
 {
-    internal class IBMEnhancedGraphicsAdaptor
+    internal class IBMEnhancedGraphicsAdapter
     {
         #region Fields
 
@@ -35,47 +35,47 @@ namespace DisplayLibrary
 
         #endregion
         #region Constructors
-        public IBMEnhancedGraphicsAdaptor()
+        public IBMEnhancedGraphicsAdapter()
         {
             /*
              * EGA supports:
              *
              * Graphics modes:
              *
-             * 640 × 350 × 16 colors (from a 6 bit palette of 64 colors), pixel aspect ratio of 1:1.37.
-             * 640 × 350 × 2 colors, pixel aspect ratio of 1:1.37.
-             * 640 × 200 × 16 colors, pixel aspect ratio of 1:2.4.
-             * 320 × 200 × 16 colors, pixel aspect ratio of 1:1.2.
+             * 640 × 350 in 16 colors (from a 6 bit palette of 64 colors), pixel aspect ratio of 1:1.37.
+             * 640 × 350 in 2 colors, pixel aspect ratio of 1:1.37.
+             * 640 × 200 in 16 colors, pixel aspect ratio of 1:2.4.
+             * 320 × 200 in 16 colors, pixel aspect ratio of 1:1.2.
              *
              * Text modes:
              *
-             * 40 × 25 with 8 × 8 pixel font (effective resolution of 320 × 200)
-             * 80 × 25 with 8 × 8 pixel font (effective resolution of 640 × 200)
-             * 80 × 25 with 8 × 14 pixel font (effective resolution of 640 × 350)
-             * 80 × 43 with 8 × 8 pixel font (effective resolution of 640 × 344)
+             * 40 × 25 in 16 colors, with 8 × 8 pixel font (effective resolution of 320 × 200)
+             * 80 × 25 in 16 colors, with 8 × 8 pixel font (effective resolution of 640 × 200)
+             * 80 × 25 in 16 colors, with 8 × 14 pixel font (effective resolution of 640 × 350)
+             * 80 × 43 in 16 colors, with 8 × 8 pixel font (effective resolution of 640 × 344)
              * 
              */
 
             // Could predefine all the modes here
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new ColourTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new VibrantTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x43c16, new ColourTextMode(80, 43));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x43c16, new VibrantTextMode(80, 43));
             _modes.Add(mode);
 
 
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c16, new ColourGraphicsMode(640, 350));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c16, new VibrantGraphicsMode(640, 350));
             _modes.Add(mode);
             mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c2, new MonochromeGraphicsMode(640, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c16, new ColourGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c16, new VibrantGraphicsMode(640, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c16, new ColourGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c16, new VibrantGraphicsMode(320, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -130,21 +130,21 @@ namespace DisplayLibrary
             switch (displayMode)
             {
                 case DisplayMode.t40x25c16:
-                    return new ColourTextMode(40, 25);
+                    return new VibrantTextMode(40, 25);
                 case DisplayMode.t80x25c16:
-                    return new ColourTextMode(80, 25);
+                    return new VibrantTextMode(80, 25);
                 case DisplayMode.t80x25c16a:
-                    return new ColourTextMode(80, 25);
+                    return new VibrantTextMode(80, 25);
                 case DisplayMode.t80x43c16:
-                    return new ColourTextMode(80, 43);
+                    return new VibrantTextMode(80, 43);
                 case DisplayMode.g640x350c16:
-                    return new ColourGraphicsMode(640, 350);
+                    return new VibrantGraphicsMode(640, 350);
                 case DisplayMode.g640x350c2:
                     return new MonochromeGraphicsMode(640, 350);
                 case DisplayMode.g640x200c16:
-                    return new ColourGraphicsMode(640, 200);
+                    return new VibrantGraphicsMode(640, 200);
                 case DisplayMode.g320x200c16:
-                    return new ColourGraphicsMode(320, 200);
+                    return new VibrantGraphicsMode(320, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }

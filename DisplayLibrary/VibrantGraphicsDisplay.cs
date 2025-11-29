@@ -6,7 +6,7 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class VibrantGraphicsDisplay : VibrantGraphicsMode, IGraphic, IMode, IStorage
+    public class VibrantGraphicsDisplay : VibrantGraphicsMode, IStorage, IMode, IGraphic
     {
         #region Fields
 
@@ -96,11 +96,9 @@ namespace DisplayLibrary
             }
             else
             {
-            	int index = (y * _width + x) * 3;
-                byte r = _memory[index];
-                byte g = _memory[index + 1];
-                byte b = _memory[index + 2];
-                Solid c = new Solid(r, g, b);
+            	int index = y * _width + x;
+            	byte colour = _memory[index];
+                SolidColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
                 return(c);
             }
         }
@@ -124,12 +122,21 @@ namespace DisplayLibrary
             }
             else
             {
-                //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
-
-                int index = (y * _width + x) * 3;
-                _memory[index] = colour.Blue;
-                _memory[index + 1] = colour.Green;
-                _memory[index + 2] = colour.Red;
+                int index = y * _width / 2 + x / 2;
+                byte newColour;
+                if (x % 2 == 1)
+                {
+                    // even pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0x0F) | (colour.ToNybble() << 4 & 0xF0));
+                }
+                else
+                {
+                    // odd pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0xF0) | (colour.ToNybble() & 0x0F));
+                }
+                _memory[index] = newColour;
             }
         }
 

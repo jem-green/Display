@@ -8,19 +8,23 @@ namespace DisplayLibrary
     public class MonochromeTextMode : TextMode, IStorage, IMode
     {
         #region Fields
-            
+
+        ColorPalette _colourPalette;
+
         #endregion
         #region Constructors
 
         public MonochromeTextMode(int width, int height) : base(width, height)
         {
             _memory = new byte[_width * _height];
+            BuildColourIndex();
         }
 
         public MonochromeTextMode(int width, int height, int scale) : base(width, height)
         {
             _memory = new byte[_width * _height];
             _scale = scale;
+            BuildColourIndex();
         }
 
         public MonochromeTextMode(int width, int height, int scale, int aspect) : base(width, height)
@@ -28,6 +32,7 @@ namespace DisplayLibrary
             _memory = new byte[_width * _height];
             _scale = scale;
             _aspect = aspect;
+            BuildColourIndex();
         }
 
         #endregion
@@ -41,18 +46,18 @@ namespace DisplayLibrary
             Clear('\0');
         }
 
+        public override void Clear(IColour colour)
+        {
+            Clear('\0');
+        }
+
         public void Clear(char character)
         {
-            _memory = new byte[_width * _height];
             for (int i = 0; i < _memory.Length; i++)
             {
                 _memory[i] = (byte)character;
             }
-        }
-
-        public override void Clear(IColour colour)
-        {
-            Clear('\0');
+            Generate();
         }
 
         public override void PartialGenerate(int column, int row, int width, int height)
@@ -67,6 +72,7 @@ namespace DisplayLibrary
             {
                 _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
             }
+            _bitmap.Palette = _colourPalette;
 
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
 
@@ -105,7 +111,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = _foreground.ToByte();
+                            rgbValues[pos] = _foreground.ToNybble();
                         }
                         else
                         {
@@ -114,7 +120,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = _foreground.ToByte();
+                                    rgbValues[pos] = _foreground.ToNybble();
                                 }
                             }
                         }
@@ -124,7 +130,7 @@ namespace DisplayLibrary
                         if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                         {
                             int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = _background.ToByte();
+                            rgbValues[pos] = _background.ToNybble();
                         }
                         else
                         {
@@ -133,7 +139,7 @@ namespace DisplayLibrary
                                 for (int j = 0; j < hscale; j++)
                                 {
                                     int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                    rgbValues[pos] = _background.ToByte();
+                                    rgbValues[pos] = _background.ToNybble();
                                 }
                             }
                         }
@@ -154,6 +160,7 @@ namespace DisplayLibrary
 
             _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+            _bitmap.Palette = _colourPalette;
 
             // Get the address of the first line.
 
@@ -193,7 +200,7 @@ namespace DisplayLibrary
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = _foreground.ToByte();
+                                    rgbValues[pos] = _foreground.ToNybble();
                                 }
                                 else
                                 {
@@ -202,7 +209,7 @@ namespace DisplayLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = _foreground.ToByte();
+                                            rgbValues[pos] = _foreground.ToNybble();
                                         }
                                     }
                                 }
@@ -212,7 +219,7 @@ namespace DisplayLibrary
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
                                     int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                                    rgbValues[pos] = _background.ToByte();
+                                    rgbValues[pos] = _background.ToNybble();
                                 }
                                 else
                                 {
@@ -221,7 +228,7 @@ namespace DisplayLibrary
                                         for (int j = 0; j < hscale; j++)
                                         {
                                             int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
-                                            rgbValues[pos] = _background.ToByte();
+                                            rgbValues[pos] = _background.ToNybble();
                                         }
                                     }
                                 }
@@ -238,6 +245,31 @@ namespace DisplayLibrary
 
         #endregion
         #region Private
+
+        private void BuildColourIndex()
+        {
+            using (var tempBitmap = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
+            {
+                _colourPalette = tempBitmap.Palette;
+            }
+            _colourPalette.Entries[0] = Color.FromArgb(0, 0, 0);        // Black
+            _colourPalette.Entries[1] = Color.FromArgb(0, 0, 170);      // Blue
+            _colourPalette.Entries[2] = Color.FromArgb(0, 170, 0);      // Green
+            _colourPalette.Entries[3] = Color.FromArgb(0, 170, 170);    // Cyan
+            _colourPalette.Entries[4] = Color.FromArgb(170, 0, 0);      // Red
+            _colourPalette.Entries[5] = Color.FromArgb(170, 0, 170);    // Magenta
+            _colourPalette.Entries[6] = Color.FromArgb(170, 85, 0);     // Brown
+            _colourPalette.Entries[7] = Color.FromArgb(170, 170, 170);  // Light Gray
+            _colourPalette.Entries[8] = Color.FromArgb(85, 85, 85);     // Dark Gray
+            _colourPalette.Entries[9] = Color.FromArgb(85, 85, 255);    // Light Blue
+            _colourPalette.Entries[10] = Color.FromArgb(85, 255, 85);   // Light Green
+            _colourPalette.Entries[11] = Color.FromArgb(85, 255, 255);  // Light Cyan
+            _colourPalette.Entries[12] = Color.FromArgb(255, 85, 85);   // Light Red
+            _colourPalette.Entries[13] = Color.FromArgb(255, 85, 255);  // Light Magenta
+            _colourPalette.Entries[14] = Color.FromArgb(255, 255, 85);  // Yellow
+            _colourPalette.Entries[15] = Color.FromArgb(255, 255, 255); // White
+        }
+
         #endregion
     }
 

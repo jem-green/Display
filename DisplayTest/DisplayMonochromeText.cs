@@ -1,22 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using DisplayLibrary;
 using Console = DisplayTest.Console;
 
 namespace DisplayTest
 {
-    public partial class DisplayColour : Form
+    public partial class DisplayMonochromeText : Form
     {
-        DisplayLibrary.ColourTextDisplay colourDisplay;
-        KeyboardMatrix _matrix;
 
-        public DisplayColour()
+        DisplayLibrary.MonochromeTextDisplay monochrome;
+
+        public DisplayMonochromeText()
         {
             InitializeComponent();
-
-            colourDisplay = new DisplayLibrary.ColourTextDisplay(32, 32, 2, 1);
+            monochrome = new DisplayLibrary.MonochromeTextDisplay(16, 16, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
@@ -24,20 +29,21 @@ namespace DisplayTest
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
-            colourDisplay.Font = rasterFont;
-            colourDisplay.Set(0, 0);
-            colourDisplay.ForegroundColour = new Solid(0, 0, 0); //(byte)TextMode.ConsoleColour.Black;
-            colourDisplay.BackgroundColour = new Solid(255, 255, 255);//(byte)TextMode.ConsoleColour.White;
-            colourDisplay.Write("HELLO THIS SHOULD WRAP AROUND");
-            _matrix = new KeyboardMatrix();
+            monochrome.Clear(); // Need this to set the memory to 0
+            monochrome.Font = rasterFont;
+            monochrome.Set(0, 0);
+            //monochrome.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
+            monochrome.ForegroundColour = new SolidColour(0, 255, 0); // Green foreground
+            //monochrome.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
+            monochrome.BackgroundColour = new SolidColour(0, 0, 0); // Black background
+            monochrome.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
-
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = colourDisplay.Bitmap;
+            Bitmap b = monochrome.Bitmap;
             g.DrawImageUnscaled(b, 0, 0);
         }
 
@@ -47,27 +53,23 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 400; i++)
                 {
-                    colourDisplay.Write((byte)'e');
+                    monochrome.Write((byte)'e');
                 }
-                colourDisplay.Generate();
+                monochrome.Generate();
                 pictureBox1.Invalidate();
             }
             else
             {
-                colourDisplay.Write("Hello");
+                monochrome.Write("Hello");
                 pictureBox1.Invalidate();
             }
         }
 
         private void pictureBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
-            if (key > 0)
-            {
-                //colourDisplay.Write(key, (byte)TextMode.ConsoleColour.Blue, (byte)TextMode.ConsoleColour.Green);
-                colourDisplay.Write(key, new Solid(0,0,255), new Solid(0,255,0));
-                pictureBox1.Invalidate();
-            }
+            int key = e.KeyValue;
+            monochrome.Write((byte)key);
+            pictureBox1.Invalidate();
         }
     }
 }

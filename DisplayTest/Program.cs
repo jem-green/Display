@@ -13,11 +13,16 @@ namespace DisplayTest
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DisplayColour());
-            Application.Run(new DisplayMonochrome());
-            Application.Run(new ConsoleMonochrome());
-            Application.Run(new TerminalColour());
-            Application.Run(new UserControlColour());
+            
+            // Colour tests
+
+            Application.Run(new DisplayColourText());
+            Application.Run(new DisplayColourGraphics());
+            //Application.Run(new DisplayMonochromeText());
+            //Application.Run(new ConsoleMonochrome());
+            //Application.Run(new TerminalColour());
+            //Application.Run(new UserControlColour());
+            //Application.Run(new DisplayVibrantGraphics());
 
         }
     }

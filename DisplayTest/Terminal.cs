@@ -3,7 +3,7 @@ using DisplayLibrary;
 
 namespace DisplayTest
 {
-    public class Terminal : ColourTextMode, IStorage, IMode, IText
+    public class Terminal : VibrantTextMode, IStorage, IMode, IText
     {
         #region Fields
 

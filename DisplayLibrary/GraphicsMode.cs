@@ -10,8 +10,8 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        protected Solid _foreground;
-        protected Solid _background;
+        protected SolidColour _foreground;
+        protected SolidColour _background;
         protected int _scale = 1;
         protected int _aspect = 1;
         protected Bitmap _bitmap;
@@ -21,8 +21,8 @@ namespace DisplayLibrary
 
         public GraphicsMode(int width, int height) : base(width, height)
         {
-            _background = new Solid(0, 0, 0);
-            _foreground = new Solid(255, 255, 255);
+            _background = new SolidColour(0, 0, 0);
+            _foreground = new SolidColour(255, 255, 255);
             _type = Type.graphic;
         }
 

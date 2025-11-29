@@ -37,9 +37,9 @@ namespace DisplayTest
             terminal.Font = rasterFont;
             terminal.Set(0, 0);
             //terminal.ForegroundColour = (byte)TextMode.ConsoleColour.Black;
-            terminal.ForegroundColour = new Solid(0, 0, 0);
+            terminal.ForegroundColour = new SolidColour(0, 0, 0);
             //terminal.BackgroundColour = (byte)TextMode.ConsoleColour.White;
-            terminal.BackgroundColour = new Solid(255, 255, 255);
+            terminal.BackgroundColour = new SolidColour(255, 255, 255);
             terminal.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();
         }

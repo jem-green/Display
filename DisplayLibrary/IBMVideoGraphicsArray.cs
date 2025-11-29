@@ -51,22 +51,22 @@ namespace DisplayLibrary
              * 
              * Text modes:
              * 
-             * 80 × 25, rendered with a 9 × 16 pixel font, with an effective resolution of 720 × 400.
-             * 40 × 25, with a 9 × 16 font, with an effective resolution of 360 × 400.
-             * 80 × 50, with an 8 × 8 font grid, with an effective resolution of 640 × 344 or 640 × 400 pixels.
+             * 80 × 25 in 16 colors, rendered with a 9 × 16 pixel font, with an effective resolution of 720 × 400.
+             * 40 × 25 in 16 colors, with a 9 × 16 font, with an effective resolution of 360 × 400.
+             * 80 × 50 in 16 colors, with an 8 × 8 font grid, with an effective resolution of 640 × 344 or 640 × 400 pixels.
              * 
              */
 
             // Could predefine all the modes here
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new ColourTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new VibrantTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new ColourTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new ColourGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new VibrantGraphicsMode(320, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new ColourGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new VibrantGraphicsMode(640, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -122,15 +122,15 @@ namespace DisplayLibrary
             {
                 case DisplayMode.t40x25c16:
                     {
-                        IStorage mode = new ColourTextMode(40, 25);
+                        IStorage mode = new VibrantTextMode(40, 25);
                         return (mode);
                     }
                 case DisplayMode.t80x25c16:
-                    return new ColourTextMode(80, 25);
+                    return new VibrantTextMode(80, 25);
                 case DisplayMode.g320x200c4:
-                    return new ColourGraphicsMode(320, 200);
+                    return new VibrantGraphicsMode(320, 200);
                 case DisplayMode.g640x200c2:
-                    return new ColourGraphicsMode(640, 200);
+                    return new VibrantGraphicsMode(640, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }
