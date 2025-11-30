@@ -13,13 +13,32 @@ namespace DisplayTest
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
-            // Colour tests
 
-            Application.Run(new DisplayColourText());
-            Application.Run(new DisplayColourGraphics());
+            // Colour tests 1-bit 2-colour
+
             //Application.Run(new DisplayMonochromeText());
             //Application.Run(new ConsoleMonochrome());
+
+            // Colour tests 2-bit 4-colour
+
+            //Application.Run(new DisplayColourText());
+            //Application.Run(new DisplayColourGraphics());
+
+            // Enhanced tests 4-bit 16-colour
+
+            // Application.Run(new DisplayEnhancedText());
+            // Application.Run(new DisplayEnhancedGraphics());
+
+            // Vibrant tests 8-bit 256-colour
+
+            //Application.Run(new DisplayVibrantText());
+            //Application.Run(new DisplayVibrantGraphics());
+
+            // Vibrant tests 24-bit rgb-colour
+
+            //Application.Run(new DisplayTrueText());
+            Application.Run(new DisplayTrueGraphics());
+
             //Application.Run(new TerminalColour());
             //Application.Run(new UserControlColour());
             //Application.Run(new DisplayVibrantGraphics());

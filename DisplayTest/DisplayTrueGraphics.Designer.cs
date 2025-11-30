@@ -1,7 +1,7 @@
 ﻿
 namespace DisplayTest
 {
-    partial class UserControlColour
+    partial class DisplayTrueGraphics
     {
         /// <summary>
         /// Required designer variable.
@@ -29,34 +29,38 @@ namespace DisplayTest
         /// </summary>
         private void InitializeComponent()
         {
-            this.displayBox1 = new DisplayTest.DisplayBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // displayBox1
+            // pictureBox1
             // 
-            this.displayBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.displayBox1.Location = new System.Drawing.Point(0, 0);
-            this.displayBox1.Name = "displayBox1";
-            this.displayBox1.Size = new System.Drawing.Size(1435, 1155);
-            this.displayBox1.TabIndex = 0;
-            this.displayBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.displayBox1_KeyDown);
-            this.displayBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.displayBox1_MouseDown);
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1435, 1155);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             // 
-            // Form5
+            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1435, 1155);
-            this.Controls.Add(this.displayBox1);
-            this.Name = "Form5";
-            this.Text = "Form5";
+            this.Controls.Add(this.pictureBox1);
+            this.Name = "Form1";
+            this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private DisplayTest.DisplayBox displayBox1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

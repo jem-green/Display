@@ -6,7 +6,10 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class MonochromeGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic, IDisplay
+    /// <summary>
+    /// Support for 4-bit graphics mode, 16 colours
+    /// </summary>
+    public class EnhancedGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic
     {
         #region Fields
 
@@ -16,20 +19,20 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public MonochromeGraphicsDisplay(int width, int height) : base(width, height)
+        public EnhancedGraphicsDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public MonochromeGraphicsDisplay(int width, int height, int scale) : base(width, height)
+        public EnhancedGraphicsDisplay(int width, int height, int scale) : base(width, height)
         {
             _x = 0;
             _y = 0;
             _scale = scale;
         }
 
-        public MonochromeGraphicsDisplay(int width, int height, int scale, int aspect) : base(width, height)
+        public EnhancedGraphicsDisplay(int width, int height, int scale, int aspect) : base(width, height)
         {
             _x = 0;
             _y = 0;
@@ -98,7 +101,7 @@ namespace DisplayLibrary
             {
             	int index = y * _width + x;
             	byte colour = _memory[index];
-                IColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
+                SolidColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
                 return(c);
             }
         }
@@ -122,10 +125,21 @@ namespace DisplayLibrary
             }
             else
             {
-                //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
-
-                int index = y * _width + x;
-                _memory[index] = colour.ToByte();
+                int index = y * _width / 2 + x / 2;
+                byte newColour;
+                if (x % 2 == 1)
+                {
+                    // even pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0x0F) | (colour.ToNybble() << 4 & 0xF0));
+                }
+                else
+                {
+                    // odd pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0xF0) | (colour.ToNybble() & 0x0F));
+                }
+                _memory[index] = newColour;
             }
         }
 

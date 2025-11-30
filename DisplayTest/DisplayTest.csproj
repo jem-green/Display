@@ -30,10 +30,13 @@
     <EmbeddedResource Remove="Form5.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="DisplayBox.cs">
-      <SubType>UserControl</SubType>
+    <Compile Update="DisplayEnhancedGraphics.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="DisplayVibrantGraphics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="DisplayTrueGraphics.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="DisplayColourGraphics.cs">

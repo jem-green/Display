@@ -60,13 +60,13 @@ namespace DisplayLibrary
             // Could predefine all the modes here
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new VibrantTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new EnhancedTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new EnhancedTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new VibrantGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new EnhancedGraphicsMode(320, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new VibrantGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new EnhancedGraphicsMode(640, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -122,15 +122,15 @@ namespace DisplayLibrary
             {
                 case DisplayMode.t40x25c16:
                     {
-                        IStorage mode = new VibrantTextMode(40, 25);
+                        IStorage mode = new EnhancedTextMode(40, 25);
                         return (mode);
                     }
                 case DisplayMode.t80x25c16:
-                    return new VibrantTextMode(80, 25);
+                    return new EnhancedTextMode(80, 25);
                 case DisplayMode.g320x200c4:
-                    return new VibrantGraphicsMode(320, 200);
+                    return new EnhancedGraphicsMode(320, 200);
                 case DisplayMode.g640x200c2:
-                    return new VibrantGraphicsMode(640, 200);
+                    return new EnhancedGraphicsMode(640, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }

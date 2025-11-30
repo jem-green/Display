@@ -6,7 +6,10 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class MonochromeGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic, IDisplay
+    /// <summary>
+    /// Support for 2-bit graphics mode, 4 colours from a palette of 16 colours
+    /// </summary>
+    public class ColourGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic
     {
         #region Fields
 
@@ -16,20 +19,20 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public MonochromeGraphicsDisplay(int width, int height) : base(width, height)
+        public ColourGraphicsDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public MonochromeGraphicsDisplay(int width, int height, int scale) : base(width, height)
+        public ColourGraphicsDisplay(int width, int height, int scale) : base(width, height)
         {
             _x = 0;
             _y = 0;
             _scale = scale;
         }
 
-        public MonochromeGraphicsDisplay(int width, int height, int scale, int aspect) : base(width, height)
+        public ColourGraphicsDisplay(int width, int height, int scale, int aspect) : base(width, height)
         {
             _x = 0;
             _y = 0;
@@ -98,7 +101,34 @@ namespace DisplayLibrary
             {
             	int index = y * _width + x;
             	byte colour = _memory[index];
-                IColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
+
+                byte red = 0;
+                byte green = 0;
+                byte blue = 0;
+
+                if (x % 4 == 1)
+                {
+                    colour = (byte)((colour & 0xC0) >> 6);
+                }
+                else if (x % 4 == 2)
+                {
+                    colour = (byte)((colour & 0x30) >> 4);
+                }
+                else if (x % 4 == 3)
+                {
+                    colour = (byte)((colour & 0x0C) >> 2);
+                }
+                else
+                {
+                    colour = (byte)((colour & 0x03));
+                }
+
+                // Extract RGB bits directly
+                red = (byte)((colour & 0x03) != 0 ? 0xFF : 0);
+                green = (byte)((colour & 0x02) != 0 ? 0xFF : 0);
+                blue = (byte)((colour & 0x01) != 0 ? 0xFF : 0);
+
+                SolidColour c = new SolidColour(red,green,blue);
                 return(c);
             }
         }
@@ -122,10 +152,32 @@ namespace DisplayLibrary
             }
             else
             {
-                //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
-
-                int index = y * _width + x;
-                _memory[index] = colour.ToByte();
+                int index = y * _width / 2 + x / 2;
+                byte newColour;
+                if (x % 4 == 1)
+                {
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0xC0) | (colour.To2Bit() << 6));
+                }
+                else if (x % 4 == 2)
+                {
+                    // even pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0x30) | (colour.To2Bit() << 4));
+                }
+                else if (x % 4 == 3)
+                {
+                    // even pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0x0C) | (colour.To2Bit() << 2));
+                }
+                else
+                {
+                    // odd pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0x03) | (colour.To2Bit()));
+                }
+                _memory[index] = newColour;
             }
         }
 

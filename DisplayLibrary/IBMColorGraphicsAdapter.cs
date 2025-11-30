@@ -49,13 +49,13 @@ namespace DisplayLibrary
             // Could predefine all the modes here
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new VibrantTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new EnhancedTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new EnhancedTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new VibrantGraphicsMode(160, 100));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new EnhancedGraphicsMode(160, 100));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new VibrantGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new EnhancedGraphicsMode(320, 200));
             _modes.Add(mode);
             mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new MonochromeGraphicsMode(640, 200));
             _modes.Add(mode);
@@ -112,15 +112,15 @@ namespace DisplayLibrary
             switch (displayMode)
             {
                 case DisplayMode.t40x25c16:
-                    return new VibrantTextMode(40, 25);
+                    return new EnhancedTextMode(40, 25);
                 case DisplayMode.t80x25c16:
-                    return new VibrantTextMode(80, 25);
+                    return new EnhancedTextMode(80, 25);
                 case DisplayMode.g160x100c16:
-                    return new VibrantGraphicsMode(160, 100);
+                    return new EnhancedGraphicsMode(160, 100);
                 case DisplayMode.g320x200c4:
-                    return new VibrantGraphicsMode(320, 200);
+                    return new EnhancedGraphicsMode(320, 200);
                 case DisplayMode.g640x200c2:
-                    return new VibrantGraphicsMode(640, 200);
+                    return new EnhancedGraphicsMode(640, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }

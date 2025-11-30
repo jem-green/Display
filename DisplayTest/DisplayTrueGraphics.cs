@@ -3,48 +3,42 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayTest.c;
 
 namespace DisplayTest
 {
-    // A test form to display a Colour Graphics Display 4-bit colour
 
+    // A test form to display a True Graphics Display 24-bit colour
 
-    public partial class DisplayColourGraphics : Form
+    public partial class DisplayTrueGraphics : Form
     {
-        DisplayLibrary.EnhancedGraphicsDisplay colourDisplay;
+        DisplayLibrary.TrueGraphicsDisplay trueDisplay;
         KeyboardMatrix _matrix;
 
-        public DisplayColourGraphics()
+        public DisplayTrueGraphics()
         {
             InitializeComponent();
 
-            colourDisplay = new DisplayLibrary.EnhancedGraphicsDisplay(128, 128, 2, 1);
-            colourDisplay.Generate();
-            colourDisplay.Set(0, 0);
+            trueDisplay = new DisplayLibrary.TrueGraphicsDisplay(128, 128, 2, 1);
+            trueDisplay.Generate();
+            trueDisplay.Set(0, 0);
             pictureBox1.Select();
 
             SolidColour colour = new SolidColour(0, 0, 255);
             for (int i = 0; i < 128; i++)
             {
-                colourDisplay.Write(i, 0, colour);
-                colourDisplay.Write(i, 127, colour);
-                colourDisplay.Write(0, i, colour);
-                colourDisplay.Write(127, i, colour);
+                trueDisplay.Write(i, 0, colour);
+                trueDisplay.Write(i, 127, colour);
+                trueDisplay.Write(0, i, colour);
+                trueDisplay.Write(127, i, colour);
             }
 
             colour = new SolidColour(255, 0, 0);
-            colourDisplay.Write(0, 0, colour);
-            colourDisplay.Write(127, 0, colour);
-            colourDisplay.Write(127, 127, colour);
-            colourDisplay.Write(0, 127, colour);
+            trueDisplay.Write(0, 0, colour);
+            trueDisplay.Write(127, 0, colour);
+            trueDisplay.Write(127, 127, colour);
+            trueDisplay.Write(0, 127, colour);
 
-
-            colourDisplay.PartialGenerate(0, 0, 127, 127);
-
-
-
-            //colourDisplay.Generate();
+            trueDisplay.PartialGenerate(0,0,127,127);
             pictureBox1.Invalidate();
 
         }
@@ -52,7 +46,7 @@ namespace DisplayTest
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = colourDisplay.Bitmap;
+            Bitmap b = trueDisplay.Bitmap;
             g.DrawImageUnscaled(b, 0, 0);
         }
 
@@ -63,18 +57,18 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    colourDisplay.Write(i, i, colour);
+                    trueDisplay.Write(i, i, colour);
                 }
-                colourDisplay.Generate();
+                trueDisplay.Generate();
                 pictureBox1.Invalidate();
             }
             else
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    colourDisplay.Write(127-i, i, colour);
+                    trueDisplay.Write(127-i, i, colour);
                 }
-                colourDisplay.Generate();
+                trueDisplay.Generate();
                 pictureBox1.Invalidate();
             }
         }

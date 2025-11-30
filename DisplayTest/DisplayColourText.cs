@@ -3,20 +3,23 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayTest.Console;
+using Console = DisplayTest.c;
 
 namespace DisplayTest
 {
+    // A test form to display a Colour Text Display 8-bit colour
+
+
     public partial class DisplayColourText : Form
     {
-        DisplayLibrary.VibrantTextDisplay colourDisplay;
+        DisplayLibrary.EnancedTextDisplay colourDisplay;
         KeyboardMatrix _matrix;
 
         public DisplayColourText()
         {
             InitializeComponent();
 
-            colourDisplay = new DisplayLibrary.VibrantTextDisplay(16, 16, 2, 1);
+            colourDisplay = new DisplayLibrary.EnancedTextDisplay(16, 16, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";

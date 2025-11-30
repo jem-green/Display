@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 namespace DisplayLibrary
 {
     /// <summary>
-    /// Support for 1 bit graphics mode
+    /// Support for 1 bit graphics mode, 2 colours from a palette of 16 colours
     /// </summary>
     internal class MonochromeGraphicsMode : GraphicsMode, IStorage, IMode
     {

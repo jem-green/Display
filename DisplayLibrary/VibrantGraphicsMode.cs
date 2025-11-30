@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace DisplayLibrary
 {
     /// <summary>
-    /// Support for 4 bit graphics mode
+    /// Support for 8-bit graphics mode, 256 colours
     /// </summary>
     public class VibrantGraphicsMode : GraphicsMode, IStorage, IMode
     {
@@ -20,23 +19,20 @@ namespace DisplayLibrary
 
         public VibrantGraphicsMode(int width, int height) : base(width, height)
         {
-            // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/2) * _height];
+            _memory = new byte[_width * _height];
             BuildColourIndex();
         }
 
         public VibrantGraphicsMode(int width, int height, int scale) : base(width, height)
         {
-            // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/2) * _height];
+            _memory = new byte[_width * _height];
             _scale = scale;
             BuildColourIndex();
         }
 
         public VibrantGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 +_width/2) * _height];
+            _memory = new byte[_width * _height];
             _scale = scale;
             _aspect = aspect;
             BuildColourIndex();
@@ -55,11 +51,10 @@ namespace DisplayLibrary
 
         public override void Clear(IColour background)
         {
-            byte colour = background.ToNybble();
-            colour = (byte)(colour & background.ToNybble() << 4);
-            for (int i = 0; i < _memory.Length; i++)
+            for (int i = 0; i < _memory.Length; i += 3)
             {
-                _memory[i] = colour;
+                // Note : BGR order for 24bpp RGB
+                _memory[i] = background.ToByte();         // 3-2-3 Approximation
             }
         }
 
@@ -89,31 +84,31 @@ namespace DisplayLibrary
 
             Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
 
-            // Need to scale the memory to the rgbValues array
-
-            for (int y = y1; y <= y2; y++)
+            if ((_scale == 1) && (_aspect == 1))
             {
-                int rowBase = y * (_width / 2);   // precompute row offset
 
-                for (int x = x1; x <= x2; x++)
+                // Copy the memory to the rgbValues array
+
+                _memory.CopyTo(rgbValues, 0);
+            }
+            else
+            {
+
+                // Need to scale the memory to the rgbValues array
+                for (int y = 0; y <= y2; y++)
                 {
-                    int sourceIndex = rowBase + (x >> 1); // faster than /2
-                    byte c = _memory[sourceIndex];
-
-                    // extract nibble: low vs high
-                    c = (x & 1) == 0 ? (byte)(c & 0x0F) : (byte)(c >> 4);
-
-                    // replicate into scaled buffer
-                    int destXBase = x * hscale;
-                    int destYBase = y * vscale;
-
-                    for (int v = 0; v < vscale; v++)
+                    for (int x = 0; x <= x2; x++)
                     {
-                        int destRow = (destYBase + v) * (_width * hscale);
-
-                        for (int h = 0; h < hscale; h++)
+                        byte colour = _memory[y * _width + x];
+                        for (int v = 0; v < vscale; v++)
                         {
-                            rgbValues[destRow + destXBase + h] = c;
+                            for (int h = 0; h < hscale; h++)
+                            {
+                                int destX = x * hscale + h;
+                                int destY = y * vscale + v;
+                                int destIndex = (destY * _width * hscale + destX);
+                                rgbValues[destIndex] = colour;
+                            }
                         }
                     }
                 }
@@ -129,7 +124,10 @@ namespace DisplayLibrary
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-        	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
+            if (_bitmap is null)
+            {
+                _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
+            }
             _bitmap.Palette = _colourPalette;
 
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
@@ -147,37 +145,36 @@ namespace DisplayLibrary
 
             Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
 
-            // Need to scale the memory to the rgbValues array
-
-            for (int y = 0; y < _height; y++)
+            if ((_scale == 1) && (_aspect == 1))
             {
-                int rowBase = y * (_width / 2);   // precompute row offset
 
-                for (int x = 0; x < _width; x++)
+                // Copy the memory to the rgbValues array
+
+                _memory.CopyTo(rgbValues, 0);
+            }
+            else
+            {
+                // Need to scale the memory to the rgbValues array
+                for (int y = 0; y < _height; y++)
                 {
-                    int sourceIndex = rowBase + (x >> 1); // faster than /2
-                    byte c = _memory[sourceIndex];
-
-                    // extract nibble: low vs high
-                    c = (x & 1) == 0 ? (byte)(c & 0x0F) : (byte)(c >> 4);
-
-                    // replicate into scaled buffer
-                    int destXBase = x * hscale;
-                    int destYBase = y * vscale;
-
-                    for (int v = 0; v < vscale; v++)
+                    for (int x = 0; x < _width; x++)
                     {
-                        int destRow = (destYBase + v) * (_width * hscale);
-
-                        for (int h = 0; h < hscale; h++)
+                        byte colour = _memory[y * _width + x];
+                        for (int v = 0; v < vscale; v++)
                         {
-                            rgbValues[destRow + destXBase + h] = c;
+                            for (int h = 0; h < hscale; h++)
+                            {
+                                int destX = x * hscale + h;
+                                int destY = y * vscale + v;
+                                int destIndex = (destY * _width * hscale + destX);
+                                rgbValues[destIndex] = colour;
+                            }
                         }
                     }
                 }
             }
 
-            // Copy the 255 bit values back to the bitmap
+            // Copy the 256 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }
@@ -187,26 +184,31 @@ namespace DisplayLibrary
 
         private void BuildColourIndex()
         {
+            // build 8-bit colour palette
+            // based on 3-3-2
+
             using (var tempBitmap = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
             {
                 _colourPalette = tempBitmap.Palette;
             }
-            _colourPalette.Entries[0] = Color.FromArgb(0, 0, 0);        // Black
-            _colourPalette.Entries[1] = Color.FromArgb(0, 0, 170);      // Blue
-            _colourPalette.Entries[2] = Color.FromArgb(0, 170, 0);      // Green
-            _colourPalette.Entries[3] = Color.FromArgb(0, 170, 170);    // Cyan
-            _colourPalette.Entries[4] = Color.FromArgb(170, 0, 0);      // Red
-            _colourPalette.Entries[5] = Color.FromArgb(170, 0, 170);    // Magenta
-            _colourPalette.Entries[6] = Color.FromArgb(170, 85, 0);     // Brown
-            _colourPalette.Entries[7] = Color.FromArgb(170, 170, 170);  // Light Gray
-            _colourPalette.Entries[8] = Color.FromArgb(85, 85, 85);     // Dark Gray
-            _colourPalette.Entries[9] = Color.FromArgb(85, 85, 255);    // Light Blue
-            _colourPalette.Entries[10] = Color.FromArgb(85, 255, 85);   // Light Green
-            _colourPalette.Entries[11] = Color.FromArgb(85, 255, 255);  // Light Cyan
-            _colourPalette.Entries[12] = Color.FromArgb(255, 85, 85);   // Light Red
-            _colourPalette.Entries[13] = Color.FromArgb(255, 85, 255);  // Light Magenta
-            _colourPalette.Entries[14] = Color.FromArgb(255, 255, 85);  // Yellow
-            _colourPalette.Entries[15] = Color.FromArgb(255, 255, 255); // White
+
+            int index = 0;
+
+            for (int r = 0; r < 8; r++)             // 3 bits → 0–7
+            {
+                for (int g = 0; g < 8; g++)         // 3 bits → 0–7
+                {
+                    for (int b = 0; b < 4; b++)     // 2 bits → 0–3
+                    {
+                        // Scale to 0–255 range
+                        int red = (r * 255) / 7;
+                        int green = (g * 255) / 7;
+                        int blue = (b * 255) / 3;
+
+                        _colourPalette.Entries[index++] = Color.FromArgb(red, green, blue);
+                    }
+                }
+            }
         }
 
         #endregion

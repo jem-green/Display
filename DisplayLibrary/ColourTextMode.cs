@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 namespace DisplayLibrary
 {
     /// <summary>
-    /// Support for 1 bit text mode, 2 colours from a palette of 16 colours
+    ///  Support for 2-bit text mode, 4 colours from a palette of 16 colours
     /// </summary>
 
-    public class MonochromeTextMode : TextMode, IStorage, IMode
+    public class ColourTextMode : TextMode, IStorage, IMode
     {
         #region Fields
 
@@ -18,20 +18,20 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public MonochromeTextMode(int width, int height) : base(width, height)
+        public ColourTextMode(int width, int height) : base(width, height)
         {
             _memory = new byte[_width * _height];
             BuildColourIndex();
         }
 
-        public MonochromeTextMode(int width, int height, int scale) : base(width, height)
+        public ColourTextMode(int width, int height, int scale) : base(width, height)
         {
             _memory = new byte[_width * _height];
             _scale = scale;
             BuildColourIndex();
         }
 
-        public MonochromeTextMode(int width, int height, int scale, int aspect) : base(width, height)
+        public ColourTextMode(int width, int height, int scale, int aspect) : base(width, height)
         {
             _memory = new byte[_width * _height];
             _scale = scale;
@@ -74,11 +74,11 @@ namespace DisplayLibrary
 
             if (_bitmap is null)
             {
-                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
+                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format4bppIndexed);
             }
             _bitmap.Palette = _colourPalette;
 
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format4bppIndexed);
 
             // Get the address of the first line.
 
@@ -276,46 +276,4 @@ namespace DisplayLibrary
 
         #endregion
     }
-
-    //// Add the following helper class to resolve the CS0103 error.  
-    //// This class provides the missing 'IndexedBitmapHelper' functionality.  
-    //internal static class IndexedBitmapHelper
-    //{
-    //    public static void SetPalette(Bitmap bitmap, TextMode.ConsoleColour foreground, TextMode.ConsoleColour background)
-    //    {
-    //        if (bitmap.PixelFormat != PixelFormat.Format1bppIndexed)
-    //        {
-    //            throw new ArgumentException("Bitmap must be 1bpp indexed format.", nameof(bitmap));
-    //        }
-
-    //        ColorPalette palette = bitmap.Palette;
-    //        palette.Entries[0] = MapConsoleColorToColor(background);
-    //        palette.Entries[1] = MapConsoleColorToColor(foreground);
-    //        bitmap.Palette = palette;
-    //    }
-
-    //    private static Color MapConsoleColorToColor(TextMode.ConsoleColour consoleColor)
-    //    {
-    //        return consoleColor switch
-    //        {
-    //            TextMode.ConsoleColour.Black => Color.Black,
-    //            TextMode.ConsoleColour.DarkBlue => Color.DarkBlue,
-    //            TextMode.ConsoleColour.DarkGreen => Color.DarkGreen,
-    //            TextMode.ConsoleColour.DarkCyan => Color.DarkCyan,
-    //            TextMode.ConsoleColour.DarkRed => Color.DarkRed,
-    //            TextMode.ConsoleColour.DarkMagenta => Color.DarkMagenta,
-    //            TextMode.ConsoleColour.DarkYellow => Color.Olive,
-    //            TextMode.ConsoleColour.Gray => Color.Gray,
-    //            TextMode.ConsoleColour.DarkGray => Color.DarkGray,
-    //            TextMode.ConsoleColour.Blue => Color.Blue,
-    //            TextMode.ConsoleColour.Green => Color.Green,
-    //            TextMode.ConsoleColour.Cyan => Color.Cyan,
-    //            TextMode.ConsoleColour.Red => Color.Red,
-    //            TextMode.ConsoleColour.Magenta => Color.Magenta,
-    //            TextMode.ConsoleColour.Yellow => Color.Yellow,
-    //            TextMode.ConsoleColour.White => Color.White,
-    //            _ => throw new ArgumentOutOfRangeException(nameof(consoleColor), "Invalid console color value.")
-    //        };
-    //    }
-    
 }

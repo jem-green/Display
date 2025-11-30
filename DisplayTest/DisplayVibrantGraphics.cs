@@ -3,25 +3,28 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayTest.Console;
+using Console = DisplayTest.c;
 
 namespace DisplayTest
 {
+
+    // A test form to display a Vibrant Graphics Display 8-bit colour
+
     public partial class DisplayVibrantGraphics : Form
     {
-        DisplayLibrary.TrueGraphicsDisplay vibrantDisplay;
+        DisplayLibrary.VibrantGraphicsDisplay vibrantDisplay;
         KeyboardMatrix _matrix;
 
         public DisplayVibrantGraphics()
         {
             InitializeComponent();
 
-            vibrantDisplay = new DisplayLibrary.TrueGraphicsDisplay(128, 128, 2, 1);
+            vibrantDisplay = new DisplayLibrary.VibrantGraphicsDisplay(128, 128, 2, 1);
             vibrantDisplay.Generate();
             vibrantDisplay.Set(0, 0);
             pictureBox1.Select();
 
-            SolidColour colour = new SolidColour(255, 0, 0);
+            SolidColour colour = new SolidColour(0, 0, 255);    // Red border
             for (int i = 0; i < 128; i++)
             {
                 vibrantDisplay.Write(i, 0, colour);
@@ -29,6 +32,13 @@ namespace DisplayTest
                 vibrantDisplay.Write(0, i, colour);
                 vibrantDisplay.Write(127, i, colour);
             }
+
+            colour = new SolidColour(255, 0, 0);
+            vibrantDisplay.Write(0, 0, colour);
+            vibrantDisplay.Write(127, 0, colour);
+            vibrantDisplay.Write(127, 127, colour);
+            vibrantDisplay.Write(0, 127, colour);
+
             vibrantDisplay.PartialGenerate(0,0,127,127);
             pictureBox1.Invalidate();
 

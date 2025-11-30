@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DisplayLibrary;
-using Console = DisplayTest.Console;
+using Console = DisplayTest.c;
 
 namespace DisplayTest
 {

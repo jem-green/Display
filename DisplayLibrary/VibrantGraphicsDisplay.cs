@@ -6,6 +6,9 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
+    /// <summary>
+    /// Support for 4-bit graphics mode, 16 colours
+    /// </summary>  
     public class VibrantGraphicsDisplay : VibrantGraphicsMode, IStorage, IMode, IGraphic
     {
         #region Fields
@@ -98,7 +101,8 @@ namespace DisplayLibrary
             {
             	int index = y * _width + x;
             	byte colour = _memory[index];
-                SolidColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
+                // convert 8-bit colour to 24-bit RGB using 3-3-2 bits
+                SolidColour c = new SolidColour(colour);
                 return(c);
             }
         }
@@ -122,20 +126,8 @@ namespace DisplayLibrary
             }
             else
             {
-                int index = y * _width / 2 + x / 2;
-                byte newColour;
-                if (x % 2 == 1)
-                {
-                    // even pixel
-                    byte existing = _memory[index];
-                    newColour = (byte)((existing & 0x0F) | (colour.ToNybble() << 4 & 0xF0));
-                }
-                else
-                {
-                    // odd pixel
-                    byte existing = _memory[index];
-                    newColour = (byte)((existing & 0xF0) | (colour.ToNybble() & 0x0F));
-                }
+                int index = y * _width + x;
+                byte newColour = colour.ToByte();
                 _memory[index] = newColour;
             }
         }

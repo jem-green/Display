@@ -1,32 +1,37 @@
 ﻿using System;
-using DisplayLibrary;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Text;
 
-namespace DisplayTest
+namespace DisplayLibrary
 {
-    public class Console : MonochromeTextMode, IStorage, IText
+    /// Summary
+    /// Enhanced Text Display supporting 16 foreground and 16 background colours
+    /// </summary>
+    public class EnancedTextDisplay : EnhancedTextMode, IStorage, IText
     {
         #region Fields
 
-        int _x;
-        int _y;
-        
+        int _x; // Column
+        int _y; // Row
 
         #endregion
         #region Constructors
-		
-		public Console(int width, int height) : base(width, height)
+
+        public EnancedTextDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public Console(int width, int height, int scale) : base(width,height,scale)
+        public EnancedTextDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
         }
 
-        public Console(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public EnancedTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
@@ -46,18 +51,6 @@ namespace DisplayTest
         {
             set
             {
-                _x = value;
-            }
-            get
-            {
-                return (_x);
-            }
-        }
-
-        public int Column
-        {
-            set
-            {
                 _y = value;
             }
             get
@@ -66,29 +59,20 @@ namespace DisplayTest
             }
         }
 
+        public int Column
+        {
+            set
+            {
+                _x = value;
+            }
+            get
+            {
+                return (_x);
+            }
+        }
+
         #endregion
         #region Methods
-
-        public byte Read(int column, int row)
-        {
-            // need to do some boundary checks
-            if ((column > _width) || (row > _height))
-            {
-                throw new IndexOutOfRangeException();
-            }
-            else
-            {
-                byte character = _memory[_x + _y * _width];
-                return (character);
-            }
-        }
-
-        public byte Read()
-        {
-            // need to do some boundary checks
-            byte character = _memory[_x + _y * _width];
-            return (character);
-        }
 
         public void Set(int column, int row)
         {
@@ -103,6 +87,27 @@ namespace DisplayTest
                 _y = row;
             }
         }
+		
+        public byte Read()
+        {
+            // need to do some boundary checks
+            byte character = _memory[(_x + _y * _width) * 2];
+            return (character);
+        }
+
+        public byte Read(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                byte character = _memory[(column + row * _width)*2];
+                return (character);
+            }
+        }
 
         public void Write(byte character)
         {
@@ -111,7 +116,9 @@ namespace DisplayTest
 
         public void Write(byte character, IColour foreground, IColour background)
         {
-            _memory[_x + _y * _width] = character;
+            _memory[(_x + _y * _width) * 2] = character;
+            _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToByte() << 4) | foreground.ToByte()) ;
+
             // Would have to call a partial generate here
 
             PartialGenerate(_x, _y, 1, 1);
@@ -124,8 +131,9 @@ namespace DisplayTest
                 if (_y >= _height)
                 {
                     _y = _height;
-                    // the display needs to coll at the point.
+                    // the display needs to scroll at the point.
                     Scroll();
+                    Generate();
                 }
             }
         }
@@ -141,8 +149,11 @@ namespace DisplayTest
             // Need to do some boundary checks
             for (int i = 0; i < chars.Length; i++)
             {
-                _memory[_x + _y * _width] = (byte)chars[i];
+                _memory[(_x + _y * _width) * 2] = (byte)chars[i];
+                _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToNybble() << 4) | foreground.ToNybble());
+
                 // Would have to call a partial generate here
+                // but may make sense to only do this at the end
 
                 PartialGenerate(_x, _y, 1, 1);
 
@@ -155,10 +166,11 @@ namespace DisplayTest
                     {
                         _y = _height;
                         // the display needs to scroll at the point.
-                        Scroll();          
+                        Scroll();
                     }
                 }
             }
+            Generate();
         }
 
         public void Scroll()
@@ -168,18 +180,20 @@ namespace DisplayTest
 
         public void Scroll(int rows)
         {
-            Buffer.BlockCopy(_memory, _width, _memory, 0, _width * (_height - 1));
+            Buffer.BlockCopy(_memory, _width * 2, _memory, 0, _width * (_height - 1) * 2);
             // fill the space
             for (int i = 0; i < _width; i++)
             {
-                _memory[_width * (_height - 1) + i] = 32;
+                _memory[(_width * (_height - 1) + i) * 2] = 32;
+                _memory[(_width * (_height - 1) + i) * 2 + 1] = (byte)((_background.ToNybble() << 4) | _foreground.ToNybble());
             }
             _y--;
         }
 
         public void Save(string path, string filename)
         {
-            throw new NotImplementedException("");
+            // Save the display to a file
+            throw new NotImplementedException("Save method not implemented for ColourTextDisplay.");
         }
 
         #endregion

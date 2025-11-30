@@ -59,23 +59,23 @@ namespace DisplayLibrary
             // Could predefine all the modes here
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new VibrantTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new EnhancedTextMode(40, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new EnhancedTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new VibrantTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new EnhancedTextMode(80, 25));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x43c16, new VibrantTextMode(80, 43));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x43c16, new EnhancedTextMode(80, 43));
             _modes.Add(mode);
 
 
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c16, new VibrantGraphicsMode(640, 350));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c16, new EnhancedGraphicsMode(640, 350));
             _modes.Add(mode);
             mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x350c2, new MonochromeGraphicsMode(640, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c16, new VibrantGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c16, new EnhancedGraphicsMode(640, 200));
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c16, new VibrantGraphicsMode(320, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c16, new EnhancedGraphicsMode(320, 200));
             _modes.Add(mode);
 
             // or for CGA
@@ -130,21 +130,21 @@ namespace DisplayLibrary
             switch (displayMode)
             {
                 case DisplayMode.t40x25c16:
-                    return new VibrantTextMode(40, 25);
+                    return new EnhancedTextMode(40, 25);
                 case DisplayMode.t80x25c16:
-                    return new VibrantTextMode(80, 25);
+                    return new EnhancedTextMode(80, 25);
                 case DisplayMode.t80x25c16a:
-                    return new VibrantTextMode(80, 25);
+                    return new EnhancedTextMode(80, 25);
                 case DisplayMode.t80x43c16:
-                    return new VibrantTextMode(80, 43);
+                    return new EnhancedTextMode(80, 43);
                 case DisplayMode.g640x350c16:
-                    return new VibrantGraphicsMode(640, 350);
+                    return new EnhancedGraphicsMode(640, 350);
                 case DisplayMode.g640x350c2:
                     return new MonochromeGraphicsMode(640, 350);
                 case DisplayMode.g640x200c16:
-                    return new VibrantGraphicsMode(640, 200);
+                    return new EnhancedGraphicsMode(640, 200);
                 case DisplayMode.g320x200c16:
-                    return new VibrantGraphicsMode(320, 200);
+                    return new EnhancedGraphicsMode(320, 200);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(displayMode), displayMode, null);
             }

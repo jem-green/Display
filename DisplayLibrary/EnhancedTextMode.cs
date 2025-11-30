@@ -5,25 +5,30 @@ using System.Runtime.InteropServices;
 
 namespace DisplayLibrary
 {
-    public class VibrantTextMode : TextMode, IStorage, IMode
+
+    /// <summary> 
+    /// Support for 4 bit text mode
+    /// </summary>
+    
+    public class EnhancedTextMode : TextMode, IStorage, IMode
     {
         #region Fields
 
         #endregion
         #region Constructors
 
-        public VibrantTextMode(int width, int height) : base(width, height)
+        public EnhancedTextMode(int width, int height) : base(width, height)
         {
             _memory = new byte[_width * _height * 2];
         }
 
-        public VibrantTextMode(int width, int height, int scale) : base(width, height)
+        public EnhancedTextMode(int width, int height, int scale) : base(width, height)
         {
             _memory = new byte[_width * _height * 2];
             _scale = scale;
         }
 
-        public VibrantTextMode(int width, int height, int scale, int aspect) : base(width, height)
+        public EnhancedTextMode(int width, int height, int scale, int aspect) : base(width, height)
         {
             _memory = new byte[_width * _height * 2];
             _scale = scale;

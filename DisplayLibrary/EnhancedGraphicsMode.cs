@@ -7,9 +7,9 @@ using System.Windows.Forms;
 namespace DisplayLibrary
 {
     /// <summary>
-    /// Support for 2-bit graphics mode, 4 colours from a palette of 16 colours
+    /// Support for 4 bit graphics mode
     /// </summary>
-    public class ColourGraphicsMode : GraphicsMode, IStorage, IMode
+    public class EnhancedGraphicsMode : GraphicsMode, IStorage, IMode
     {
         #region Fields
 
@@ -18,25 +18,25 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public ColourGraphicsMode(int width, int height) : base(width, height)
+        public EnhancedGraphicsMode(int width, int height) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/4) * _height];
+            _memory = new byte[(int)(0.5 + _width/2) * _height];
             BuildColourIndex();
         }
 
-        public ColourGraphicsMode(int width, int height, int scale) : base(width, height)
+        public EnhancedGraphicsMode(int width, int height, int scale) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/4) * _height];
+            _memory = new byte[(int)(0.5 + _width/2) * _height];
             _scale = scale;
             BuildColourIndex();
         }
 
-        public ColourGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
+        public EnhancedGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 +_width/4) * _height];
+            _memory = new byte[(int)(0.5 +_width/2) * _height];
             _scale = scale;
             _aspect = aspect;
             BuildColourIndex();
@@ -71,10 +71,10 @@ namespace DisplayLibrary
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-            _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format4bppIndexed);
+            _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
             _bitmap.Palette = _colourPalette;
 
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format4bppIndexed);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
