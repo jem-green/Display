@@ -7,9 +7,9 @@ using System.Text;
 namespace DisplayLibrary
 {
     /// Summary
-    /// Enhanced Text Display supporting 16 foreground and 16 background colours
+    /// Enhanced Text Display supporting 16 foreground and 16 background colours, from a palette of 64 colours.
     /// </summary>
-    public class EnancedTextDisplay : EnhancedTextMode, IStorage, IText
+    public class EnhancedTextDisplay : EnhancedTextMode, IStorage, IText
     {
         #region Fields
 
@@ -19,19 +19,19 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public EnancedTextDisplay(int width, int height) : base(width, height)
+        public EnhancedTextDisplay(int width, int height) : base(width, height)
         {
             _x = 0;
             _y = 0;
         }
 
-        public EnancedTextDisplay(int width, int height, int scale) : base(width,height,scale)
+        public EnhancedTextDisplay(int width, int height, int scale) : base(width,height,scale)
         {
             _x = 0;
             _y = 0;
         }
 
-        public EnancedTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
+        public EnhancedTextDisplay(int width, int height, int scale, int aspect) : base(width, height, scale, aspect)
         {
             _x = 0;
             _y = 0;
@@ -117,7 +117,7 @@ namespace DisplayLibrary
         public void Write(byte character, IColour foreground, IColour background)
         {
             _memory[(_x + _y * _width) * 2] = character;
-            _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToByte() << 4) | foreground.ToByte()) ;
+            _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToNybble() << 4) | foreground.ToNybble()) ;
 
             // Would have to call a partial generate here
 

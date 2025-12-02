@@ -112,6 +112,8 @@ namespace DisplayLibrary
 
         public void Write(byte character, IColour foreground, IColour background)
         {
+            // Ignore any colour information for monochrome display
+
             _memory[_x + _y * _width] = character;
             // Would have to call a partial generate here
 
@@ -139,6 +141,8 @@ namespace DisplayLibrary
 
         public void Write(string text, IColour foreground, IColour background)
         {
+            // Ignore any colour information for monochrome display
+
             char[] chars = text.ToCharArray();
             // Need to do some boundary checks
             for (int i = 0; i < chars.Length; i++)
@@ -147,7 +151,7 @@ namespace DisplayLibrary
                 // Would have to call a partial generate here
                 // but may make sense to only do this at the end
 
-                PartialGenerate(_x, _y, 1, 1);
+                //PartialGenerate(_x, _y, 1, 1);
 
                 _x++;
                 if (_x >= _width)

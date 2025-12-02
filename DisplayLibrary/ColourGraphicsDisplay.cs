@@ -140,10 +140,6 @@ namespace DisplayLibrary
 
         public void Write(int x, int y, IColour colour)
         {
-            // 8-bit colour from wiki
-            // http://en.wikipedia.org/wiki/8-bit_color
-            // 3 bits red, 3 bits green, 2 bits blue
-
             // need to do some boundary checks
 
             if ((x > _width) || (y > _height))

@@ -22,6 +22,10 @@ namespace DisplayLibrary
 
         public SolidColour(string hex)
         {
+            if (hex.Length != 7 || hex[0] != '#')
+            {
+                throw new ArgumentException("Hex colour must be in format #RRGGBB");
+            }
             byte red = Convert.ToByte(hex.Substring(1, 2), 16);
             byte green = Convert.ToByte(hex.Substring(3, 2), 16);
             byte blue = Convert.ToByte(hex.Substring(5, 2), 16);

@@ -47,17 +47,18 @@ namespace DisplayLibrary
              */
 
             // Could predefine all the modes here
+            // Aim to keep the scaling consistent with each mode so 640 x 200 is the base
 
             KeyValuePair<int, IStorage> mode;
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new EnhancedTextMode(40, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t40x25c16, new EnhancedTextMode(40, 25,2,1));               //2 times, 0.5 times (1 times)
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new EnhancedTextMode(80, 25));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.t80x25c16, new EnhancedTextMode(80, 25, 1, 2));             //1 times, 1 times (2 times)
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new EnhancedGraphicsMode(160, 100));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g160x100c16, new ColourGraphicsMode(160, 100,4,1));         // 4 times, 0.5 times aspect (1 times)
+            _modes.Add(mode);   
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new ColourGraphicsMode(320, 200,2,1));          // 2 times, 0.5 times aspect (1 times)
             _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g320x200c4, new EnhancedGraphicsMode(320, 200));
-            _modes.Add(mode);
-            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new MonochromeGraphicsMode(640, 200));
+            mode = new KeyValuePair<int, IStorage>((int)DisplayMode.g640x200c2, new MonochromeGraphicsMode(640, 200, 1, 2));    // 1 times, 1 times (2 times)
             _modes.Add(mode);
 
             // or for CGA
@@ -74,14 +75,14 @@ namespace DisplayLibrary
 
 
         /// <summary>
-        /// The mode of the adaptor. This is used to switch between text and graphics modes.
+        /// The mode of the adapter. This is used to switch between text and graphics modes.
         /// </summary>
         public DisplayMode Mode
         {
             set
             {
                 _displayMode = value;
-                // Could create the new adaptor here as CGA only has 1 memory buffer
+                // Could create the new adapter here as CGA only has 1 memory buffer
                 _mode = GetAdaptor(_displayMode);
             }
             get

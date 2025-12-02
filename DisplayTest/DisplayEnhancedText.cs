@@ -6,19 +6,18 @@ using DisplayLibrary;
 
 namespace DisplayTest
 {
-    // A test form to display a Colour Text Display 8-bit colour
+    // A test form to display a Enhanced Text Display 4-bit colour
 
-
-    public partial class DisplayColourText : Form
+    public partial class DisplayEnhancedText : Form
     {
-        DisplayLibrary.ColourTextDisplay colourDisplay;
+        DisplayLibrary.EnhancedTextDisplay colourDisplay;
         KeyboardMatrix _matrix;
 
-        public DisplayColourText()
+        public DisplayEnhancedText()
         {
             InitializeComponent();
 
-            colourDisplay = new DisplayLibrary.ColourTextDisplay(16, 16, 2, 1);
+            colourDisplay = new DisplayLibrary.EnhancedTextDisplay(16, 16, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
@@ -28,8 +27,8 @@ namespace DisplayTest
 
             colourDisplay.Font = rasterFont;
             colourDisplay.Set(0, 0);
-            colourDisplay.ForegroundColour = new SolidColour(0, 0, 0); //(byte)TextMode.ConsoleColour.Black;
-            colourDisplay.BackgroundColour = new SolidColour(255, 255, 255);//(byte)TextMode.ConsoleColour.White;
+            colourDisplay.ForegroundColour = new SolidColour(255, 255, 255);    // White foreground 
+            colourDisplay.BackgroundColour = new SolidColour(0, 0, 0);          // Black background;
             colourDisplay.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             pictureBox1.Select();
@@ -66,7 +65,7 @@ namespace DisplayTest
             byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
             if (key > 0)
             {
-                colourDisplay.Write(key, new SolidColour(0,0,255), new SolidColour(0,255,0));
+                colourDisplay.Write(key, new SolidColour(0,0,255), new SolidColour(0,255,0));   // Blue foreground, Green background
                 pictureBox1.Invalidate();
             }
         }

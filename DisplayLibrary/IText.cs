@@ -22,11 +22,11 @@ namespace DisplayLibrary
 
         public void Set(int column, int row);
 
-        public void Write(byte character);
-
         public byte Read();
 
         public byte Read(int column, int row);
+
+        public void Write(byte character);
 
         public void Write(byte character, IColour foreground, IColour background);
 

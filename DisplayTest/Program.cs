@@ -26,7 +26,7 @@ namespace DisplayTest
 
             // Enhanced tests 4-bit 16-colour
 
-            // Application.Run(new DisplayEnhancedText());
+            Application.Run(new DisplayEnhancedText());
             // Application.Run(new DisplayEnhancedGraphics());
 
             // Vibrant tests 8-bit 256-colour
@@ -37,7 +37,7 @@ namespace DisplayTest
             // Vibrant tests 24-bit rgb-colour
 
             //Application.Run(new DisplayTrueText());
-            Application.Run(new DisplayTrueGraphics());
+            //Application.Run(new DisplayTrueGraphics());
 
             //Application.Run(new TerminalColour());
             //Application.Run(new UserControlColour());

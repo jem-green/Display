@@ -61,7 +61,6 @@ namespace DisplayLibrary
             {
                 _memory[i] = (byte)character;
             }
-            Generate();
         }
 
         public override void PartialGenerate(int column, int row, int width, int height)
@@ -100,50 +99,58 @@ namespace DisplayLibrary
 
             int hbytes = (int)Math.Round((double)hbits / 8);
 
-            byte character = _memory[column + row * columns];
+            // work across character by character
 
-            for (int r = 0; r < vbits; r++)
+            for (int r = row; r < row + height; r++)
             {
-                byte value = _font.Data[(byte)character * hbytes * vbits + r];
-
-                for (int c = 0; c < hbits; c++) // columns
+                for (int c = column; c < column + width; c++)
                 {
-                    byte val = (byte)(value & (128 >> c));
+                    byte character = _memory[column + row * columns];
 
-                    if (val != 0)
+                    for (int v = 0; v < vbits; v++) // row
                     {
-                        if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
+                        byte value = _font.Data[(byte)character * hbytes * vbits + v];
+
+                        for (int h = 0; h < hbits; h++) // columns
                         {
-                            int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = _foreground.ToNybble();
-                        }
-                        else
-                        {
-                            for (int i = 0; i < vscale; i++)
+                            byte val = (byte)(value & (128 >> h));
+
+                            if (val != 0)
                             {
-                                for (int j = 0; j < hscale; j++)
+                                if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
+                                    int pos = (r * vbits + v) * columns * hbits + c * hbits + h;
                                     rgbValues[pos] = _foreground.ToNybble();
                                 }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
-                        {
-                            int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
-                            rgbValues[pos] = _background.ToNybble();
-                        }
-                        else
-                        {
-                            for (int i = 0; i < vscale; i++)
-                            {
-                                for (int j = 0; j < hscale; j++)
+                                else
                                 {
-                                    int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
+                                    for (int i = 0; i < vscale; i++)
+                                    {
+                                        for (int j = 0; j < hscale; j++)
+                                        {
+                                            int pos = (r * vbits * vscale + v * vscale + i) * columns * hbits * hscale + c * hbits * hscale + h * hscale + j;
+                                            rgbValues[pos] = _foreground.ToNybble();
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
+                                {
+                                    int pos = (r * vbits + v) * columns * hbits + c * hbits + h;
                                     rgbValues[pos] = _background.ToNybble();
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < vscale; i++)
+                                    {
+                                        for (int j = 0; j < hscale; j++)
+                                        {
+                                            int pos = (r * vbits * vscale + v * vscale + i) * columns * hbits * hscale + c * hbits * hscale + h * hscale + j;
+                                            rgbValues[pos] = _background.ToNybble();
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -174,6 +181,7 @@ namespace DisplayLibrary
 
             int size = _bitmap.Width * _bitmap.Height;
             byte[] rgbValues = new byte[size];
+
             // might be quicker to fill the array with background in one go
 
             int rows = _height;
@@ -185,25 +193,25 @@ namespace DisplayLibrary
 
             // work across character by character
 
-            for (int row = 0; row < rows; row++)
+            for (int r = 0; r < rows; r++)
             {
-                for (int column = 0; column < columns; column++)
+                for (int c = 0; c < columns; c++)
                 {
-                    byte character = _memory[column + row * columns];
+                    byte character = _memory[c + r * columns];
 
-                    for (int r = 0; r < vbits; r++)
+                    for (int v = 0; v < vbits; v++)
                     {
-                        byte value = _font.Data[(byte)character * hbytes * vbits + r];
+                        byte value = _font.Data[(byte)character * hbytes * vbits + v];
 
-                        for (int c = 0; c < hbits; c++) // columns
+                        for (int h = 0; h < hbits; h++) // columns
                         {
-                            byte val = (byte)(value & (128 >> c));
+                            byte val = (byte)(value & (128 >> h));
 
                             if (val != 0)
                             {
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
+                                    int pos = (r * vbits + v) * columns * hbits + c * hbits + h;
                                     rgbValues[pos] = _foreground.ToNybble();
                                 }
                                 else
@@ -212,7 +220,7 @@ namespace DisplayLibrary
                                     {
                                         for (int j = 0; j < hscale; j++)
                                         {
-                                            int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
+                                            int pos = (r * vbits * vscale + v * vscale + i) * columns * hbits * hscale + c * hbits * hscale + h * hscale + j;
                                             rgbValues[pos] = _foreground.ToNybble();
                                         }
                                     }
@@ -222,7 +230,7 @@ namespace DisplayLibrary
                             {
                                 if ((hscale == 1) && (vscale == 1) && (_aspect == 1))
                                 {
-                                    int pos = (row * vbits + r) * columns * hbits + column * hbits + c;
+                                    int pos = (r * vbits + v) * columns * hbits + c * hbits + h;
                                     rgbValues[pos] = _background.ToNybble();
                                 }
                                 else
@@ -231,7 +239,7 @@ namespace DisplayLibrary
                                     {
                                         for (int j = 0; j < hscale; j++)
                                         {
-                                            int pos = (row * vbits * vscale + r * vscale + i) * columns * hbits * hscale + column * hbits * hscale + c * hscale + j;
+                                            int pos = (r * vbits * vscale + v * vscale + i) * columns * hbits * hscale + c * hbits * hscale + h * hscale + j;
                                             rgbValues[pos] = _background.ToNybble();
                                         }
                                     }

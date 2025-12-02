@@ -1,0 +1,5 @@
+Monochrome - 1 bit
+Colour = 2 bit
+Enhanced = 4 bit
+Vibrant = 8 bit
+True = 24 bit
