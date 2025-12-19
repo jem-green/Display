@@ -49,10 +49,10 @@ namespace DisplayLibrary
 
         public void Set(int x, int y);
 
-        public void Write(IColour c);
-        public void Write(int x, int y, IColour c);
+        public void Put(IColour c);
+        public void Put(int x, int y, IColour c);
 
-        public IColour Read(int x, int y);
+        public IColour Get(int x, int y);
 
         void Clear();
 

@@ -86,10 +86,10 @@ namespace DisplayLibrary
 		
         public IColour Read()
         {
-            return Read(_x, _y);
+            return Get(_x, _y);
         }
 
-        public IColour Read(int x, int y)
+        public IColour Get(int x, int y)
         {
             
             // need to do some boundary checks
@@ -133,12 +133,12 @@ namespace DisplayLibrary
             }
         }
 
-        public void Write(IColour colour)
+        public void Put(IColour colour)
         {
-            Write(_x, _y, colour);
+            Put(_x, _y, colour);
         }
 
-        public void Write(int x, int y, IColour colour)
+        public void Put(int x, int y, IColour colour)
         {
             // need to do some boundary checks
 

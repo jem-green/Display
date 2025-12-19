@@ -26,17 +26,17 @@ namespace DisplayTest
             SolidColour colour = new SolidColour(0, 0, 255);
             for (int i = 0; i < 128; i++)
             {
-                trueDisplay.Write(i, 0, colour);
-                trueDisplay.Write(i, 127, colour);
-                trueDisplay.Write(0, i, colour);
-                trueDisplay.Write(127, i, colour);
+                trueDisplay.Put(i, 0, colour);
+                trueDisplay.Put(i, 127, colour);
+                trueDisplay.Put(0, i, colour);
+                trueDisplay.Put(127, i, colour);
             }
 
             colour = new SolidColour(255, 0, 0);
-            trueDisplay.Write(0, 0, colour);
-            trueDisplay.Write(127, 0, colour);
-            trueDisplay.Write(127, 127, colour);
-            trueDisplay.Write(0, 127, colour);
+            trueDisplay.Put(0, 0, colour);
+            trueDisplay.Put(127, 0, colour);
+            trueDisplay.Put(127, 127, colour);
+            trueDisplay.Put(0, 127, colour);
 
             trueDisplay.PartialGenerate(0,0,127,127);
             pictureBox1.Invalidate();
@@ -57,7 +57,7 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    trueDisplay.Write(i, i, colour);
+                    trueDisplay.Put(i, i, colour);
                 }
                 trueDisplay.Generate();
                 pictureBox1.Invalidate();
@@ -66,7 +66,7 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    trueDisplay.Write(127-i, i, colour);
+                    trueDisplay.Put(127-i, i, colour);
                 }
                 trueDisplay.Generate();
                 pictureBox1.Invalidate();

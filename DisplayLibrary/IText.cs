@@ -22,9 +22,13 @@ namespace DisplayLibrary
 
         public void Set(int column, int row);
 
-        public byte Read();
+        public byte Get();
 
-        public byte Read(int column, int row);
+        public byte Get(int column, int row);
+
+        public void Put(byte character);
+
+        public void Put(byte character, IColour foreground, IColour background);
 
         public void Write(byte character);
 

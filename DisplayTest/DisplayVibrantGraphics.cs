@@ -26,17 +26,17 @@ namespace DisplayTest
             SolidColour colour = new SolidColour(0, 0, 255);    // Red border
             for (int i = 0; i < 128; i++)
             {
-                vibrantDisplay.Write(i, 0, colour);
-                vibrantDisplay.Write(i, 127, colour);
-                vibrantDisplay.Write(0, i, colour);
-                vibrantDisplay.Write(127, i, colour);
+                vibrantDisplay.Put(i, 0, colour);
+                vibrantDisplay.Put(i, 127, colour);
+                vibrantDisplay.Put(0, i, colour);
+                vibrantDisplay.Put(127, i, colour);
             }
 
             colour = new SolidColour(255, 0, 0);
-            vibrantDisplay.Write(0, 0, colour);
-            vibrantDisplay.Write(127, 0, colour);
-            vibrantDisplay.Write(127, 127, colour);
-            vibrantDisplay.Write(0, 127, colour);
+            vibrantDisplay.Put(0, 0, colour);
+            vibrantDisplay.Put(127, 0, colour);
+            vibrantDisplay.Put(127, 127, colour);
+            vibrantDisplay.Put(0, 127, colour);
 
             vibrantDisplay.PartialGenerate(0,0,127,127);
             pictureBox1.Invalidate();
@@ -57,7 +57,7 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    vibrantDisplay.Write(i, i, colour);
+                    vibrantDisplay.Put(i, i, colour);
                 }
                 vibrantDisplay.Generate();
                 pictureBox1.Invalidate();
@@ -66,7 +66,7 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    vibrantDisplay.Write(127-i, i, colour);
+                    vibrantDisplay.Put(127-i, i, colour);
                 }
                 vibrantDisplay.Generate();
                 pictureBox1.Invalidate();

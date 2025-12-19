@@ -88,14 +88,14 @@ namespace DisplayLibrary
             }
         }
 		
-        public byte Read()
+        public byte Get()
         {
             // need to do some boundary checks
             byte character = _memory[(_x + _y * _width) * 2];
             return (character);
         }
 
-        public byte Read(int column, int row)
+        public byte Get(int column, int row)
         {
             // need to do some boundary checks
             if ((column > _width) || (row > _height))
@@ -107,6 +107,22 @@ namespace DisplayLibrary
                 byte character = _memory[(column + row * _width)*2];
                 return (character);
             }
+        }
+
+        public void Put(byte character)
+        {
+            Put(character, _foreground, _background);
+        }
+
+        public void Put(byte character, IColour foreground, IColour background)
+        {
+            _memory[(_x + _y * _width) * 2] = character;
+            _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToNybble() << 4) | foreground.ToNybble());
+
+            // Would have to call a partial generate here
+
+            PartialGenerate(_x, _y, 1, 1);
+
         }
 
         public void Write(byte character)

@@ -85,14 +85,14 @@ namespace DisplayLibrary
             }
         }
 
-        public byte Read()
+        public byte Get()
         {
             // need to do some boundary checks
             byte character = _memory[_x + _y * _width];
             return (character);
         }
 
-        public byte Read(int column, int row)
+        public byte Get(int column, int row)
         {
             // need to do some boundary checks
             if ((column > _width) || (row > _height))
@@ -105,6 +105,23 @@ namespace DisplayLibrary
             	return (character);
             }
         }
+
+        public void Put(byte character)
+        {
+            Put(character, _foreground, _background);
+        }
+
+        public void Put(byte character, IColour foreground, IColour background)
+        {
+            // Ignore any colour information for monochrome display
+
+            _memory[_x + _y * _width] = character;
+            // Would have to call a partial generate here
+
+            PartialGenerate(_x, _y, 1, 1);
+
+        }
+
         public void Write(byte character)
         {
             Write(character, _foreground, _background);
@@ -168,7 +185,6 @@ namespace DisplayLibrary
             }
             Generate();
         }
-
 
         public void Scroll()
         {

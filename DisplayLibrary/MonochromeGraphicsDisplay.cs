@@ -6,7 +6,7 @@ using static DisplayLibrary.Storage;
 
 namespace DisplayLibrary
 {
-    public class MonochromeGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic, IDisplay
+    public class MonochromeGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic
     {
         #region Fields
 
@@ -83,10 +83,10 @@ namespace DisplayLibrary
 		
         public IColour Read()
         {
-            return Read(_x, _y);
+            return Get(_x, _y);
         }
 
-        public IColour Read(int x, int y)
+        public IColour Get(int x, int y)
         {
             
             // need to do some boundary checks
@@ -103,12 +103,12 @@ namespace DisplayLibrary
             }
         }
 
-        public void Write(IColour colour)
+        public void Put(IColour colour)
         {
-            Write(_x, _y, colour);
+            Put(_x, _y, colour);
         }
 
-        public void Write(int x, int y, IColour colour)
+        public void Put(int x, int y, IColour colour)
         {
             // 8-bit colour from wiki
             // http://en.wikipedia.org/wiki/8-bit_color
