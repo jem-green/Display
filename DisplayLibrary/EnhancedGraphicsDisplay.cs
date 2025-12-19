@@ -84,12 +84,12 @@ namespace DisplayLibrary
 			}
         }
 		
-        public IColour Read()
+        public IColour Fetch()
         {
-            return Get(_x, _y);
+            return Fetch(_x, _y);
         }
 
-        public IColour Get(int x, int y)
+        public IColour Fetch(int x, int y)
         {
             
             // need to do some boundary checks

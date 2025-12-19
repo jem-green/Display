@@ -47,12 +47,19 @@ namespace DisplayLibrary
             get;
         }
 
+        // Set current position
+
         public void Set(int x, int y);
+
+        // Put colour at current position
 
         public void Put(IColour c);
         public void Put(int x, int y, IColour c);
 
-        public IColour Get(int x, int y);
+        // Fetch colour at current position
+
+        public IColour Fetch();
+        public IColour Fetch(int x, int y);
 
         void Clear();
 

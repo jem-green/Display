@@ -1,6 +1,39 @@
 ﻿
+using System.Windows.Forms;
+
 namespace DisplayLibrary
 {
+    public struct Position
+    {
+        private int _column;
+        private int _row;
+
+        public Position(int column, int row)
+        {
+            _column = column;
+            _row = row;
+        }
+
+        public Position()
+        {
+            _column = 0;
+            _row = 0;
+        }
+
+        public int Column
+        {
+            get { return _column; }
+            set { _column = value; }
+        }
+
+        public int Row
+        {
+            get { return _row; }
+            set { _row = value; }
+        }
+
+    }
+
     public interface IText
     {
         public ROMFont Font
@@ -20,15 +53,38 @@ namespace DisplayLibrary
             get;
         }
 
+        // Set the cursor position
+
         public void Set(int column, int row);
 
-        public byte Get();
+        //public Position Get();
 
-        public byte Get(int column, int row);
+        // Set characters at the current cursor position with specified character
+
+        public void Put(int column, int row, byte character);
 
         public void Put(byte character);
 
         public void Put(byte character, IColour foreground, IColour background);
+
+        public void Put(int column, int row, byte character, IColour foreground, IColour background);
+
+        // Fetch characters at the current cursor position
+
+        public byte Fetch();
+
+        public byte Fetch(int column, int row);
+
+        // Read characters and strings at the current cursor position
+
+        public byte Read();
+
+        public byte Read(int column, int row);
+
+        //public string Read(int length);
+        //public string Read(int column, int row, int length);
+
+        // Write characters and strings at the current cursor position
 
         public void Write(byte character);
 

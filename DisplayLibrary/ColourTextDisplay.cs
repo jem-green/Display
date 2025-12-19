@@ -7,7 +7,7 @@ using System.Text;
 namespace DisplayLibrary
 {
     /// Summary
-    /// Enhanced Text Display supporting 16 foreground and 16 background colours, from a palette of 16 colours.
+    /// Colour Text Display supporting 16 foreground and 16 background colours, from a palette of 16 colours.
     /// </summary>
     public class ColourTextDisplay : ColourTextMode, IStorage, IText
     {
@@ -74,28 +74,16 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
-        public void Set(int column, int row)
-        {
-            // need to do some boundary checks
-            if ((column > _width) || (row > _height))
-            {
-                throw new IndexOutOfRangeException();
-            }
-            else
-            {
-                _x = column;
-                _y = row;
-            }
-        }
+        
 		
-        public byte Get()
+        public byte Fetch()
         {
             // need to do some boundary checks
             byte character = _memory[(_x + _y * _width) * 2];
             return (character);
         }
 
-        public byte Get(int column, int row)
+        public byte Fetch(int column, int row)
         {
             // need to do some boundary checks
             if ((column > _width) || (row > _height))
@@ -109,19 +97,65 @@ namespace DisplayLibrary
             }
         }
 
+        // Sets the current cursor position
+		
+        public void Set(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                _x = column;
+                _y = row;
+            }
+        }
+
         public void Put(byte character)
         {
-            Put(character, _foreground, _background);
+            Put(_x, _y, character, _foreground, _background);
+        }
+
+        public void Put(int column, int row, byte character)
+        {
+            Put(column, row, character, _foreground, _background);
         }
 
         public void Put(byte character, IColour foreground, IColour background)
         {
+            Put(_x, _y, character, foreground, background);
+        }
+
+        public void Put(int column, int row, byte character, IColour foreground, IColour background)
+        {
+            Set(column, row);
             _memory[(_x + _y * _width) * 2] = character;
             _memory[(_x + _y * _width) * 2 + 1] = (byte)((background.ToNybble() << 4) | foreground.ToNybble());
 
             // Would have to call a partial generate here
 
             PartialGenerate(_x, _y, 1, 1);
+        }
+
+        public byte Read()
+        {
+            return (Read(_x,_y));
+        }
+
+        public byte Read(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                byte character = _memory[(column + row * _width) * 2];
+                return (character);
+            }
         }
 
         public void Write(byte character)

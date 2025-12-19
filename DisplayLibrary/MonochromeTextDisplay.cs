@@ -6,6 +6,9 @@ using System.Text;
 
 namespace DisplayLibrary
 {
+    /// Summary
+    /// Colour Text Display supporting 16 foreground and 16 background colours, from a palette of 16 colours.
+    /// </summary>
     public class MonochromeTextDisplay : MonochromeTextMode, IStorage, IMode, IText
     {
         #region Fields
@@ -71,6 +74,31 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
+       
+		
+        public byte Fetch()
+        {
+            // need to do some boundary checks
+            byte character = _memory[_x + _y * _width];
+            return (character);
+        }
+
+        public byte Fetch(int column, int row)
+        {
+            // need to do some boundary checks
+            if ((column > _width) || (row > _height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+            	byte character = _memory[column + row * _width];
+            	return (character);
+            }
+        }
+
+        // Sets the current cursor position
+		
         public void Set(int column, int row)
         {
             // need to do some boundary checks
@@ -85,14 +113,38 @@ namespace DisplayLibrary
             }
         }
 
-        public byte Get()
+        public void Put(byte character)
         {
-            // need to do some boundary checks
-            byte character = _memory[_x + _y * _width];
-            return (character);
+            Put(_x, _y, character, _foreground, _background);
         }
 
-        public byte Get(int column, int row)
+        public void Put(int column, int row, byte character)
+        {
+            Put(column, row, character, _foreground, _background);
+        }
+		
+        public void Put(byte character, IColour foreground, IColour background)
+        {
+            Put(_x, _y, character, _foreground, _background);
+        }
+		
+        public void Put(int column, int row, byte character, IColour foreground, IColour background)
+        {
+            // Ignore any colour information for monochrome display
+			
+            Set(column, row);
+            _memory[_x + _y * _width] = character;
+            // Would have to call a partial generate here
+
+            PartialGenerate(_x, _y, 1, 1);
+        }
+
+        public byte Read()
+        {
+            return (Read(_x,_y));
+        }
+
+        public byte Read(int column, int row)
         {
             // need to do some boundary checks
             if ((column > _width) || (row > _height))
@@ -104,22 +156,6 @@ namespace DisplayLibrary
             	byte character = _memory[column + row * _width];
             	return (character);
             }
-        }
-
-        public void Put(byte character)
-        {
-            Put(character, _foreground, _background);
-        }
-
-        public void Put(byte character, IColour foreground, IColour background)
-        {
-            // Ignore any colour information for monochrome display
-
-            _memory[_x + _y * _width] = character;
-            // Would have to call a partial generate here
-
-            PartialGenerate(_x, _y, 1, 1);
-
         }
 
         public void Write(byte character)
