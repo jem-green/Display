@@ -3,13 +3,14 @@
 using System;
 using System.Drawing.Imaging;
 using static DisplayLibrary.Storage;
+using static System.Windows.Forms.DataFormats;
 
 namespace DisplayLibrary
 {
     /// <summary>
     /// Support for 2-bit graphics mode, 4 colours from a palette of 16 colours
     /// </summary>
-    public class ColourGraphicsDisplay : EnhancedGraphicsMode, IStorage, IMode, IGraphic
+    public class ColourGraphicsDisplay : ColourGraphicsMode, IStorage, IMode, IGraphic
     {
         #region Fields
 
@@ -102,10 +103,6 @@ namespace DisplayLibrary
             	int index = y * _width + x;
             	byte colour = _memory[index];
 
-                byte red = 0;
-                byte green = 0;
-                byte blue = 0;
-
                 if (x % 4 == 1)
                 {
                     colour = (byte)((colour & 0xC0) >> 6);
@@ -123,12 +120,7 @@ namespace DisplayLibrary
                     colour = (byte)((colour & 0x03));
                 }
 
-                // Extract RGB bits directly
-                red = (byte)((colour & 0x03) != 0 ? 0xFF : 0);
-                green = (byte)((colour & 0x02) != 0 ? 0xFF : 0);
-                blue = (byte)((colour & 0x01) != 0 ? 0xFF : 0);
-
-                SolidColour c = new SolidColour(red,green,blue);
+                IColour c = new SolidColour().From2Bit(colour);
                 return(c);
             }
         }
@@ -148,7 +140,7 @@ namespace DisplayLibrary
             }
             else
             {
-                int index = y * _width / 2 + x / 2;
+                int index = (int)((y * _width + x ) / 4.0);
                 byte newColour;
                 if (x % 4 == 1)
                 {
@@ -180,13 +172,51 @@ namespace DisplayLibrary
         public void Save(string path, string filename)
         {
             // Save the bitmap to a file
-            Save(path, filename, ImageFormat.Png);
+
+            int pos = filename.LastIndexOf(".");
+            string extension = ".png";
+            if (pos > 0)
+            {
+                extension = filename.Substring(pos, filename.Length - pos);
+                filename = filename.Substring(0, pos);
+            }
+
+            if (extension == ".bmp")
+                Save(path, filename, ImageFormat.Bmp);
+            else if (extension == ".jpg")
+                Save(path, filename, ImageFormat.Jpeg);
+            else if (extension == ".png")
+                Save(path, filename, ImageFormat.Png);
         }
 
         public void Save(string path, string filename, ImageFormat format)
         {
+            int pos = filename.LastIndexOf(".");
+            string extension = String.Empty;
+            if (pos > 0)
+            {
+                filename = filename.Substring(0, pos);
+            }
+
+            if (format == ImageFormat.Bmp)
+            {
+                extension = ".bmp";
+            }
+            else if (format == ImageFormat.Jpeg)
+            {
+                extension = ".jpg";
+            }
+            else if (format == ImageFormat.Png)
+            {
+                extension = ".png";
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
             // Save the bitmap to a file
-            string filenamePath = System.IO.Path.Combine(path, filename);
+            string filenamePath = System.IO.Path.Combine(path, filename + extension);
             _bitmap.Save(filenamePath, format);
         }
 

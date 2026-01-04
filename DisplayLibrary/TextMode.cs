@@ -7,16 +7,11 @@ using DisplayLibrary;
 
 namespace DisplayLibrary
 {
-    public abstract class TextMode : Storage, IStorage, IMode
+    public abstract class TextMode : Mode, IStorage, IMode
     {
         #region Fields
 
         protected ROMFont _font;
-        protected IColour _foreground;
-        protected IColour _background;
-        protected int _scale = 1;
-        protected int _aspect = 1;
-        protected Bitmap _bitmap;
 
         public enum ConsoleColour : byte
         {
@@ -52,64 +47,29 @@ namespace DisplayLibrary
         #endregion
         #region Properties
 
-        public int Aspect
-        {
-            set
-            {
-                _aspect = value;
-            }
-            get
-            {
-                return (_aspect);
-            }
-        }
-
-        public Bitmap Bitmap
+        public ROMFont Font
         {
             get
             {
-                return (_bitmap);
-            }
-        }
-
-        public int Scale
-        {
-            get
-            {
-                return (_scale);
+                return _font;
             }
             set
             {
-                _scale = value;
+                _font = value;
             }
         }
 
-        public IColour ForegroundColour
-        {
-            set
-            {
-                _foreground = value;
-            }
-        }
-
-        public IColour BackgroundColour
-        {
-            set
-            {
-                _background = value;
-            }
-        }
 
         #endregion
         #region Methods
 
-        public abstract void Clear();
+        public override abstract void Clear();
 
-        public abstract void Clear(IColour background);
+        public override abstract void Clear(IColour background);
 
-        public abstract void PartialGenerate(int x1, int y1, int x2, int y2);
+        public override abstract void PartialGenerate(int x1, int y1, int x2, int y2);
 
-        public abstract void Generate();
+        public override abstract void Generate();
 
         #endregion
         #region Private

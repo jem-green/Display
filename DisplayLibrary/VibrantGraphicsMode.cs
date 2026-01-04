@@ -21,6 +21,7 @@ namespace DisplayLibrary
         {
             _memory = new byte[_width * _height];
             BuildColourIndex();
+            _hbits = 8;
         }
 
         public VibrantGraphicsMode(int width, int height, int scale) : base(width, height)
@@ -28,6 +29,7 @@ namespace DisplayLibrary
             _memory = new byte[_width * _height];
             _scale = scale;
             BuildColourIndex();
+            _hbits = 8;
         }
 
         public VibrantGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
@@ -36,6 +38,7 @@ namespace DisplayLibrary
             _scale = scale;
             _aspect = aspect;
             BuildColourIndex();
+            _hbits = 8;
         }
 
         #endregion
@@ -95,9 +98,9 @@ namespace DisplayLibrary
             {
 
                 // Need to scale the memory to the rgbValues array
-                for (int y = 0; y <= y2; y++)
+                for (int y = y1; y < y2; y++)
                 {
-                    for (int x = 0; x <= x2; x++)
+                    for (int x = x1; x < x2; x++)
                     {
                         byte colour = _memory[y * _width + x];
                         for (int v = 0; v < vscale; v++)
@@ -126,7 +129,7 @@ namespace DisplayLibrary
 
             if (_bitmap is null)
             {
-                _bitmap = new Bitmap(Width * hscale, Height * vscale, PixelFormat.Format8bppIndexed);
+                _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
             }
             _bitmap.Palette = _colourPalette;
 

@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    public class Mode : IMode
+    public abstract class Mode : Storage, IMode
     {
         #region Fields
 
@@ -15,7 +15,7 @@ namespace DisplayLibrary
         #endregion
         #region Constructors
 
-        public Mode(int width, int height)
+        public Mode(int width, int height): base(width,height)
         {
             _background = new SolidColour(0, 0, 0);
             _foreground = new SolidColour(255, 255, 255);
@@ -56,28 +56,33 @@ namespace DisplayLibrary
             }
         }
 
+        public IColour ForegroundColour
+        {
+            set
+            {
+                _foreground = value;
+            }
+        }
+
+        public IColour BackgroundColour
+        {
+            set
+            {
+                _background = value;
+            }
+        }
+
         #endregion
         #region Methods
 
-        public void Clear()
-        {
-            // Implementation of Clear method without parameters
-        }
+        public abstract void Clear();
 
-        public void Clear(IColour background)
-        {
-            // Implementation of Clear method with background colour
-        }
+        public abstract void Clear(IColour background);
 
-        public void PartialGenerate(int x1, int y1, int x2, int y2)
-        {
-            // Implementation of PartialGenerate method
-        }
+        public abstract void PartialGenerate(int x1, int y1, int x2, int y2);
 
-        public void Generate()
-        {
-            // Implementation of Generate method
-        }
+        public abstract void Generate();
+
 
         #endregion
     }

@@ -7,7 +7,7 @@ using System.Text;
 namespace DisplayLibrary
 {
     /// Summary
-    /// Colour Text Display supporting 16 foreground and 16 background colours, from a palette of 16 colours.
+    /// Monochrome Text Display supporting 16 foreground and 16 background colours, from a palette of 16 colours.
     /// </summary>
     public class MonochromeTextDisplay : MonochromeTextMode, IStorage, IMode, IText
     {
@@ -39,13 +39,6 @@ namespace DisplayLibrary
 
         #endregion
         #region Properties
-        public ROMFont Font
-        {
-            set
-            {
-                _font = value;
-            }
-        }
 
         public int Row
         {

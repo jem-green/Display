@@ -2,7 +2,7 @@
 
 namespace DisplayLibrary
 {
-    public class DitheredColour : IEquatable<SolidColour>, IColour
+    public class DitheredColour : IEquatable<SolidColour>
     {
         #region Fields
 

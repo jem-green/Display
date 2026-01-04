@@ -12,19 +12,21 @@ namespace DisplayLibrary
     {
         #region Fields
 
-
+       
         #endregion
         #region Constructors
 
         public TrueGraphicsMode(int width, int height) : base(width, height)
         {
             _memory = new byte[_width * _height * 3];
+            _hbits = 24;
         }
 
         public TrueGraphicsMode(int width, int height, int scale) : base(width, height)
         {
             _memory = new byte[_width * _height * 3];
             _scale = scale;
+            _hbits = 24;
         }
 
         public TrueGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
@@ -32,6 +34,7 @@ namespace DisplayLibrary
             _memory = new byte[_width * _height * 3];
             _scale = scale;
             _aspect = aspect;
+            _hbits = 24;
         }
 
         #endregion
@@ -92,9 +95,9 @@ namespace DisplayLibrary
             {
 
                 // Need to scale the memory to the rgbValues array
-                for (int y = 0; y <= y2; y++)
+                for (int y = y1; y < y2; y++)
                 {
-                    for (int x = 0; x <= x2; x++)
+                    for (int x = x1; x < x2; x++)
                     {
                         int sourceIndex = (y * _width + x) * 3;
                         for (int v = 0; v < vscale; v++)
@@ -123,7 +126,10 @@ namespace DisplayLibrary
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-            _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format24bppRgb);
+            if (_bitmap is null)
+            {
+            	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format24bppRgb);
+			}
 
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
 

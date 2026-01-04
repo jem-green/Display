@@ -18,7 +18,7 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            enhancedDisplay = new DisplayLibrary.EnhancedGraphicsDisplay(128, 128, 2, 1);
+            enhancedDisplay = new DisplayLibrary.EnhancedGraphicsDisplay(128, 128, 1, 1);
             enhancedDisplay.Generate();
             enhancedDisplay.Set(0, 0);
             pictureBox1.Select();

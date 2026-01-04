@@ -28,6 +28,18 @@ namespace DisplayLibrary
             set;
         }
 
+        public SolidColour FromBit(byte colour);
+
+        public SolidColour From2Bit(byte colour);
+
+
+        public SolidColour FromNybble(byte colour);
+
+
+        public SolidColour FromByte(byte colour);
+
+        public byte ToBit();
+
         public byte To2Bit();
 
         public byte ToNybble();

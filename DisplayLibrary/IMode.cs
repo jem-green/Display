@@ -1,9 +1,13 @@
 ﻿using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace DisplayLibrary
 {
     public interface IMode
     {
+        #region Fields
+
+        #endregion
         #region Methods
 
         public int Aspect
@@ -20,6 +24,16 @@ namespace DisplayLibrary
         public int Scale
         {
             get;
+            set;
+        }
+
+        public IColour ForegroundColour
+        {
+            set;
+        }
+
+        public IColour BackgroundColour
+        {
             set;
         }
 

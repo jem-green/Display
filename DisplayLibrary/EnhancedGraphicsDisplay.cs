@@ -99,10 +99,21 @@ namespace DisplayLibrary
             }
             else
             {
-            	int index = y * _width + x;
-            	byte colour = _memory[index];
-                SolidColour c = new SolidColour((byte)((colour >> 16) & 0xFF), (byte)((colour >> 8) & 0xFF), (byte)(colour & 0xFF));
-                return(c);
+                int index = (y * _width + x) / 2;
+                byte colour = _memory[index];
+
+                if (x % 2 == 1)
+                {
+                    // even pixel
+                    colour = (byte)((colour & 0xF0) >> 4);
+                }
+                else
+                {
+                    // odd pixel
+                    colour = (byte)(colour & 0x0F);
+                }
+                IColour c = new SolidColour().FromNybble(colour);
+                return (c);
             }
         }
 
@@ -146,13 +157,51 @@ namespace DisplayLibrary
         public void Save(string path, string filename)
         {
             // Save the bitmap to a file
-            Save(path, filename, ImageFormat.Png);
+
+            int pos = filename.LastIndexOf(".");
+            string extension = ".png";
+            if (pos > 0)
+            {
+                extension = filename.Substring(pos, filename.Length - pos);
+                filename = filename.Substring(0, pos);
+            }
+
+            if (extension == ".bmp")
+                Save(path, filename, ImageFormat.Bmp);
+            else if (extension == ".jpg")
+                Save(path, filename, ImageFormat.Jpeg);
+            else if (extension == ".png")
+                Save(path, filename, ImageFormat.Png);
         }
 
         public void Save(string path, string filename, ImageFormat format)
         {
+            int pos = filename.LastIndexOf(".");
+            string extension = String.Empty;
+            if (pos > 0)
+            {
+                filename = filename.Substring(0, pos);
+            }
+
+            if (format == ImageFormat.Bmp)
+            {
+                extension = ".bmp";
+            }
+            else if (format == ImageFormat.Jpeg)
+            {
+                extension = ".jpg";
+            }
+            else if (format == ImageFormat.Png)
+            {
+                extension = ".png";
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
             // Save the bitmap to a file
-            string filenamePath = System.IO.Path.Combine(path, filename);
+            string filenamePath = System.IO.Path.Combine(path, filename + extension);
             _bitmap.Save(filenamePath, format);
         }
 

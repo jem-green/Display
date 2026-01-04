@@ -1,7 +1,7 @@
 ﻿
 namespace DisplayTest
 {
-    partial class DisplayEnhancedGraphics
+    partial class DisplayMonochromeGraphics
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@ namespace DisplayTest
             // 
             pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             pictureBox1.Location = new System.Drawing.Point(0, 0);
-            pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new System.Drawing.Size(1696, 1540);
             pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -46,15 +46,15 @@ namespace DisplayTest
             pictureBox1.Paint += pictureBox1_Paint;
             pictureBox1.MouseDown += pictureBox1_MouseDown;
             // 
-            // DisplayEnhancedGraphics
+            // DisplayMonochromeGraphics
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1696, 1540);
             Controls.Add(pictureBox1);
-            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            Name = "DisplayEnhancedGraphics";
-            Text = "DisplayEnhancedGraphics";
+            Margin = new System.Windows.Forms.Padding(4);
+            Name = "DisplayMonochromeGraphics";
+            Text = "DisplayMonochromeGraphics";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
 

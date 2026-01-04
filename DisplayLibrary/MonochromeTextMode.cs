@@ -73,11 +73,11 @@ namespace DisplayLibrary
 
             if (_bitmap is null)
             {
-                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
+                _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format1bppIndexed);
             }
             _bitmap.Palette = _colourPalette;
 
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format1bppIndexed);
 
             // Get the address of the first line.
 
@@ -191,7 +191,7 @@ namespace DisplayLibrary
 
             int hbytes = (int)Math.Round((double)hbits / 8);
 
-            // work across character by character
+            // work across pixel by pixel
 
             for (int r = 0; r < rows; r++)
             {

@@ -39,13 +39,6 @@ namespace DisplayLibrary
 
         #endregion
         #region Properties
-        public ROMFont Font
-        {
-            set
-            {
-                _font = value;
-            }
-        }
 
         public int Row
         {

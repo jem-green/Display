@@ -10,14 +10,14 @@ namespace DisplayTest
 
     public partial class DisplayEnhancedText : Form
     {
-        DisplayLibrary.EnhancedTextDisplay colourDisplay;
+        DisplayLibrary.EnhancedTextDisplay enhanced;
         KeyboardMatrix _matrix;
 
         public DisplayEnhancedText()
         {
             InitializeComponent();
 
-            colourDisplay = new DisplayLibrary.EnhancedTextDisplay(16, 16, 2, 1);
+            enhanced = new DisplayLibrary.EnhancedTextDisplay(16, 16, 2, 1);
 
             ROMFont rasterFont = new ROMFont();
             string path = @"C:\SOURCE\GIT\cs.net\Display\DisplayTest";
@@ -25,11 +25,11 @@ namespace DisplayTest
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
-            colourDisplay.Font = rasterFont;
-            colourDisplay.Set(0, 0);
-            colourDisplay.ForegroundColour = new SolidColour(255, 255, 255);    // White foreground 
-            colourDisplay.BackgroundColour = new SolidColour(0, 0, 0);          // Black background;
-            colourDisplay.Write("HELLO THIS SHOULD WRAP AROUND");
+            enhanced.Font = rasterFont;
+            enhanced.Set(0, 0);
+            enhanced.ForegroundColour = new SolidColour(255, 255, 255);    // White foreground 
+            enhanced.BackgroundColour = new SolidColour(0, 0, 0);          // Black background;
+            enhanced.Write("HELLO THIS SHOULD WRAP AROUND");
             _matrix = new KeyboardMatrix();
             pictureBox1.Select();
 
@@ -38,7 +38,7 @@ namespace DisplayTest
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Bitmap b = colourDisplay.Bitmap;
+            Bitmap b = enhanced.Bitmap;
             g.DrawImageUnscaled(b, 0, 0);
         }
 
@@ -48,14 +48,14 @@ namespace DisplayTest
             {
                 for (int i = 0; i < 400; i++)
                 {
-                    colourDisplay.Write((byte)'e');
+                    enhanced.Write((byte)'e');
                 }
-                colourDisplay.Generate();
+                enhanced.Generate();
                 pictureBox1.Invalidate();
             }
             else
             {
-                colourDisplay.Write("Hello");
+                enhanced.Write("Hello");
                 pictureBox1.Invalidate();
             }
         }
@@ -65,7 +65,7 @@ namespace DisplayTest
             byte key = _matrix.ToASCII(e.KeyValue, e.Shift, e.Control, e.Alt);
             if (key > 0)
             {
-                colourDisplay.Write(key, new SolidColour(0,0,255), new SolidColour(0,255,0));   // Blue foreground, Green background
+                enhanced.Write(key, new SolidColour(0,0,255), new SolidColour(0,255,0));   // Blue foreground, Green background
                 pictureBox1.Invalidate();
             }
         }

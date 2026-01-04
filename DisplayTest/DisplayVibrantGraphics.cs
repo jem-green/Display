@@ -18,7 +18,7 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            vibrantDisplay = new DisplayLibrary.VibrantGraphicsDisplay(128, 128, 2, 1);
+            vibrantDisplay = new DisplayLibrary.VibrantGraphicsDisplay(128, 128, 1, 1);
             vibrantDisplay.Generate();
             vibrantDisplay.Set(0, 0);
             pictureBox1.Select();

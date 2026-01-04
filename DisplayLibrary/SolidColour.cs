@@ -11,6 +11,7 @@ namespace DisplayLibrary
         private byte _red = 0;
         private byte _green = 0;
         private byte _blue = 0;
+        private byte _colour1 = 0;      // 1-bit colour
         private byte _colour2 = 0;      // 2-bit colour
         private byte _colour4 = 0;      // 4-bit colour
         private byte _colour8 = 0;      // 8-bit colour
@@ -19,6 +20,9 @@ namespace DisplayLibrary
 
         #endregion
         #region Constructors
+
+        public SolidColour()
+        { }
 
         public SolidColour(string hex)
         {
@@ -85,9 +89,50 @@ namespace DisplayLibrary
         #endregion
         #region Methods
 
-        public byte To2Bit()
+        public SolidColour FromBit(byte colour)
+        {
+            byte red = (byte)((colour != 0) ? 255 : 0);
+            byte green = (byte)((colour != 0) ? 255 : 0);
+            byte blue = (byte)((colour != 0) ? 255 : 0);
+            return (new SolidColour(red, green, blue));
+        }
+
+        public SolidColour From2Bit(byte colour)
+        {
+            byte red = (byte)((((colour >> 1) & 0x01) != 0) ? 255 : 0);
+            byte green = (byte)((((colour >> 0) & 0x01) != 0) ? 127 : 0);
+            byte blue = (byte)((((colour >> 2) & 0x01) != 0) ? 255 : 0);
+            return (new SolidColour(red, green, blue));
+        }
+
+        public SolidColour FromNybble(byte colour)
+        {
+            byte intensity = (byte)((colour >> 3) & 0x01);
+            byte red = (byte)((((colour >> 2) & 0x01) != 0) ? (intensity != 0 ? 255 : 127) : 0);
+            byte green = (byte)((((colour >> 1) & 0x01) != 0) ? (intensity != 0 ? 255 : 127) : 0);
+            byte blue = (byte)((((colour >> 0) & 0x01) != 0) ? (intensity != 0 ? 255 : 127) : 0);
+            return (new SolidColour(red, green, blue));
+        }
+
+        public SolidColour FromByte(byte colour)
+        {
+            // Convert 3-3-2 format to 24-bit colour
+
+            byte red = (byte)(((colour >> 5) & 0b111) * 255/7);
+            byte green = (byte)(((colour >> 4) & 0b111) * 255/7);
+            byte blue = (byte)((colour & 0b11) * 255 / 3);
+            return (new SolidColour(red, green, blue));
+        }
+
+        public byte ToBit()
         {
             // Return 1-bit colour
+            return (_colour1);
+        }
+
+        public byte To2Bit()
+        {
+            // Return 2-bit colour - black, grey, white
             return (_colour2);
         }
 
@@ -125,6 +170,9 @@ namespace DisplayLibrary
             _red = red;
             _green = green;
             _blue = blue;
+
+            // Convert to 1-bit colour
+            _colour1 = (byte)((((_red >> 7) | (_green >> 7) | (_blue >> 7)) & 0x01));
 
             // Convert to 2-bit colour
 

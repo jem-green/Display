@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace DisplayLibrary
 {
@@ -23,6 +22,7 @@ namespace DisplayLibrary
             // not sure what to do with odd widths assume we round up
             _memory = new byte[(int)(0.5 + _width/2) * _height];
             BuildColourIndex();
+            _hbits = 4;
         }
 
         public EnhancedGraphicsMode(int width, int height, int scale) : base(width, height)
@@ -31,6 +31,7 @@ namespace DisplayLibrary
             _memory = new byte[(int)(0.5 + _width/2) * _height];
             _scale = scale;
             BuildColourIndex();
+            _hbits = 4;
         }
 
         public EnhancedGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
@@ -40,6 +41,7 @@ namespace DisplayLibrary
             _scale = scale;
             _aspect = aspect;
             BuildColourIndex();
+            _hbits = 4;
         }
 
         #endregion
@@ -91,11 +93,11 @@ namespace DisplayLibrary
 
             // Need to scale the memory to the rgbValues array
 
-            for (int y = y1; y <= y2; y++)
+            for (int y = y1; y < y2; y++)
             {
                 int rowBase = y * (_width / 2);   // precompute row offset
 
-                for (int x = x1; x <= x2; x++)
+                for (int x = x1; x < x2; x++)
                 {
                     int sourceIndex = rowBase + (x >> 1); // faster than /2
                     byte c = _memory[sourceIndex];
@@ -129,8 +131,11 @@ namespace DisplayLibrary
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-        	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
-            _bitmap.Palette = _colourPalette;
+            if (_bitmap is null)
+            {
+        		_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
+            }
+			_bitmap.Palette = _colourPalette;
 
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 

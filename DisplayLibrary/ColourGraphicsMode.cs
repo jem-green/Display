@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace DisplayLibrary
 {
@@ -13,7 +12,7 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        ColorPalette _colourPalette;
+        private ColorPalette _colourPalette;
 
         #endregion
         #region Constructors
@@ -21,24 +20,27 @@ namespace DisplayLibrary
         public ColourGraphicsMode(int width, int height) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/4) * _height];
+            _memory = new byte[(int)(0.5 + _width / 4.0) * _height];
+            _hbits = 2;
             BuildColourIndex();
         }
 
         public ColourGraphicsMode(int width, int height, int scale) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/4) * _height];
+            _memory = new byte[(int)(0.5 + _width / 4.0) * _height];
             _scale = scale;
+            _hbits = 2;
             BuildColourIndex();
         }
 
         public ColourGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 +_width/4) * _height];
+            _memory = new byte[(int)(0.5 +_width / 4.0) * _height];
             _scale = scale;
             _aspect = aspect;
+            _hbits = 2;
             BuildColourIndex();
         }
 
@@ -91,13 +93,13 @@ namespace DisplayLibrary
 
             // Need to scale the memory to the rgbValues array
 
-            for (int y = y1; y <= y2; y++)
+            for (int y = y1; y < y2; y++)
             {
-                int rowBase = y * (_width / 2);   // precompute row offset
+                int rowBase = y * (_width / 4);   // precompute row offset
 
-                for (int x = x1; x <= x2; x++)
+                for (int x = x1; x < x2; x++)
                 {
-                    int sourceIndex = rowBase + (x >> 1); // faster than /2
+                    int sourceIndex = rowBase + (x >> 2); // faster than /4
                     byte c = _memory[sourceIndex];
 
                     // extract nibble: low vs high
@@ -129,8 +131,11 @@ namespace DisplayLibrary
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-        	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
-            _bitmap.Palette = _colourPalette;
+            if (_bitmap is null)
+            {
+        		_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
+            }
+			_bitmap.Palette = _colourPalette;
 
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
@@ -151,11 +156,11 @@ namespace DisplayLibrary
 
             for (int y = 0; y < _height; y++)
             {
-                int rowBase = y * (_width / 2);   // precompute row offset
+                int rowBase = y * (_width / 4);   // precompute row offset
 
                 for (int x = 0; x < _width; x++)
                 {
-                    int sourceIndex = rowBase + (x >> 1); // faster than /2
+                    int sourceIndex = rowBase + (x >> 2); // faster than /4
                     byte c = _memory[sourceIndex];
 
                     // extract nibble: low vs high

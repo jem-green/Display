@@ -5,7 +5,6 @@ namespace DisplayLibrary
 {
     public interface IGraphic
     {
-
         int Left
         {
             set;
@@ -44,6 +43,11 @@ namespace DisplayLibrary
         public int Y
         {
             set;
+            get;
+        }
+
+        public byte Bits
+        {
             get;
         }
 

@@ -18,7 +18,7 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            trueDisplay = new DisplayLibrary.TrueGraphicsDisplay(128, 128, 2, 1);
+            trueDisplay = new DisplayLibrary.TrueGraphicsDisplay(128, 128, 1, 1);
             trueDisplay.Generate();
             trueDisplay.Set(0, 0);
             pictureBox1.Select();
