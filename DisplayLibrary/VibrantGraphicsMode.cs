@@ -12,21 +12,23 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        ColorPalette _colourPalette;
+        private ColorPalette _colourPalette;
 
         #endregion
         #region Constructors
 
         public VibrantGraphicsMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            int size = (int)(_width * _height);
+            _memory = new byte[size];
             BuildColourIndex();
             _hbits = 8;
         }
 
         public VibrantGraphicsMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            int size = (int)(_width * _height);
+            _memory = new byte[size];
             _scale = scale;
             BuildColourIndex();
             _hbits = 8;
@@ -34,7 +36,8 @@ namespace DisplayLibrary
 
         public VibrantGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[_width * _height];
+            int size = (int)(_width * _height);
+            _memory = new byte[size];
             _scale = scale;
             _aspect = aspect;
             BuildColourIndex();
@@ -54,10 +57,10 @@ namespace DisplayLibrary
 
         public override void Clear(IColour background)
         {
-            for (int i = 0; i < _memory.Length; i += 3)
+            byte colour = background.ToByte();  // 3-2-3 Approximation
+            for (int i = 0; i < _memory.Length; i++)
             {
-                // Note : BGR order for 24bpp RGB
-                _memory[i] = background.ToByte();         // 3-2-3 Approximation
+                _memory[i] = colour;
             }
         }
 
@@ -65,6 +68,11 @@ namespace DisplayLibrary
         {
             // need to know which position has been updated
             // at the moment this is handled by the parent class
+
+            if ((x2 > _width - 1) || (y2 > _height - 1) || (x1 < 0) || (y1 < 0) || (x2 < x1) || (y2 < y1))
+            {
+                throw new IndexOutOfRangeException();
+            }
 
             int hscale = _scale * _aspect;
             int vscale = _scale;
@@ -98,18 +106,22 @@ namespace DisplayLibrary
             {
 
                 // Need to scale the memory to the rgbValues array
-                for (int y = y1; y < y2; y++)
+                for (int y = y1; y <= y2; y++)
                 {
-                    for (int x = x1; x < x2; x++)
+                    int rowBase = y * _width;   // precompute row offset
+                    for (int x = x1; x <= x2; x++)
                     {
-                        byte colour = _memory[y * _width + x];
+                        int sourceIndex = rowBase + x;
+                        byte colour = _memory[sourceIndex];
+                        // replicate into scaled buffer
+                        int destXBase = x * hscale;
+                        int destYBase = y * vscale;
                         for (int v = 0; v < vscale; v++)
                         {
+                            int destRow = (destYBase + v) * (_width * hscale);
                             for (int h = 0; h < hscale; h++)
                             {
-                                int destX = x * hscale + h;
-                                int destY = y * vscale + v;
-                                int destIndex = (destY * _width * hscale + destX);
+                                int destIndex = destRow + destXBase + h;
                                 rgbValues[destIndex] = colour;
                             }
                         }
@@ -121,6 +133,7 @@ namespace DisplayLibrary
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
         }
+
 
         public override void Generate()
         {
@@ -162,21 +175,23 @@ namespace DisplayLibrary
                 {
                     for (int x = 0; x < _width; x++)
                     {
-                        byte colour = _memory[y * _width + x];
+                        int sourceIndex = y * _width + x;
+                        byte colour = _memory[sourceIndex];
+                        // replicate into scaled buffer
+                        int destXBase = x * hscale;
+                        int destYBase = y * vscale;
                         for (int v = 0; v < vscale; v++)
                         {
+                            int destRow = (destYBase + v) * (_width * hscale);
                             for (int h = 0; h < hscale; h++)
                             {
-                                int destX = x * hscale + h;
-                                int destY = y * vscale + v;
-                                int destIndex = (destY * _width * hscale + destX);
+                                int destIndex = destRow + destXBase + h;
                                 rgbValues[destIndex] = colour;
                             }
                         }
                     }
                 }
             }
-
             // Copy the 256 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);

@@ -18,12 +18,12 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            trueDisplay = new DisplayLibrary.TrueGraphicsDisplay(128, 128, 1, 1);
+            trueDisplay = new DisplayLibrary.TrueGraphicsDisplay(128, 128, 2, 1);
             trueDisplay.Generate();
             trueDisplay.Set(0, 0);
             pictureBox1.Select();
 
-            SolidColour colour = new SolidColour(0, 0, 255);
+            SolidColour colour = new SolidColour(0, 0, 255);    // Blue border
             for (int i = 0; i < 128; i++)
             {
                 trueDisplay.Put(i, 0, colour);
@@ -32,7 +32,7 @@ namespace DisplayTest
                 trueDisplay.Put(127, i, colour);
             }
 
-            colour = new SolidColour(255, 0, 0);
+            colour = new SolidColour(255, 0, 0);    // Red corners
             trueDisplay.Put(0, 0, colour);
             trueDisplay.Put(127, 0, colour);
             trueDisplay.Put(127, 127, colour);

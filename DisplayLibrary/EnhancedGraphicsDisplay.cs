@@ -99,7 +99,8 @@ namespace DisplayLibrary
             }
             else
             {
-                int index = (y * _width + x) / 2;
+                int bytesPerRow = (_width + 1) >> 1;
+                int index = y * bytesPerRow + (x >> 1);
                 byte colour = _memory[index];
 
                 if (x % 2 == 1)
@@ -136,7 +137,8 @@ namespace DisplayLibrary
             }
             else
             {
-                int index = y * _width / 2 + x / 2;
+                int bytesPerRow = (_width + 1) >> 1;
+                int index = y * bytesPerRow + (x >> 1);
                 byte newColour;
                 if (x % 2 == 1)
                 {

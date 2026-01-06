@@ -94,7 +94,6 @@ namespace DisplayLibrary
 
             Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
 
-
             int rows = _height;
             int columns = _width;
             int hbits = _font.Horizontal;

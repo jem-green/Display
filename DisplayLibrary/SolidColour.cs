@@ -175,11 +175,15 @@ namespace DisplayLibrary
             _colour1 = (byte)((((_red >> 7) | (_green >> 7) | (_blue >> 7)) & 0x01));
 
             // Convert to 2-bit colour
+            // 00 - black
+            // 01 -         red < 128 or blue < 128 and green = 64
+            // 10 -       red = 128 or blue = 128 and green < 64 (magenta) = 2
+            // 11 - white red = 128 or blue = 128 and green = 64 
 
-            _colour2 = (byte)((_red >> 7) << 1 | (_green >> 6) | (_blue >> 7));
+            _colour2 = (byte)((((_red >> 7) << 1 | (_green >> 6) | (_blue >> 7)) & 0b11));
 
             // Convert to 4-bit colour
-
+        
             byte intensity = (byte)(((_red >> 6) | (_green >> 6) | (_blue >> 6)) & 0x01);
             _colour4 = (byte)((intensity << 3) | ((_red >> 7) << 2) | ((_green >> 7) << 1) | (_blue >> 7));
 

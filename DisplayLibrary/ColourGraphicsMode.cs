@@ -20,28 +20,31 @@ namespace DisplayLibrary
         public ColourGraphicsMode(int width, int height) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width / 4.0) * _height];
-            _hbits = 2;
+            int size = ((_width + 3) >> 2) * _height; // divide by 4 rounded up
+            _memory = new byte[size];
             BuildColourIndex();
+            _hbits = 2;
         }
 
         public ColourGraphicsMode(int width, int height, int scale) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width / 4.0) * _height];
+            int size = ((_width + 3) >> 2) * _height; // divide by 4 rounded up
+            _memory = new byte[size];
             _scale = scale;
-            _hbits = 2;
             BuildColourIndex();
+            _hbits = 2;
         }
 
         public ColourGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 +_width / 4.0) * _height];
+            int size = ((_width + 3) >> 2) * _height; // divide by 4 rounded up
+            _memory = new byte[size];
             _scale = scale;
             _aspect = aspect;
-            _hbits = 2;
             BuildColourIndex();
+            _hbits = 2;
         }
 
         #endregion
@@ -57,8 +60,8 @@ namespace DisplayLibrary
 
         public override void Clear(IColour background)
         {
-            byte colour = background.ToNybble();
-            colour = (byte)(colour & background.ToNybble() << 4);
+            byte colour = background.To2Bit();
+            colour = (byte)((colour << 6) | (colour << 4) | (colour << 2) | colour);
             for (int i = 0; i < _memory.Length; i++)
             {
                 _memory[i] = colour;
@@ -70,13 +73,18 @@ namespace DisplayLibrary
             // need to know which position has been updated
             // at the moment this is handled by the parent class
 
+            if ((x2 > _width - 1) || (y2 > _height - 1) || (x1 < 0) || (y1 < 0) || (x2 < x1) || (y2 < y1))
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-            _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format4bppIndexed);
+            _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
             _bitmap.Palette = _colourPalette;
 
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format4bppIndexed);
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
@@ -93,17 +101,17 @@ namespace DisplayLibrary
 
             // Need to scale the memory to the rgbValues array
 
-            for (int y = y1; y < y2; y++)
+            for (int y = y1; y <= y2; y++)
             {
-                int rowBase = y * (_width / 4);   // precompute row offset
+                int rowBase = y * ((_width + 3) >> 2);   // precompute row offset
 
-                for (int x = x1; x < x2; x++)
+                for (int x = x1; x <= x2; x++)
                 {
                     int sourceIndex = rowBase + (x >> 2); // faster than /4
-                    byte c = _memory[sourceIndex];
+                    byte colour = _memory[sourceIndex];
 
-                    // extract nibble: low vs high
-                    c = (x & 1) == 0 ? (byte)(c & 0x0F) : (byte)(c >> 4);
+                    byte shift = (byte)((3 - (x % 4)) * 2);
+                    colour = (byte)((colour >> shift) & 0b11);
 
                     // replicate into scaled buffer
                     int destXBase = x * hscale;
@@ -115,7 +123,8 @@ namespace DisplayLibrary
 
                         for (int h = 0; h < hscale; h++)
                         {
-                            rgbValues[destRow + destXBase + h] = c;
+							int destIndex = destRow + destXBase + h;
+                            rgbValues[destIndex] = colour;
                         }
                     }
                 }
@@ -156,15 +165,15 @@ namespace DisplayLibrary
 
             for (int y = 0; y < _height; y++)
             {
-                int rowBase = y * (_width / 4);   // precompute row offset
+                int rowBase = y * ((_width + 3) >> 2);   // precompute row offset
 
                 for (int x = 0; x < _width; x++)
                 {
                     int sourceIndex = rowBase + (x >> 2); // faster than /4
-                    byte c = _memory[sourceIndex];
+                    byte colour = _memory[sourceIndex];
 
-                    // extract nibble: low vs high
-                    c = (x & 1) == 0 ? (byte)(c & 0x0F) : (byte)(c >> 4);
+                    byte shift = (byte)((3 - (x % 4)) * 2);
+                    colour = (byte)((colour >> shift) & 0b11);
 
                     // replicate into scaled buffer
                     int destXBase = x * hscale;
@@ -176,7 +185,8 @@ namespace DisplayLibrary
 
                         for (int h = 0; h < hscale; h++)
                         {
-                            rgbValues[destRow + destXBase + h] = c;
+                            int destIndex = destRow + destXBase + h;
+                            rgbValues[destIndex] = colour;
                         }
                     }
                 }
@@ -196,22 +206,11 @@ namespace DisplayLibrary
             {
                 _colourPalette = tempBitmap.Palette;
             }
+
             _colourPalette.Entries[0] = Color.FromArgb(0, 0, 0);        // Black
-            _colourPalette.Entries[1] = Color.FromArgb(0, 0, 170);      // Blue
-            _colourPalette.Entries[2] = Color.FromArgb(0, 170, 0);      // Green
-            _colourPalette.Entries[3] = Color.FromArgb(0, 170, 170);    // Cyan
-            _colourPalette.Entries[4] = Color.FromArgb(170, 0, 0);      // Red
-            _colourPalette.Entries[5] = Color.FromArgb(170, 0, 170);    // Magenta
-            _colourPalette.Entries[6] = Color.FromArgb(170, 85, 0);     // Brown
-            _colourPalette.Entries[7] = Color.FromArgb(170, 170, 170);  // Light Gray
-            _colourPalette.Entries[8] = Color.FromArgb(85, 85, 85);     // Dark Gray
-            _colourPalette.Entries[9] = Color.FromArgb(85, 85, 255);    // Light Blue
-            _colourPalette.Entries[10] = Color.FromArgb(85, 255, 85);   // Light Green
-            _colourPalette.Entries[11] = Color.FromArgb(85, 255, 255);  // Light Cyan
-            _colourPalette.Entries[12] = Color.FromArgb(255, 85, 85);   // Light Red
-            _colourPalette.Entries[13] = Color.FromArgb(255, 85, 255);  // Light Magenta
-            _colourPalette.Entries[14] = Color.FromArgb(255, 255, 85);  // Yellow
-            _colourPalette.Entries[15] = Color.FromArgb(255, 255, 255); // White
+            _colourPalette.Entries[1] = Color.FromArgb(0, 170, 170);    // Cyan
+            _colourPalette.Entries[2] = Color.FromArgb(170, 0, 170);    // Magenta
+            _colourPalette.Entries[3] = Color.FromArgb(255, 255, 255);  // White
         }
 
         #endregion

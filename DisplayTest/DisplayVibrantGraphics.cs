@@ -18,7 +18,7 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            vibrantDisplay = new DisplayLibrary.VibrantGraphicsDisplay(128, 128, 1, 1);
+            vibrantDisplay = new DisplayLibrary.VibrantGraphicsDisplay(128, 128, 2, 1);
             vibrantDisplay.Generate();
             vibrantDisplay.Set(0, 0);
             pictureBox1.Select();
@@ -32,7 +32,7 @@ namespace DisplayTest
                 vibrantDisplay.Put(127, i, colour);
             }
 
-            colour = new SolidColour(255, 0, 0);
+            colour = new SolidColour(255, 0, 0);    // Blue corners
             vibrantDisplay.Put(0, 0, colour);
             vibrantDisplay.Put(127, 0, colour);
             vibrantDisplay.Put(127, 127, colour);
@@ -52,7 +52,7 @@ namespace DisplayTest
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            SolidColour colour = new SolidColour(0,255,0);
+            SolidColour colour = new SolidColour(0,255,0);  // Green diagonal
             if (e.Button == MouseButtons.Left)
             {
                 for (int i = 0; i < 128; i++)

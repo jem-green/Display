@@ -99,7 +99,8 @@ namespace DisplayLibrary
             }
             else
             {
-            	int index = y * _width + x;
+                int bytesPerRow = (_width + 7) >> 3;
+                int index = y * bytesPerRow + (x >> 3); // divide by 8
             	byte colour = _memory[index];
                 IColour c = new SolidColour().FromBit(colour);
                 return (c);
@@ -113,9 +114,6 @@ namespace DisplayLibrary
 
         public void Put(int x, int y, IColour colour)
         {
-            // 8-bit colour from wiki
-            // http://en.wikipedia.org/wiki/8-bit_color
-            // 3 bits red, 3 bits green, 2 bits blue
 
             // need to do some boundary checks
 
@@ -125,7 +123,8 @@ namespace DisplayLibrary
             }
             else
             {
-                int index = (int)((y * _width + x) / 8.0);
+                int bytesPerRow = (_width + 7) >> 3;
+                int index = y * bytesPerRow + (x >> 3); // divide by 8
                 byte pixelBit = (byte)(7 - ((x) % 8));
                 byte mask = (byte)(1 << pixelBit);
 

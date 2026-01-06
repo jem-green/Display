@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace DisplayLibrary
 {
@@ -17,29 +12,38 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        ColorPalette _colourPalette;
+        private ColorPalette _colourPalette;
 
         #endregion
         #region Constructors
 
         public MonochromeGraphicsMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[(int)(0.5 +_width / 8.0) * _height];
+            // not sure what to do with odd widths assume we round up
+            int size = ((_width + 7)>>3) * _height; // divide by 8 rounded up
+            _memory = new byte[size];
+            BuildColourIndex();
             _hbits = 1;
         }
 
         public MonochromeGraphicsMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[(int)(0.5 + _width / 8.0) * _height];
+            // not sure what to do with odd widths assume we round up
+            int size = ((_width + 7) >> 3) * _height; // divide by 8 rounded up
+            _memory = new byte[size];
             _scale = scale;
+            BuildColourIndex();
             _hbits = 1;
         }
 
         public MonochromeGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[(int)(0.5 + _width / 8.0) * _height];
+            // not sure what to do with odd widths assume we round up
+            int size = ((_width + 7) >> 3) * _height; // divide by 8 rounded up
+            _memory = new byte[size];
             _scale = scale;
             _aspect = aspect;
+            BuildColourIndex();
             _hbits = 1;
         }
 
@@ -57,10 +61,11 @@ namespace DisplayLibrary
 		
 		public override void Clear(IColour background)
         {
-            _memory = new byte[(int)(0.5 + _width / 8.0) * _height];
+            byte colour = background.ToBit();
+            colour = (byte)(colour == 0 ? 0x00 : 0xFF);
             for (int i = 0; i < _memory.Length; i++)
             {
-                _memory[i] = background.ToBit();
+                _memory[i] = colour;
             }
         }
 
@@ -69,14 +74,18 @@ namespace DisplayLibrary
             // need to know which position has been updated
             // at the moment this is handled by the parent class
 
+            if ((x2 > _width - 1) || (y2 > _height - 1) || (x1 < 0) || (y1 < 0) || (x2 < x1) || (y2 < y1))
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             int hscale = _scale * _aspect;
             int vscale = _scale;
-            if (_bitmap is null)
-            {
-                _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format1bppIndexed);
-            }
-            BuildColourIndex();
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
+
+        	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
+            _bitmap.Palette = _colourPalette;
+
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
@@ -84,23 +93,44 @@ namespace DisplayLibrary
 
             // Declare an array to hold the bytes of the bitmap.
 
-            int size = (int)(_bitmap.Width * _bitmap.Height / 8.0);
+            int size = _bitmap.Width * _bitmap.Height;
             byte[] rgbValues = new byte[size];
 
             // Copy the 256 bit values from bitmap
 
             Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
 
-            if ((_scale == 1) && (_aspect == 1))
-            {
-                // Copy the memory to the rgbValues array
+            // Need to scale the memory to the rgbValues array
 
-                _memory.CopyTo(rgbValues, 0);
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
+            for (int y = y1; y <= y2; y++)
+            {
+                int rowBase = y * ((_width + 7) >> 3);   // precompute row offset
+
+                for (int x = x1; x <= x2; x++)
+                {
+                    int sourceIndex = rowBase + (x >> 3); // faster than /8
+                    byte colour = _memory[sourceIndex];
+
+                    // extract bit
+                    colour = (byte)((colour >> (7 - (x & 7))) & 0x01);
+
+                    // replicate into scaled buffer
+                    int destXBase = x * hscale;
+                    int destYBase = y * vscale;
+
+                    for (int v = 0; v < vscale; v++)
+                    {
+                        int destRow = (destYBase + v) * (_width * hscale);
+
+                        for (int h = 0; h < hscale; h++)
+                        {
+							int destIndex = destRow + destXBase + h;
+                            rgbValues[destIndex] = colour;
+                        }
+                    }
+                }
+            }
+
             // Copy the 256 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
             _bitmap.UnlockBits(bmpCanvas);
@@ -113,10 +143,11 @@ namespace DisplayLibrary
 
             if (_bitmap is null)
             {
-            	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format1bppIndexed);
+            	_bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
 			}
-            BuildColourIndex();
-            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
+            _bitmap.Palette = _colourPalette;
+
+            BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 
             // Get the address of the first line.
 
@@ -124,23 +155,42 @@ namespace DisplayLibrary
 
             // Declare an array to hold the bytes of the bitmap.
 
-            int size = _bitmap.Width * _bitmap.Height / 8;
+            int size = _bitmap.Width * _bitmap.Height;
             byte[] rgbValues = new byte[size];
 
             // Copy the 256 bit values from bitmap
 
             Marshal.Copy(ptr, rgbValues, 0, rgbValues.Length);
 
-            if ((_scale == 1) && (_aspect == 1))
-            {
-            	// Copy the memory to the rgbValues array
+            // Need to scale the memory to the rgbValues array
 
-            	_memory.CopyTo(rgbValues, 0);
+            for (int y = 0; y < _height; y++)
+            {
+                int rowBase = y * ((_width + 7) >> 3);   // precompute row offset
+
+                for (int x = 0; x < _width; x++)
+                {
+                    int sourceIndex = rowBase + (x >> 3); // faster than /8
+                    byte colour = _memory[sourceIndex];
+
+                    // extract bit
+                    colour = (byte)((colour >> (7 - (x & 7))) & 0x01);
+
+                    // replicate into scaled buffer
+                    int destXBase = x * hscale;
+                    int destYBase = y * vscale;
+
+                    for (int v = 0; v < vscale; v++)
+                    {
+                        int destRow = (destYBase + v) * (_width * hscale);
+                        for (int h = 0; h < hscale; h++)
+                        {
+                            int destIndex = destRow + destXBase + h;
+                            rgbValues[destIndex] = colour;
+                        }
+                    }
+                }
             }
-			else
-			{
-				throw new NotImplementedException();
-			}
 
             // Copy the 256 bit values back to the bitmap
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, size);
@@ -152,7 +202,7 @@ namespace DisplayLibrary
 
         private void BuildColourIndex()
         {
-            using (var tempBitmap = new Bitmap(1, 1, PixelFormat.Format1bppIndexed))
+            using (var tempBitmap = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
             {
                 _colourPalette = tempBitmap.Palette;
             }

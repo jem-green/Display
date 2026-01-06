@@ -12,7 +12,7 @@ namespace DisplayLibrary
     {
         #region Fields
 
-        ColorPalette _colourPalette;
+        private ColorPalette _colourPalette;
 
         #endregion
         #region Constructors
@@ -20,7 +20,8 @@ namespace DisplayLibrary
         public EnhancedGraphicsMode(int width, int height) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/2) * _height];
+            int size = (int)(0.5 + _width / 2) * _height;
+            _memory = new byte[size];
             BuildColourIndex();
             _hbits = 4;
         }
@@ -28,7 +29,8 @@ namespace DisplayLibrary
         public EnhancedGraphicsMode(int width, int height, int scale) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 + _width/2) * _height];
+            int size = (int)(0.5 + _width / 2) * _height;
+            _memory = new byte[size];
             _scale = scale;
             BuildColourIndex();
             _hbits = 4;
@@ -37,7 +39,8 @@ namespace DisplayLibrary
         public EnhancedGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
             // not sure what to do with odd widths assume we round up
-            _memory = new byte[(int)(0.5 +_width/2) * _height];
+            int size = (int)(0.5 + _width / 2) * _height;
+            _memory = new byte[size];
             _scale = scale;
             _aspect = aspect;
             BuildColourIndex();
@@ -70,6 +73,11 @@ namespace DisplayLibrary
             // need to know which position has been updated
             // at the moment this is handled by the parent class
 
+            if ((x2 > _width - 1) || (y2 > _height - 1) || (x1 < 0) || (y1 < 0) || (x2 < x1) || (y2 < y1))
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
@@ -93,17 +101,17 @@ namespace DisplayLibrary
 
             // Need to scale the memory to the rgbValues array
 
-            for (int y = y1; y < y2; y++)
+            for (int y = y1; y <= y2; y++)
             {
-                int rowBase = y * (_width / 2);   // precompute row offset
+                int rowBase = y * (_width >> 1);   // precompute row offset
 
-                for (int x = x1; x < x2; x++)
+                for (int x = x1; x <= x2; x++)
                 {
                     int sourceIndex = rowBase + (x >> 1); // faster than /2
-                    byte c = _memory[sourceIndex];
+                    byte colour = _memory[sourceIndex];
 
                     // extract nibble: low vs high
-                    c = (x & 1) == 0 ? (byte)(c & 0x0F) : (byte)(c >> 4);
+                    colour = (x & 1) == 0 ? (byte)(colour & 0x0F) : (byte)(colour >> 4);
 
                     // replicate into scaled buffer
                     int destXBase = x * hscale;
@@ -115,7 +123,8 @@ namespace DisplayLibrary
 
                         for (int h = 0; h < hscale; h++)
                         {
-                            rgbValues[destRow + destXBase + h] = c;
+							int destIndex = destRow + destXBase + h;
+                            rgbValues[destIndex] = colour;
                         }
                     }
                 }
@@ -156,15 +165,15 @@ namespace DisplayLibrary
 
             for (int y = 0; y < _height; y++)
             {
-                int rowBase = y * (_width / 2);   // precompute row offset
+                int rowBase = y * (_width >> 1);   // precompute row offset
 
                 for (int x = 0; x < _width; x++)
                 {
                     int sourceIndex = rowBase + (x >> 1); // faster than /2
-                    byte c = _memory[sourceIndex];
+                    byte colour = _memory[sourceIndex];
 
                     // extract nibble: low vs high
-                    c = (x & 1) == 0 ? (byte)(c & 0x0F) : (byte)(c >> 4);
+                    colour = (x & 1) == 0 ? (byte)(colour & 0x0F) : (byte)(colour >> 4);
 
                     // replicate into scaled buffer
                     int destXBase = x * hscale;
@@ -176,7 +185,8 @@ namespace DisplayLibrary
 
                         for (int h = 0; h < hscale; h++)
                         {
-                            rgbValues[destRow + destXBase + h] = c;
+                            int destIndex = destRow + destXBase + h;
+                            rgbValues[destIndex] = colour;
                         }
                     }
                 }

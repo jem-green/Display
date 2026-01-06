@@ -11,19 +11,19 @@ namespace DisplayTest
 
     public partial class DisplayColourGraphics : Form
     {
-        DisplayLibrary.EnhancedGraphicsDisplay colourDisplay;
+        DisplayLibrary.ColourGraphicsDisplay colourDisplay;
         KeyboardMatrix _matrix;
 
         public DisplayColourGraphics()
         {
             InitializeComponent();
 
-            colourDisplay = new DisplayLibrary.EnhancedGraphicsDisplay(128, 128, 1, 1);
+            colourDisplay = new DisplayLibrary.ColourGraphicsDisplay(128, 128, 2, 1);
             colourDisplay.Generate();
             colourDisplay.Set(0, 0);
             pictureBox1.Select();
 
-            SolidColour colour = new SolidColour(0, 0, 255);
+            SolidColour colour = new SolidColour(0, 0, 255);    // Blue border
             for (int i = 0; i < 128; i++)
             {
                 colourDisplay.Put(i, 0, colour);
@@ -32,7 +32,7 @@ namespace DisplayTest
                 colourDisplay.Put(127, i, colour);
             }
 
-            colour = new SolidColour(255, 0, 0);
+            colour = new SolidColour(255, 0, 0);    // Red corners
             colourDisplay.Put(0, 0, colour);
             colourDisplay.Put(127, 0, colour);
             colourDisplay.Put(127, 127, colour);

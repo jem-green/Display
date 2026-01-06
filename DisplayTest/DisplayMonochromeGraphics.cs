@@ -18,7 +18,7 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            monochromeDisplay = new DisplayLibrary.MonochromeGraphicsDisplay(128, 128, 1, 1);
+            monochromeDisplay = new DisplayLibrary.MonochromeGraphicsDisplay(128, 128, 2, 1);
             monochromeDisplay.Generate();
             monochromeDisplay.Set(0, 0);
             //monochromeDisplay.Background = new SolidColour(255, 255, 255); // White background
@@ -35,7 +35,7 @@ namespace DisplayTest
                 monochromeDisplay.Put(127, i, colour);
             }
 
-            colour = new SolidColour(255, 0, 0);
+            colour = new SolidColour(255, 0, 0);                // Red corners
             monochromeDisplay.Put(0, 0, colour);
             monochromeDisplay.Put(127, 0, colour);
             monochromeDisplay.Put(127, 127, colour);

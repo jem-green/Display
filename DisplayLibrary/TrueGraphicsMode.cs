@@ -18,20 +18,23 @@ namespace DisplayLibrary
 
         public TrueGraphicsMode(int width, int height) : base(width, height)
         {
-            _memory = new byte[_width * _height * 3];
+            int size = (_width * _height) * 3;
+            _memory = new byte[size];
             _hbits = 24;
         }
 
         public TrueGraphicsMode(int width, int height, int scale) : base(width, height)
         {
-            _memory = new byte[_width * _height * 3];
+            int size = (_width * _height) * 3;
+            _memory = new byte[size];
             _scale = scale;
             _hbits = 24;
         }
 
         public TrueGraphicsMode(int width, int height, int scale, int aspect) : base(width, height)
         {
-            _memory = new byte[_width * _height * 3];
+            int size = (_width * _height) * 3;
+            _memory = new byte[size];
             _scale = scale;
             _aspect = aspect;
             _hbits = 24;
@@ -64,6 +67,11 @@ namespace DisplayLibrary
             // need to know which position has been updated
             // at the moment this is handled by the parent class
 
+            if ((x2 > _width - 1) || (y2 > _height - 1) || (x1 < 0) || (y1 < 0) || (x2 < x1) || (y2 < y1))
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
@@ -95,11 +103,12 @@ namespace DisplayLibrary
             {
 
                 // Need to scale the memory to the rgbValues array
-                for (int y = y1; y < y2; y++)
+                for (int y = y1; y <= y2; y++)
                 {
-                    for (int x = x1; x < x2; x++)
+                    for (int x = x1; x <= x2; x++)
                     {
                         int sourceIndex = (y * _width + x) * 3;
+
                         for (int v = 0; v < vscale; v++)
                         {
                             for (int h = 0; h < hscale; h++)
@@ -161,13 +170,17 @@ namespace DisplayLibrary
                     for (int x = 0; x < _width; x++)
                     {
                         int sourceIndex = (y * _width + x) * 3;
+                        // Cannot get a single byte so need to copy all three
+
                         for (int v = 0; v < vscale; v++)
                         {
                             for (int h = 0; h < hscale; h++)
                             {
                                 int destX = x * hscale + h;
                                 int destY = y * vscale + v;
+
                                 int destIndex = (destY * _width * hscale + destX) * 3;
+
                                 rgbValues[destIndex] = _memory[sourceIndex];
                                 rgbValues[destIndex + 1] = _memory[sourceIndex + 1];
                                 rgbValues[destIndex + 2] = _memory[sourceIndex + 2];

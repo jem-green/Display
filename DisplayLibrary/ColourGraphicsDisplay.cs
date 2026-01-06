@@ -100,18 +100,19 @@ namespace DisplayLibrary
             }
             else
             {
-            	int index = y * _width + x;
+                int bytesPerRow = (_width + 3) >> 2;
+                int index = y * bytesPerRow + (x >> 2);
             	byte colour = _memory[index];
 
-                if (x % 4 == 1)
+                if (x % 4 == 0)
                 {
                     colour = (byte)((colour & 0xC0) >> 6);
                 }
-                else if (x % 4 == 2)
+                else if (x % 4 == 1)
                 {
                     colour = (byte)((colour & 0x30) >> 4);
                 }
-                else if (x % 4 == 3)
+                else if (x % 4 == 2)
                 {
                     colour = (byte)((colour & 0x0C) >> 2);
                 }
@@ -140,32 +141,36 @@ namespace DisplayLibrary
             }
             else
             {
-                int index = (int)((y * _width + x ) / 4.0);
+                int bytesPerRow = (_width + 3) >> 2;
+                int index = y * bytesPerRow + (x >> 2);
+
                 byte newColour;
-                if (x % 4 == 1)
+                if (x % 4 == 0)
                 {
                     byte existing = _memory[index];
-                    newColour = (byte)((existing & 0xC0) | (colour.To2Bit() << 6));
+                    newColour = (byte)((existing & 0x3F) | (colour.To2Bit() << 6));
+                }
+                else if (x % 4 == 1)
+                {
+                    // even pixel
+                    byte existing = _memory[index];
+                    newColour = (byte)((existing & 0xCF) | (colour.To2Bit() << 4));
                 }
                 else if (x % 4 == 2)
                 {
                     // even pixel
                     byte existing = _memory[index];
-                    newColour = (byte)((existing & 0x30) | (colour.To2Bit() << 4));
-                }
-                else if (x % 4 == 3)
-                {
-                    // even pixel
-                    byte existing = _memory[index];
-                    newColour = (byte)((existing & 0x0C) | (colour.To2Bit() << 2));
+                    newColour = (byte)((existing & 0xF3) | (colour.To2Bit() << 2));
                 }
                 else
                 {
                     // odd pixel
                     byte existing = _memory[index];
-                    newColour = (byte)((existing & 0x03) | (colour.To2Bit()));
+                    newColour = (byte)((existing & 0xFC) | (colour.To2Bit()));
                 }
                 _memory[index] = newColour;
+
+
             }
         }
 

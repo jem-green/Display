@@ -8,7 +8,6 @@ namespace DisplayTest
 {
     // A test form to display a Colour Graphics Display 4-bit colour
 
-
     public partial class DisplayEnhancedGraphics : Form
     {
         DisplayLibrary.EnhancedGraphicsDisplay enhancedDisplay;
@@ -18,12 +17,12 @@ namespace DisplayTest
         {
             InitializeComponent();
 
-            enhancedDisplay = new DisplayLibrary.EnhancedGraphicsDisplay(128, 128, 1, 1);
+            enhancedDisplay = new DisplayLibrary.EnhancedGraphicsDisplay(128, 128, 2, 1);
             enhancedDisplay.Generate();
             enhancedDisplay.Set(0, 0);
             pictureBox1.Select();
 
-            SolidColour colour = new SolidColour(0, 0, 255);
+            SolidColour colour = new SolidColour(0, 0, 255);    // Blue border
             for (int i = 0; i < 128; i++)
             {
                 enhancedDisplay.Put(i, 0, colour);
@@ -32,7 +31,7 @@ namespace DisplayTest
                 enhancedDisplay.Put(127, i, colour);
             }
 
-            colour = new SolidColour(255, 0, 0);
+            colour = new SolidColour(255, 0, 0);                // Red corners
             enhancedDisplay.Put(0, 0, colour);
             enhancedDisplay.Put(127, 0, colour);
             enhancedDisplay.Put(127, 127, colour);
