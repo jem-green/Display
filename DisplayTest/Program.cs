@@ -35,7 +35,7 @@ namespace DisplayTest
             ////Application.Run(new DisplayVibrantText());
             Application.Run(new DisplayVibrantGraphics());
 
-            //// Vibrant tests 24-bit rgb-colour
+            //// Vibrant tests 24-bit RGB-colour
 
             ////Application.Run(new DisplayTrueText());
             Application.Run(new DisplayTrueGraphics());
@@ -48,9 +48,7 @@ namespace DisplayTest
             basic.ColourGraphicsTest();         // Colour tests 2-bit 4-colour
             basic.EnhancedGraphicsTest();     // Enhanced tests 4-bit 16-colour
             basic.VibrantGraphicsTest();      // Vibrant tests 8-bit 256-colour
-            basic.TrueGraphicsTest();           // True tests 24-bit rgb-colour
-
-                
+            basic.TrueGraphicsTest();           // True tests 24-bit RGB-colour
 
         }
     }

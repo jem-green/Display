@@ -35,14 +35,14 @@ namespace DisplayLibrary
              * 
              * Graphics modes:
              * 
-             * 160×100 in 16 colors, chosen from a 16-color palette, utilizing a specific configuration of the 80x25 text mode.
-             * 320×200 in 4 colors, chosen from 3 fixed palettes, with high- and low-intensity variants, with color 1 chosen from a 16-color palette.
-             * 640×200 in 2 colors, one black, one chosen from a 16-color palette
+             * 160×100 in 16 colours, chosen from a 16-colour palette, utilizing a specific configuration of the 80x25 text mode.
+             * 320×200 in 4 colours, chosen from 3 fixed palettes, with high- and low-intensity variants, with colour 1 chosen from a 16-colour palette.
+             * 640×200 in 2 colours, one black, one chosen from a 16-colour palette
              * 
              * Text modes:
              * 
-             * 40×25 in 16 colors, with 8×8 pixel font (effective resolution of 320×200)
-             * 80×25 in 16 colors, with 8×8 pixel font (effective resolution of 640×200)
+             * 40×25 in 16 colours, with 8×8 pixel font (effective resolution of 320×200)
+             * 80×25 in 16 colours, with 8×8 pixel font (effective resolution of 640×200)
              * 
              */
 

@@ -42,17 +42,17 @@ namespace DisplayLibrary
              *
              * Graphics modes:
              *
-             * 640 × 350 in 16 colors (from a 6 bit palette of 64 colors), pixel aspect ratio of 1:1.37.
-             * 640 × 350 in 2 colors, pixel aspect ratio of 1:1.37.
-             * 640 × 200 in 16 colors, pixel aspect ratio of 1:2.4.
-             * 320 × 200 in 16 colors, pixel aspect ratio of 1:1.2.
+             * 640 × 350 in 16 colours (from a 6 bit palette of 64 colours), pixel aspect ratio of 1:1.37.
+             * 640 × 350 in 2 colours, pixel aspect ratio of 1:1.37.
+             * 640 × 200 in 16 colours, pixel aspect ratio of 1:2.4.
+             * 320 × 200 in 16 colours, pixel aspect ratio of 1:1.2.
              *
              * Text modes:
              *
-             * 40 × 25 in 16 colors, with 8 × 8 pixel font (effective resolution of 320 × 200)
-             * 80 × 25 in 16 colors, with 8 × 8 pixel font (effective resolution of 640 × 200)
-             * 80 × 25 in 16 colors, with 8 × 14 pixel font (effective resolution of 640 × 350)
-             * 80 × 43 in 16 colors, with 8 × 8 pixel font (effective resolution of 640 × 344)
+             * 40 × 25 in 16 colours, with 8 × 8 pixel font (effective resolution of 320 × 200)
+             * 80 × 25 in 16 colours, with 8 × 8 pixel font (effective resolution of 640 × 200)
+             * 80 × 25 in 16 colours, with 8 × 14 pixel font (effective resolution of 640 × 350)
+             * 80 × 43 in 16 colours, with 8 × 8 pixel font (effective resolution of 640 × 344)
              * 
              */
 

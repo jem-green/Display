@@ -44,16 +44,16 @@ namespace DisplayLibrary
              * 
              * Graphics modes:
              * 
-             * 320 × 200 in 4 or 16 colors (CGA/EGA compatibility).
-             * 320 × 200 in 256 colors (Mode 13h).
-             * 640 × 200 and 640 × 350 in 16 colors or monochrome (CGA/EGA compatibility).
-             * 640 × 480 in 16 colors or monochrome.
+             * 320 × 200 in 4 or 16 colours (CGA/EGA compatibility).
+             * 320 × 200 in 256 colours (Mode 13h).
+             * 640 × 200 and 640 × 350 in 16 colours or monochrome (CGA/EGA compatibility).
+             * 640 × 480 in 16 colours or monochrome.
              * 
              * Text modes:
              * 
-             * 80 × 25 in 16 colors, rendered with a 9 × 16 pixel font, with an effective resolution of 720 × 400.
-             * 40 × 25 in 16 colors, with a 9 × 16 font, with an effective resolution of 360 × 400.
-             * 80 × 50 in 16 colors, with an 8 × 8 font grid, with an effective resolution of 640 × 344 or 640 × 400 pixels.
+             * 80 × 25 in 16 colours, rendered with a 9 × 16 pixel font, with an effective resolution of 720 × 400.
+             * 40 × 25 in 16 colours, with a 9 × 16 font, with an effective resolution of 360 × 400.
+             * 80 × 50 in 16 colours, with an 8 × 8 font grid, with an effective resolution of 640 × 344 or 640 × 400 pixels.
              * 
              */
 

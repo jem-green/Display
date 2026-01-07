@@ -104,7 +104,7 @@ namespace DisplayLibrary
 
             for (int y = y1; y <= y2; y++)
             {
-                int rowBase = y * ((_width + 7) >> 3);   // precompute row offset
+                int rowBase = y * ((_width + 7) >> 3);   // pre-compute row offset
 
                 for (int x = x1; x <= x2; x++)
                 {
@@ -166,7 +166,7 @@ namespace DisplayLibrary
 
             for (int y = 0; y < _height; y++)
             {
-                int rowBase = y * ((_width + 7) >> 3);   // precompute row offset
+                int rowBase = y * ((_width + 7) >> 3);   // pre-compute row offset
 
                 for (int x = 0; x < _width; x++)
                 {

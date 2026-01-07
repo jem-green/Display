@@ -123,7 +123,7 @@ namespace DisplayLibrary
             }
             else
             {
-                //color = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
+                //colour = (r*6/256)*36 + (g*6/256)*6 + (b*6/256)
 
                 int index = (y * _width + x) * 3;
                 _memory[index] = colour.Blue;

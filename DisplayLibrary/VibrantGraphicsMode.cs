@@ -108,7 +108,7 @@ namespace DisplayLibrary
                 // Need to scale the memory to the rgbValues array
                 for (int y = y1; y <= y2; y++)
                 {
-                    int rowBase = y * _width;   // precompute row offset
+                    int rowBase = y * _width;   // pre-compute row offset
                     for (int x = x1; x <= x2; x++)
                     {
                         int sourceIndex = rowBase + x;
