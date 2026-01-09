@@ -62,6 +62,7 @@ namespace DisplayLibrary
             {
                 _memory[i] = colour;
             }
+            Generate();
         }
 
         public override void PartialGenerate(int x1, int y1, int x2, int y2)
@@ -140,10 +141,7 @@ namespace DisplayLibrary
             int hscale = _scale * _aspect;
             int vscale = _scale;
 
-            if (_bitmap is null)
-            {
-                _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
-            }
+            _bitmap = new Bitmap(_width * hscale, _height * vscale, PixelFormat.Format8bppIndexed);
             _bitmap.Palette = _colourPalette;
 
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _width * hscale, _height * vscale), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);

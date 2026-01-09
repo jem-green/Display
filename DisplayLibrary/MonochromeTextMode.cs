@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -61,6 +62,7 @@ namespace DisplayLibrary
             {
                 _memory[i] = (byte)character;
             }
+            Generate();
         }
 
         public override void PartialGenerate(int column, int row, int width, int height)

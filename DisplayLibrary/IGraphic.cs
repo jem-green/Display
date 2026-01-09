@@ -51,6 +51,16 @@ namespace DisplayLibrary
             get;
         }
 
+        public IColour ForegroundColour
+        {
+            set;
+        }
+
+        public IColour BackgroundColour
+        {
+            set;
+        }
+
         // Set current position
 
         public void Set(int x, int y);

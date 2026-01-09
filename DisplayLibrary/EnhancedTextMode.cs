@@ -175,7 +175,6 @@ namespace DisplayLibrary
             int vscale = _scale;
 
             _bitmap = new Bitmap(_width * _font.Horizontal * hscale, _height * _font.Vertical * vscale, PixelFormat.Format8bppIndexed);
-
             _bitmap.Palette = _colourPalette;
             BitmapData bmpCanvas = _bitmap.LockBits(new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
 

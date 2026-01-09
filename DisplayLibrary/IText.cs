@@ -53,6 +53,16 @@ namespace DisplayLibrary
             get;
         }
 
+        public IColour ForegroundColour
+        {
+            set;
+        }
+
+        public IColour BackgroundColour
+        {
+            set;
+        }
+
         // Set the cursor position
 
         public void Set(int column, int row);
