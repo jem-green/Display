@@ -2,8 +2,7 @@
 
 using System;
 using System.Drawing.Imaging;
-using static DisplayLibrary.Storage;
-using static System.Windows.Forms.DataFormats;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {

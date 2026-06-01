@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {
@@ -61,7 +62,7 @@ namespace DisplayLibrary
 		
 		public override void Clear(IColour background)
         {
-            byte colour = background.ToBit();
+            byte colour = background.ToBit(0,0);
             colour = (byte)(colour == 0 ? 0x00 : 0xFF);
             for (int i = 0; i < _memory.Length; i++)
             {

@@ -30,6 +30,11 @@
     <EmbeddedResource Remove="Form5.resx" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ColourLibrary">
+      <HintPath>..\ThirdParty\colour\net6.0\ColourLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="DisplayMonochromeGraphics.cs">
       <SubType>Form</SubType>
     </Compile>

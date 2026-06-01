@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.6.0-preview3.19128.7" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ColorGraphicsAdaptor.cs" />
@@ -21,12 +21,20 @@
     <Compile Remove="ColourTextAdaptor.cs" />
     <Compile Remove="Console.cs" />
     <Compile Remove="DisplayMode.cs" />
+    <Compile Remove="DitheredColour.cs" />
     <Compile Remove="GraphicsAdaptor.cs" />
     <Compile Remove="GraphicsDisplay.cs" />
+    <Compile Remove="IColour.cs" />
     <Compile Remove="MonochromeAdaptor.cs" />
     <Compile Remove="MonochromeDisplay.cs" />
     <Compile Remove="MonochromeTextAdaptor.cs" />
+    <Compile Remove="SolidColour.cs" />
     <Compile Remove="Terminal.cs" />
     <Compile Remove="TextAdaptor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ColourLibrary">
+      <HintPath>..\ThirdParty\colour\net6.0\ColourLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

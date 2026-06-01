@@ -1,5 +1,5 @@
 ﻿
-using System.Windows.Forms;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {

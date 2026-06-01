@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {
@@ -64,6 +65,7 @@ namespace DisplayLibrary
                 _memory[i] = (byte)character;
                 _memory[i + 1] = (byte)((byte)(background.ToNybble() << 4) | (byte)foreground.ToNybble());
             }
+            Generate();
         }
 
         public override void PartialGenerate(int column, int row, int width, int height)

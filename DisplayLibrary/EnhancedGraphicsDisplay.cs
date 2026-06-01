@@ -3,6 +3,7 @@
 using System;
 using System.Drawing.Imaging;
 using static DisplayLibrary.Storage;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {

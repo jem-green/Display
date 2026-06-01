@@ -4,6 +4,44 @@ using System.IO;
 
 namespace FontConverter
 {
+    /*
+        Font file
+        =========
+
+                  1         2
+        012345678901234567890
+        ~+~--+........
+         |   |
+         |   +- Image Start
+         +- Header (2)
+
+        +-----------------------+ <- 0
+        | Header (2)            | 
+        +-----------------------+ <- 2 [_data]
+        | Image data            |     
+        |          ...          |  
+        +-----------------------+
+
+        // Header
+        // ------
+        //
+        // 01234567890
+        // ++
+        // ||
+        // |+- vbits[1] = 0x00;    // Vertical bits per character 
+        // +- hbits[1] = 0x00;     // Horizontal bits per character
+        //
+        // Image Data
+        // ----------
+        // 
+        // 01234567890...
+        // ~+..¬
+        //  |
+        //  +- Image data for the character [varies]
+        //
+        */
+
+
     public class Convert
     {
         #region Fields

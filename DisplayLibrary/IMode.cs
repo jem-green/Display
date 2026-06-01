@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {

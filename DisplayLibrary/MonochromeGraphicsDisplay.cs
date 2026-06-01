@@ -1,8 +1,7 @@
 ﻿
-
 using System;
 using System.Drawing.Imaging;
-using static DisplayLibrary.Storage;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {
@@ -128,7 +127,7 @@ namespace DisplayLibrary
                 byte pixelBit = (byte)(7 - ((x) % 8));
                 byte mask = (byte)(1 << pixelBit);
 
-                if (colour.ToBit() != 0)
+                if (colour.ToBit(x,y) != 0)
                 {
                     _memory[index] |= mask; // set the bit
                 }

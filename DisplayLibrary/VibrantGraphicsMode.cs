@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using ColourLibrary;
 
 namespace DisplayLibrary
 {

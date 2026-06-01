@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
+using ColourLibrary;
 
 namespace DisplayTest
 {
@@ -22,12 +23,9 @@ namespace DisplayTest
             string fileNamePath = Path.Combine(path, fileName);
             rasterFont.Load(fileNamePath);
 
-            monochrome.Clear(); // Need this to set the memory to 0
             monochrome.Font = rasterFont;
             monochrome.Set(0, 0);
-            //monochrome.ForegroundColour = (byte)TextMode.ConsoleColour.Green;
             monochrome.ForegroundColour = new SolidColour(0, 255, 0); // Green foreground
-            //monochrome.BackgroundColour = (byte)TextMode.ConsoleColour.Black;
             monochrome.BackgroundColour = new SolidColour(0, 0, 0); // Black background
             monochrome.Write("HELLO THIS SHOULD WRAP AROUND");
             pictureBox1.Select();

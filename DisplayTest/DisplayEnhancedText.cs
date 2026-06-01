@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DisplayLibrary;
+using ColourLibrary;
 
 namespace DisplayTest
 {
